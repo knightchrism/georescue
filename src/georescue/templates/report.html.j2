@@ -1,0 +1,11 @@
+<!doctype html><html><head><meta charset="utf-8"><title>GeoRescue QA — {{ name }}</title>
+<style>body{font-family:sans-serif;margin:2em}table{border-collapse:collapse}td,th{border:1px solid #ccc;padding:4px 8px;font-size:13px}th{background:#eee}</style></head><body>
+<h1>GeoRescue QA report — {{ name }}</h1>
+<p>Source: {{ source }} · Generated {{ generated }}</p>
+<h2>Summary</h2><table>{% for k,v in summary.items() if k!='issues_by_check' %}<tr><th>{{k}}</th><td>{{v}}</td></tr>{% endfor %}</table>
+<h2>Issues by check</h2><table><tr><th>check</th><th>count</th></tr>{% for k,v in summary.issues_by_check.items() %}<tr><td>{{k}}</td><td>{{v}}</td></tr>{% endfor %}</table>
+<h2>Repairs</h2><table><tr><th>check</th><th>action</th><th>applied</th><th>count</th></tr>{% for r in repairs %}<tr><td>{{r.check}}</td><td>{{r.action}}</td><td>{{r.applied}}</td><td>{{r.n}}</td></tr>{% endfor %}</table>
+<h2>Original vs corrected diff</h2><table><tr><th>change</th><th>count</th></tr>{% for k,v in diff.items() %}<tr><td>{{k}}</td><td>{{v}}</td></tr>{% endfor %}</table>
+<h2>Sample issues (first 200)</h2><table><tr><th>feature_id</th><th>check</th><th>severity</th><th>message</th></tr>
+{% for i in sample %}<tr><td>{{i.feature_id}}</td><td>{{i.check}}</td><td>{{i.severity}}</td><td>{{i.message}}</td></tr>{% endfor %}</table>
+</body></html>

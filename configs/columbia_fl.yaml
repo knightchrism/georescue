@@ -1,0 +1,13 @@
+name: Columbia County FL parcels (LCParcels)
+id_field: PARCEL_ID
+expected_crs: EPSG:4326        # ArcGIS GeoJSON export
+working_crs: EPSG:2238         # NAD83 / Florida North (ftUS) -> areas in sq ft
+fields:
+  PARCEL_ID: {type: str}
+  PARCELNO: {type: str}
+  NAME: {type: str}
+  GIS_Acres: {type: float}
+  Deed_Acres: {type: float, required: false}
+bounds: {minx: -82.85, miny: 29.75, maxx: -82.40, maxy: 30.65, crs: EPSG:4326}
+topology: {overlap_min_area: 10.0, sliver_max_area: 50.0, sliver_max_compactness: 0.02, gap_max_area: 500.0}
+repair: {trim_overlaps_below_area: 10.0}

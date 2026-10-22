@@ -1,0 +1,9 @@
+name: synthetic
+id_field: PID
+expected_crs: EPSG:3857
+fields:
+  PID: {type: str}
+  ACRES: {type: float}
+bounds: {minx: -1, miny: -1, maxx: 1, maxy: 1, crs: EPSG:4326}
+topology: {overlap_min_area: 0.5, sliver_max_area: 2, gap_max_area: 50}
+repair: {trim_overlaps_below_area: 100, drop_exact_duplicates: true}
