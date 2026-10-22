@@ -8,7 +8,7 @@ from pyproj import CRS
 from .config import Config
 from . import checks
 
-LOG_COLS = ["feature_id", "row", "check", "action", "before", "after", "reason", "post_valid", "applied"]
+LOG_COLS = ["feature_id", "row", "check", "action", "before", "after", "reason", "post_valid", "applied", "before_area", "after_area"]
 
 
 def _w(g, n=200):
@@ -70,17 +70,23 @@ def repair(gdf: gpd.GeoDataFrame, cfg: Config, issues: pd.DataFrame | None = Non
             pass  # handled below
         elif c == "overlap" and r.trim_overlaps_below_area > 0:
             area = float(iss["message"].split(" by ")[1].split(" ")[0])
-            if area < r.trim_overlaps_below_area:
-                other = int(iss["message"].split("other_row=")[1])
-                w = checks.working(out, cfg)
-                before = w.geometry.iloc[i]
-                after = _polygonal(shapely.make_valid(before.difference(w.geometry.iloc[other])))
-                valid = bool(after.is_valid and not after.is_empty)
-                if valid:
-                    back = gpd.GeoSeries([after], crs=w.crs).to_crs(out.crs).iloc[0]
-                    out.loc[i, out.geometry.name] = back
-                log.append(dict(feature_id=fid(i), row=i, check=c, action="trim_overlap", before=_w(before), after=_w(after),
-                                reason=iss["message"], post_valid=valid, applied=valid))
+            other = int(iss["message"].split("other_row=")[1])
+            if area > r.trim_overlaps_below_area:
+                log.append(dict(feature_id=fid(i), row=i, check=c, action="flag_only", before=None, after=None,
+                                reason=iss["message"] + f" (above trim max {r.trim_overlaps_below_area})", post_valid=None, applied=False))
+                continue
+            w = checks.working(out, cfg)
+            gi, go = w.geometry.iloc[i], w.geometry.iloc[other]
+            # trim from the smaller parcel (or the issue row if trim_overlap_from == "row")
+            t, keep = (i, go) if r.trim_overlap_from == "row" or gi.area <= go.area else (other, gi)
+            before = w.geometry.iloc[t]
+            after = _polygonal(shapely.make_valid(before.difference(keep)))
+            valid = bool(after.is_valid and not after.is_empty)
+            if valid:
+                out.loc[t, out.geometry.name] = gpd.GeoSeries([after], crs=w.crs).to_crs(out.crs).iloc[0]
+            log.append(dict(feature_id=fid(t), row=t, check=c, action="trim_overlap", before=_w(before), after=_w(after),
+                            reason=iss["message"] + f"; trimmed from smaller parcel {fid(t)}, kept {fid(other if t == i else i)}",
+                            post_valid=valid, applied=valid, before_area=round(before.area, 3), after_area=round(after.area, 3)))
         else:
             log.append(dict(feature_id=iss["feature_id"], row=i, check=c, action="flag_only", before=None, after=None,
                             reason=iss["message"], post_valid=None, applied=False))

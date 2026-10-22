@@ -17,3 +17,9 @@ LLM plug-in: Claude Desktop config `mcpServers` with
   "rustgis": {"command":"rustgis-cli","args":["mcp","--data","<parcels>","--yes"]}}`.
 For Ollama, keep this client: merge both sessions' `list_tools()` into the model's tool list,
 route each tool call to its session, and return `view_map` images to a vision model.
+
+## v2 (overlap trim + inspect filters)
+- `inspect_dataset(path, config_path, check=[...], severity=[...], limit=50, offset=0, include_wkt=False)` returns `matched` + one page.
+- `repair.trim_overlaps_below_area` (max overlap area, working-CRS units^2) + `trim_overlap_from: smaller|row`;
+  changelog gains `before_area`/`after_area`. Columbia config: max 100 sq ft.
+- Snapshots 04/05 show changed parcels filled by repair action (`layer.symbology` unique).

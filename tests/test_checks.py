@@ -87,3 +87,57 @@ def test_pipeline_outputs(tmp_path):
     import pandas as pd
     d = pd.read_csv(res["outputs"]["diff.csv"])
     assert {"geometry", "attribute"} <= set(d.change)
+
+
+# --- MCP inspect filters ---
+from georescue.mcp_server import filter_issues
+
+def _iss():
+    g = mk(base() + [dict(PID="C", ACRES=1.0, geometry=Polygon([(30,0),(40,10),(40,0),(30,10)])),
+                     dict(PID="D", ACRES=1.0, geometry=box(5, 0, 15, 10))])
+    return checks.inspect(g, CFG)
+
+def test_filter_check_severity():
+    iss = _iss()
+    r = filter_issues(iss, {}, check=["geometry_invalid"])
+    assert r["matched"] == 1 and r["issues"][0]["check"] == "geometry_invalid"
+    assert "geometry_wkt" not in r["issues"][0]
+    r = filter_issues(iss, {}, severity=["error"])
+    assert all(x["severity"] == "error" for x in r["issues"]) and r["matched"] == (iss.severity == "error").sum()
+
+def test_filter_paging_and_wkt():
+    iss = _iss(); n = len(iss)
+    a = filter_issues(iss, {}, limit=2, offset=0)["issues"]
+    b = filter_issues(iss, {}, limit=2, offset=2)["issues"]
+    assert len(a) == 2 and a != b and filter_issues(iss, {}, limit=10, offset=n)["issues"] == []
+    r = filter_issues(iss, {}, check=["overlap"], include_wkt=True)
+    assert r["matched"] >= 1 and r["issues"][0]["geometry_wkt"].startswith(("POLYGON", "MULTIPOLYGON"))
+
+
+# --- overlap trim ---
+def _ov(cfg):
+    big = dict(PID="BIG", ACRES=1.0, geometry=box(0, 0, 100, 100))
+    small = dict(PID="SMALL", ACRES=1.0, geometry=box(98, 0, 110, 10))   # 2x10 = 20 overlap
+    return mk([big, small]), cfg
+
+def _cfg(**kw):
+    c = CFG.model_copy(deep=True); c.topology.overlap_min_area = 1.0
+    for k, v in kw.items(): setattr(c.repair, k, v)
+    return c
+
+def test_overlap_trim_smaller():
+    g, cfg = _ov(_cfg(trim_overlaps_below_area=50))
+    fixed, log = repair.repair(g, cfg)
+    r = log[log.action == "trim_overlap"].iloc[0]
+    assert r.feature_id == "SMALL" and r.applied and r.post_valid
+    assert r.before_area == pytest.approx(120) and r.after_area == pytest.approx(100)
+    assert fixed.geometry.iloc[0].equals(box(0, 0, 100, 100))
+    assert shapely.intersection(fixed.geometry.iloc[0], fixed.geometry.iloc[1]).area < 1e-6
+    assert "overlap" not in kinds(fixed.drop(columns="_src_row"), cfg)
+
+def test_overlap_above_max_flagged():
+    g, cfg = _ov(_cfg(trim_overlaps_below_area=10))
+    fixed, log = repair.repair(g, cfg)
+    r = log[log.check == "overlap"].iloc[0]
+    assert r.action == "flag_only" and not r.applied
+    assert fixed.geometry.iloc[1].equals(box(98, 0, 110, 10))

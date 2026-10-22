@@ -1,5 +1,6 @@
 """YAML rule config, validated with Pydantic."""
 from __future__ import annotations
+from typing import Literal
 from pathlib import Path
 from typing import Literal, Optional
 import yaml
@@ -43,7 +44,8 @@ class RepairRules(BaseModel):
     assign_crs_if_missing: bool = True
     drop_empty_geometries: bool = False
     drop_exact_duplicates: bool = False
-    trim_overlaps_below_area: float = Field(0.0, ge=0, description="trim overlaps smaller than this from the higher-row feature; 0 = off")
+    trim_overlaps_below_area: float = Field(0.0, ge=0, description="max overlap area (working CRS units^2) to auto-trim; 0 = off")
+    trim_overlap_from: Literal["smaller", "row"] = "smaller"
 
 
 class Config(BaseModel):

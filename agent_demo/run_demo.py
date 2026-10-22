@@ -83,13 +83,15 @@ async def main():
             rustgis=[t.name for t in (await gis.list_tools()).tools])
 
         # (1) GeoRescue inspect
-        r = await geo.call_tool("inspect_dataset", {"path": str(parcels), "config_path": CFG})
-        res = json.loads(text(r)); log("georescue.inspect_dataset", summary=res["summary"].get("issues_by_check"))
-        geom_issues = [i for i in res["issues"] if i["check"] in ("geometry_invalid", "overlap")]
+        r = await geo.call_tool("inspect_dataset", {"path": str(parcels), "config_path": CFG,
+                                                     "check": ["geometry_invalid", "overlap"], "include_wkt": True, "limit": 20})
+        res = json.loads(text(r)); log("georescue.inspect_dataset", summary=res["summary"].get("issues_by_check"), matched=res["matched"])
+        geom_issues = [{k: v for k, v in i.items() if k != "geometry_wkt"} for i in res["issues"]]
         log("agent.findings", geom_issues=geom_issues[:6])
 
         # (2) RustGIS: issues layer, zoom, snapshots
         await rg(gis, "layer.addData", path=str(ipath), name="issues")
+        await rg(gis, "layer.symbology", layer="issues", type="unique", field="check")
         await rg(gis, "layer.outline", layer="issues", color="#FF0000", width=3)
         r = await gis.call_tool("list_layers", {}); log("rustgis.list_layers", result=text(r)[:300])
         r = await gis.call_tool("read_features", {"layer": "issues", "where": "check = 'overlap'", "limit": 5})
@@ -103,13 +105,13 @@ async def main():
         await snapshot(gis, "02_overlap_02305-005_02272-052_before")
 
         # (3) proposed fix -> GeoRescue repair
-        log("agent.proposal", fix="04384-000: make_valid (Ring Self-intersection); overlaps are flagged-only per config (manual review)")
+        log("agent.proposal", fix="04384-000: make_valid (Ring Self-intersection); 02305-005/02272-052: trim 55 sqft overlap from the smaller parcel (max 100 sqft per config)")
         r = await geo.call_tool("repair_dataset", {"path": str(parcels), "out_dir": str(OUT), "config_path": CFG})
         rep = json.loads(text(r)); log("georescue.repair_dataset", outputs=rep.get("outputs"))
         with open(OUT / "changelog.csv") as f:
             entries = [row for row in csv.DictReader(f) if row["feature_id"] in sum(TARGETS.values(), [])]
         for e in entries:
-            log("changelog", **{k: e[k] for k in ("feature_id", "check", "action", "post_valid", "applied")})
+            log("changelog", **{k: e[k] for k in ("feature_id", "check", "action", "post_valid", "applied", "before_area", "after_area")})
 
         # verify in RustGIS
         corr = OUT / "corrected.gpkg"
@@ -118,6 +120,20 @@ async def main():
         await rg(gis, "select.byAttributes", layer="corrected", where="PARCEL_ID = '04384-000'")
         await rg(gis, "map.zoomToExtent", extent=bbox_of(pg, TARGETS["invalid"]))
         await snapshot(gis, "03_invalid_04384-000_after")
+        # changed parcels as a filled layer, styled by repair action
+        ch = pd.read_csv(OUT / "changelog.csv"); ch = ch[ch.applied.astype(str) == "True"]
+        ch = ch[ch.action.isin(["make_valid", "trim_overlap"])][["feature_id", "action", "before_area", "after_area"]]
+        cg = gpd.read_file(corr); cg = cg[["PARCEL_ID", "geometry"]].merge(ch, left_on="PARCEL_ID", right_on="feature_id")
+        cpath = DATA / "changed.geojson"; cg.to_file(cpath, driver="GeoJSON")
+        await rg(gis, "layer.addData", path=str(cpath), name="changed")
+        await rg(gis, "layer.symbology", layer="changed", type="unique", field="action")
+        await rg(gis, "layer.outline", layer="changed", color="#000000", width=2)
+        await rg(gis, "map.zoomToExtent", extent=bbox_of(pg, TARGETS["overlap"], 0.0006))
+        await snapshot(gis, "04_overlap_02305-005_02272-052_after")
+        await rg(gis, "map.zoomToExtent", extent=bbox_of(pg, TARGETS["invalid"]))
+        await snapshot(gis, "05_invalid_04384-000_after_filled")
+        r = await gis.call_tool("read_features", {"layer": "changed", "limit": 10})
+        log("rustgis.read_features.changed", result=text(r)[:600])
         r = await gis.call_tool("run_tool", {"tool": "calculateGeometry", "params": {"input": "corrected"}})
         log("rustgis.run_tool.calculateGeometry", error=r.is_error, result=text(r)[:300])
     (D / "run_log.json").write_text(json.dumps(LOG, indent=1, default=str))

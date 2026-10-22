@@ -35,7 +35,8 @@
    "gap": 16,
    "geometry_invalid": 1,
    "overlap": 1
-  }
+  },
+  "matched": 2
  },
  {
   "step": "agent.findings",
@@ -46,6 +47,13 @@
     "check": "geometry_invalid",
     "severity": "error",
     "message": "Ring Self-intersection[-82.6032448806187 30.5364376955466]"
+   },
+   {
+    "row": 37.0,
+    "feature_id": "02305-005",
+    "check": "overlap",
+    "severity": "error",
+    "message": "overlaps row 22 (02272-052) by 55.14 units^2|other_row=22"
    }
   ]
  },
@@ -59,6 +67,16 @@
   "result": "{\"layersAdded\":[\"issues\"],\"result\":{\"features\":18,\"layer\":2}}"
  },
  {
+  "step": "rustgis.layer.symbology",
+  "params": {
+   "layer": "issues",
+   "type": "unique",
+   "field": "check"
+  },
+  "error": false,
+  "result": "{\"ok\":true}"
+ },
+ {
   "step": "rustgis.layer.outline",
   "params": {
    "layer": "issues",
@@ -70,7 +88,7 @@
  },
  {
   "step": "rustgis.list_layers",
-  "result": "{\"activeMap\":\"Map\",\"basemap\":\"paper\",\"center\":{\"lat\":30.378381627477847,\"lon\":-82.63342730181667},\"layers\":[{\"features\":18,\"fields\":[\"check (Text)\",\"feature_id (Text)\",\"message (Text)\",\"row (Double)\",\"severity (Text)\"],\"id\":2,\"name\":\"issues\",\"renderer\":\"Single Symbol\",\"selected\":0,\"type\":\"Polygon\",\""
+  "result": "{\"activeMap\":\"Map\",\"basemap\":\"paper\",\"center\":{\"lat\":30.378381627477847,\"lon\":-82.63342730181667},\"layers\":[{\"features\":18,\"fields\":[\"check (Text)\",\"feature_id (Text)\",\"message (Text)\",\"row (Double)\",\"severity (Text)\"],\"id\":2,\"name\":\"issues\",\"renderer\":\"Unique Values\",\"selected\":0,\"type\":\"Polygon\",\""
  },
  {
   "step": "rustgis.read_features",
@@ -142,7 +160,7 @@
  },
  {
   "step": "agent.proposal",
-  "fix": "04384-000: make_valid (Ring Self-intersection); overlaps are flagged-only per config (manual review)"
+  "fix": "04384-000: make_valid (Ring Self-intersection); 02305-005/02272-052: trim 55 sqft overlap from the smaller parcel (max 100 sqft per config)"
  },
  {
   "step": "georescue.repair_dataset",
@@ -161,7 +179,9 @@
   "check": "geometry_invalid",
   "action": "make_valid",
   "post_valid": "True",
-  "applied": "True"
+  "applied": "True",
+  "before_area": "",
+  "after_area": ""
  },
  {
   "step": "changelog",
@@ -169,7 +189,9 @@
   "check": "attribute_wrong_type",
   "action": "flag_only",
   "post_valid": "False",
-  "applied": "False"
+  "applied": "False",
+  "before_area": "",
+  "after_area": ""
  },
  {
   "step": "changelog",
@@ -177,7 +199,19 @@
   "check": "attribute_wrong_type",
   "action": "flag_only",
   "post_valid": "False",
-  "applied": "False"
+  "applied": "False",
+  "before_area": "",
+  "after_area": ""
+ },
+ {
+  "step": "changelog",
+  "feature_id": "02305-005",
+  "check": "overlap",
+  "action": "trim_overlap",
+  "post_valid": "True",
+  "applied": "True",
+  "before_area": "10089.222",
+  "after_area": "10034.083"
  },
  {
   "step": "rustgis.layer.addData",
@@ -223,6 +257,73 @@
  {
   "step": "snapshot",
   "path": "/workspace/georescue/agent_demo/snapshots/03_invalid_04384-000_after.png"
+ },
+ {
+  "step": "rustgis.layer.addData",
+  "params": {
+   "path": "/workspace/georescue/agent_demo/data/changed.geojson",
+   "name": "changed"
+  },
+  "error": false,
+  "result": "{\"layersAdded\":[\"changed\"],\"result\":{\"features\":2,\"layer\":4}}"
+ },
+ {
+  "step": "rustgis.layer.symbology",
+  "params": {
+   "layer": "changed",
+   "type": "unique",
+   "field": "action"
+  },
+  "error": false,
+  "result": "{\"ok\":true}"
+ },
+ {
+  "step": "rustgis.layer.outline",
+  "params": {
+   "layer": "changed",
+   "color": "#000000",
+   "width": 2
+  },
+  "error": false,
+  "result": "{\"ok\":true}"
+ },
+ {
+  "step": "rustgis.map.zoomToExtent",
+  "params": {
+   "extent": [
+    -82.67744340229993,
+    30.204811033765367,
+    -82.67495140859782,
+    30.208398614930342
+   ]
+  },
+  "error": false,
+  "result": "{\"ok\":true}"
+ },
+ {
+  "step": "snapshot",
+  "path": "/workspace/georescue/agent_demo/snapshots/04_overlap_02305-005_02272-052_after.png"
+ },
+ {
+  "step": "rustgis.map.zoomToExtent",
+  "params": {
+   "extent": [
+    -82.61003649051754,
+    30.52762038433629,
+    -82.589917437262,
+    30.545402311740368
+   ]
+  },
+  "error": false,
+  "result": "{\"ok\":true}"
+ },
+ {
+  "step": "snapshot",
+  "path": "/workspace/georescue/agent_demo/snapshots/05_invalid_04384-000_after_filled.png"
+ },
+ {
+  "step": "rustgis.read_features.changed",
+  "result": "{\"layer\":\"changed\",\"matched\":2,\"rows\":[{\"PARCEL_ID\":\"04384-000\",\"_lat\":30.53651,\"_lon\":-82.59998,\"_row\":0,\"action\":\"make_valid\",\"after_area\":null,\"before_area\":null,\"feature_id\":\"04384-000\"},{\"PARCEL_ID\":\"02305-005\",\"_lat\":30.20579,\"_lon\":-82.67655,\"_row\":1,\"action\":\"trim_overlap\",\"after_area\":10034.083,\"before_area\":10089.222,\"feature_id\":\"02305-005\"}],\"total\":2}"
  },
  {
   "step": "rustgis.run_tool.calculateGeometry",
