@@ -38,6 +38,11 @@ def run(config: str = typer.Option(..., "--config", "-c"), out: str = typer.Opti
     bad = [k for k in ("fetch", "inspect") if st.get(k) == "error"] or ([] if st.get("inspect") == "ok" else ["inspect"])
     if bad:  # fail the job so CI never publishes/deploys an empty site
         typer.echo(f"run failed: {bad} -> not usable for publishing", err=True); raise typer.Exit(1)
+    from . import store  # after collect_verification + out/latest: refresh the redacted results store for the MCP server
+    try:
+        typer.echo(json.dumps({"load_db": store.load(f"{out}/latest", runs=f"{out}/runs", db=f"{out}/georescue.duckdb")}, indent=1))
+    except Exception as e:  # noqa: BLE001 - the store is a convenience; never fail the run over it
+        typer.echo(f"load-db skipped: {e}", err=True)
 
 
 @app.command()
@@ -52,6 +57,14 @@ def publish(latest: str = "out/latest", site: str = "site", runs: str = "out/run
         typer.echo(json.dumps(pub.publish(latest, site, runs, include_coj_imagery, min_cases, redact_owners, owner_key), indent=1))
     except pub.NotPublishable as e:
         typer.echo(f"publish refused, existing {site}/ left untouched: {e}", err=True); raise typer.Exit(2)
+
+
+@app.command("load-db")
+def load_db(latest: str = "out/latest", verify: str = "public/duval_verify", runs: str = "out/runs", db: str = "out/georescue.duckdb",
+            redact_owners: bool = typer.Option(True, "--redact-owners/--no-redact-owners", help="drop/replace owner names (default on)")):
+    """Load the latest run into DuckDB (issues, cases, verdicts, deed_traverses, runs, glossary) for the MCP server."""
+    from . import store
+    typer.echo(json.dumps(store.load(latest, verify, runs, db, redact_owners), indent=1))
 
 
 def main():

@@ -1,0 +1,369 @@
+# Ask GeoRescue — recorded agent sessions
+
+Generated 2026-10-22T17:48:49-04:00 by `scripts/mcp_demo.py` over stdio. Recorded MCP tool-call sessions against the redacted GeoRescue results store. Answers are filled in by fixed templates from the tool outputs. Automated test results, not authoritative.
+
+Tools advertised: `inspect_dataset`, `repair_dataset`, `list_tables`, `describe_table`, `run_query`, `list_metrics`, `get_metric`, `get_case`, `find_issues`, `explain_issue`, `compare_runs`
+
+## 1. Why is Parcel A flagged?
+
+**Tool call:** `get_case`
+
+```json
+{
+ "case_id": "0015420010__0015315300"
+}
+```
+
+**Output:**
+
+```json
+{
+ "case": {
+  "case_id": "0015420010__0015315300",
+  "parcel_a": "001542 0010",
+  "parcel_b": "001531 5300",
+  "check": "contained_parcel",
+  "overlap_sqft": 107875.71,
+  "proposal": "cut 001531 5300 from 001542 0010",
+  "direction": "cut smaller from larger",
+  "confidence": "medium",
+  "rationale": "smaller parcel lies ~100% inside larger; stacked/un-carved parent polygon",
+  "status": "proposed",
+  "orb_refs": {
+   "001542 0010": [
+    "19870-00841",
+    "17966-00196",
+    "16276-02117",
+    "12781-02349",
+    "11954-01118",
+    "10417-00883"
+   ],
+   "001531 5300": [
+    "00056-00042",
+    "11504-02030"
+   ]
+  },
+  "basis": "deed-checked",
+  "run_id": "20261022T152125-0400"
+ },
+ "deed_check": {
+  "case_id": "0015420010__0015315300",
+  "parcel_a": "001542 0010",
+  "parcel_b": "001531 5300",
+  "verdict": "Owner of 001542 0010 GIS polygon over-includes Owner of 001531 5300 001531 5300; cut Owner of 001531 5300 from Owner of 001542 0010 (contained_parcel: cut smaller from larger)",
+  "confidence": "high",
+  "confidence_score": 0.85,
+  "orb": "ORB 19870-841",
+  "evidence": [
+   "ORB 19870-841 closes 1:353363 (misclosure 0.007 ft), COGO 7.963 ac vs stated 7.83",
+   "Record fits GIS-minus-Owner of 001531 5300 (8.11 ac) with IoU 0.981, Hausdorff 6.1 ft, zero rotation/shift",
+   "Owner of 001531 5300 inside record tract: 0%; GIS Owner of 001542 0010 10.59 = 8.11 + Owner of 001531 5300 2.48 ac",
+   "Deed's 60 ft ingress/egress strip is an easement ('Together with'), not fee - consistent with excluding the northern strip",
+   "Parent 17966-196 (3.41 ac, folio 001542-0100) closes 1:294k and lies within Tract 8"
+  ],
+  "caveat": "no monument/PLSS tie; placement is best-fit to GIS (it lands at 0,0 offset, which is itself corroborating)",
+  "closure_precision": "1:353363",
+  "closure_ratio": 353363.0,
+  "misclosure_ft": 0.007,
+  "n_calls": 6.0,
+  "perimeter_ft": 2393.44,
+  "acres_record_cogo": 7.963,
+  "acres_record_stated": 7.83,
+  "fit_iou": 0.734,
+  "status": "proposed (test result)"
+ },
+ "issues": [
+  {
+   "feature_id": "001542 0010",
+   "check": "contained_parcel",
+   "severity": "error",
+   "message": "001531 5300 is 100.0% inside 001542 0010 (107875.71 units^2); proposal: cut smaller from larger|contained_row=31636|other_row=31636",
+   "metric": 1.0000000000000002
+  }
+ ],
+ "other_cases_for_parcel": 0,
+ "note": "Automated, experimental data quality test result \u2014 a proposal, not a survey, boundary determination or legal advice."
+}
+```
+
+**Answer (template):** Case 0015420010__0015315300 pairs parcel 001542 0010 (Parcel A) with 001531 5300 (Parcel B); check: contained_parcel. First-pass proposal: cut 001531 5300 from 001542 0010 (confidence medium). Deed check (ORB 19870-841): proposed verdict — Owner of 001542 0010 GIS polygon over-includes Owner of 001531 5300 001531 5300; cut Owner of 001531 5300 from Owner of 001542 0010 (contained_parcel: cut smaller from larger) (confidence high); traverse closes 1:353363 (misclosure 0.007 ft), best-fit IoU 0.734. 1 issue(s) on these parcels. Proposal only.
+
+## 2. Which overlaps are high confidence?
+
+**Tool call:** `run_query`
+
+```json
+{
+ "sql": "SELECT c.case_id, c.\"check\", c.basis, coalesce(v.confidence, c.confidence) AS confidence, c.proposal FROM cases c LEFT JOIN verdicts v USING (case_id) WHERE coalesce(v.confidence, c.confidence) = 'high' ORDER BY 1"
+}
+```
+
+**Output:**
+
+```json
+{
+ "columns": [
+  "case_id",
+  "check",
+  "basis",
+  "confidence",
+  "proposal"
+ ],
+ "rows": [
+  {
+   "case_id": "0015420010__0015315300",
+   "check": "contained_parcel",
+   "basis": "deed-checked",
+   "confidence": "high",
+   "proposal": "cut 001531 5300 from 001542 0010"
+  },
+  {
+   "case_id": "0130300010__0130300300",
+   "check": "contained_parcel",
+   "basis": "deed-checked",
+   "confidence": "high",
+   "proposal": "cut 013030 0300 from 013030 0010"
+  }
+ ],
+ "row_count": 2,
+ "truncated": false
+}
+```
+
+**Answer (template):** 2 case file(s) have high confidence: 0015420010__0015315300 (contained_parcel, deed-checked); 0130300010__0130300300 (contained_parcel, deed-checked). Confidence is a heuristic about the data, not a finding.
+
+## 3. What does sliver_polygon mean?
+
+**Tool call:** `explain_issue`
+
+```json
+{
+ "check": "sliver_polygon"
+}
+```
+
+**Output:**
+
+```json
+{
+ "term": "sliver_polygon",
+ "kind": "check",
+ "name": "Sliver polygon",
+ "what": "A parcel that is extremely small or extremely thin \u2014 a narrow strip rather than a normal lot.",
+ "why": "Slivers are frequently leftovers of mismatched lines, though some are real (strips, easements, remnants).",
+ "how": "Area below 50 sq ft (Florida East State Plane, US feet) (sliver_max_area) or thinness score below 0.02 (sliver_max_compactness; 4\u03c0\u00b7area \u00f7 perimeter\u00b2, where a circle is 1 and a long thin strip approaches 0).",
+ "action": "Proposal only \u2014 reported for review.",
+ "causes": "Boundary mismatches between neighbours, remnant strips, right-of-way pieces.",
+ "glossary_url": "https://knightchrism.github.io/georescue/glossary.html#sliver_polygon"
+}
+```
+
+**Answer (template):** Sliver polygon: A parcel that is extremely small or extremely thin — a narrow strip rather than a normal lot. Detection: Area below 50 sq ft (Florida East State Plane, US feet) (sliver_max_area) or thinness score below 0.02 (sliver_max_compactness; 4π·area ÷ perimeter², where a circle is 1 and a long thin strip approaches 0). Automatic action: Proposal only — reported for review.
+
+## 4. How many missing owner names are there?
+
+**Tool call:** `get_metric`
+
+```json
+{
+ "name": "issues_by_check",
+ "group_by": "check"
+}
+```
+
+**Output:**
+
+```json
+{
+ "metric": "issues_by_check",
+ "label": "Issues by check",
+ "unit": "issues",
+ "sql": "SELECT \"check\", count(*) AS issues_by_check FROM issues GROUP BY 1 ORDER BY 2 DESC NULLS LAST",
+ "columns": [
+  "check",
+  "issues_by_check"
+ ],
+ "rows": [
+  {
+   "check": "gap",
+   "issues_by_check": 1089
+  },
+  {
+   "check": "sliver_polygon",
+   "issues_by_check": 995
+  },
+  {
+   "check": "attribute_missing",
+   "issues_by_check": 837
+  },
+  {
+   "check": "overlap",
+   "issues_by_check": 36
+  },
+  {
+   "check": "geometry_invalid",
+   "issues_by_check": 14
+  },
+  {
+   "check": "contained_parcel",
+   "issues_by_check": 5
+  }
+ ],
+ "row_count": 6,
+ "truncated": false,
+ "caveats": [
+  "Automated, experimental data quality test results on public data; verdicts are proposals, not findings.",
+  "Not a survey, boundary determination, title opinion or legal advice."
+ ]
+}
+```
+
+**Tool call:** `run_query`
+
+```json
+{
+ "sql": "SELECT count(*) AS n FROM issues WHERE \"check\" = 'attribute_missing' AND message LIKE 'LNAMEOWNER%'"
+}
+```
+
+**Output:**
+
+```json
+{
+ "columns": [
+  "n"
+ ],
+ "rows": [
+  {
+   "n": 837
+  }
+ ],
+ "row_count": 1,
+ "truncated": false
+}
+```
+
+**Answer (template):** 837 attribute_missing issues in the latest run; 837 of them are an empty owner-name field (LNAMEOWNER). Names themselves are never exposed by this server.
+
+## 5. Show me the deed closure for the deed-checked cases
+
+**Tool call:** `get_metric`
+
+```json
+{
+ "name": "deed_closure_ratio",
+ "group_by": "case_id"
+}
+```
+
+**Output:**
+
+```json
+{
+ "metric": "deed_closure_ratio",
+ "label": "Deed traverse closure ratio",
+ "unit": "1:N (higher is better)",
+ "sql": "SELECT \"case_id\", max(closure_ratio) AS deed_closure_ratio FROM verdicts WHERE closure_ratio IS NOT NULL GROUP BY 1 ORDER BY 2 DESC NULLS LAST",
+ "columns": [
+  "case_id",
+  "deed_closure_ratio"
+ ],
+ "rows": [
+  {
+   "case_id": "0015420010__0015315300",
+   "deed_closure_ratio": 353363.0
+  }
+ ],
+ "row_count": 1,
+ "truncated": false,
+ "caveats": [
+  "Traverses come from OCR'd deed text and best-fit placement; not field measurements.",
+  "Automated, experimental data quality test results on public data; verdicts are proposals, not findings.",
+  "Not a survey, boundary determination, title opinion or legal advice."
+ ]
+}
+```
+
+**Answer (template):** Deed traverse closure ratios (1:N, higher is better): case 0015420010__0015315300: 1:353,363. From OCR'd deed text; not field measurements.
+
+## 6. What changed since the last run?
+
+**Tool call:** `compare_runs`
+
+```json
+{}
+```
+
+**Output:**
+
+```json
+{
+ "before": {
+  "run_id": "20261022T151743-0400",
+  "finished": "2026-10-22T15:19:44.507061-04:00",
+  "features": 408934,
+  "issues_total": 2976
+ },
+ "after": {
+  "run_id": "20261022T152125-0400",
+  "finished": "2026-10-22T15:25:02.100224-04:00",
+  "features": 408934,
+  "issues_total": 2976
+ },
+ "by_check": {
+  "attribute_missing": {
+   "before": 837,
+   "after": 837,
+   "change": 0
+  },
+  "contained_parcel": {
+   "before": 5,
+   "after": 5,
+   "change": 0
+  },
+  "gap": {
+   "before": 1089,
+   "after": 1089,
+   "change": 0
+  },
+  "geometry_invalid": {
+   "before": 14,
+   "after": 14,
+   "change": 0
+  },
+  "overlap": {
+   "before": 36,
+   "after": 36,
+   "change": 0
+  },
+  "sliver_polygon": {
+   "before": 995,
+   "after": 995,
+   "change": 0
+  }
+ },
+ "changed": {}
+}
+```
+
+**Answer (template):** Comparing run 20261022T151743-0400 with 20261022T152125-0400: issues 2976 -> 2976. No check counts changed.
+
+## 7. (Safety) Can an agent delete data?
+
+**Tool call:** `run_query`
+
+```json
+{
+ "sql": "DROP TABLE cases"
+}
+```
+
+**Output:**
+
+```json
+{
+ "error": "Error executing tool run_query: UnsafeQueryError: only SELECT / WITH queries are allowed"
+}
+```
+
+**Answer (template):** The server refused: Error executing tool run_query: UnsafeQueryError: only SELECT / WITH queries are allowed (read-only by design).

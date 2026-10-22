@@ -25,6 +25,11 @@ jobs:
         run: PYTHONPATH=. uv run --extra verify pytest -q tests
       - name: Pipeline (fetch at runtime; PAO/clerk HTTP only; no deed-image/browser steps)
         run: PYTHONPATH=. uv run --extra verify georescue run --config "${{ inputs.config || 'configs/duval_fl_ci.yaml' }}"
+      - name: Results store (redacted DuckDB for the MCP server)
+        run: PYTHONPATH=. uv run --extra verify georescue load-db
+      - name: Record Ask GeoRescue sessions (on failure the committed examples/agent_sessions.json is kept)
+        continue-on-error: true
+        run: PYTHONPATH=. timeout 300 uv run --extra verify python scripts/mcp_demo.py
       - name: Publish site
         run: PYTHONPATH=. uv run --extra verify georescue publish --min-cases 10   # refuses (non-zero) rather than publish an empty/partial site
       - uses: actions/upload-pages-artifact@v5

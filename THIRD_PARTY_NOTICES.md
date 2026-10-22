@@ -58,6 +58,7 @@ No data files are included in this repository; scripts fetch them from the sourc
 | Duval Property Appraiser (paopropertysearch.coj.net) | Owner/legal/sales triage in `georescue run` | Public records; cached, low-rate HTTP lookups |
 | Exo 2 font (Natanael Gama), vendored in `brand/fonts/` (license: `brand/fonts/OFL.txt`), copied to `site/assets/fonts/` | Wordmark in site header | SIL Open Font License 1.1, https://github.com/googlefonts/Exo-2.0 |
 | GitHub Actions: actions/checkout, cache, upload-pages-artifact, deploy-pages; astral-sh/setup-uv | CI workflow | MIT |
+| knightchrism/census-pipeline (the author's own project) | MCP server pattern: SQL guard, row cap/timeout, logging, governed metrics YAML, stdio demo script (adapted in `src/georescue/mcp_server.py`, `metrics.py`, `scripts/mcp_demo.py`) | MIT, https://github.com/knightchrism/census-pipeline |
 
 Public site note: COJ Duval orthoimagery (no published licence) is excluded from `site/` by default (`georescue publish --include-coj-imagery` to override locally).
 

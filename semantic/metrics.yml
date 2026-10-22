@@ -1,0 +1,39 @@
+# Governed metrics for the GeoRescue results store (pattern from knightchrism/census-pipeline, MIT).
+# WHY: an agent asking "how many overlaps?" should not invent SQL. Each metric pins one definition.
+# get_metric(name, group_by) builds SQL from this file only; caller input never becomes SQL text.
+version: 1
+default_caveats:
+  - "Automated, experimental data quality test results on public data; verdicts are proposals, not findings."
+  - "Not a survey, boundary determination, title opinion or legal advice."
+metrics:
+  issues_by_check:
+    label: Issues by check
+    unit: issues
+    description: Number of issues in the latest run, per check type.
+    table: issues
+    expression: count(*)
+    group_by: [check, severity]
+  overlap_area_total:
+    label: Total overlap area
+    unit: sq ft (EPSG:2236)
+    description: Sum of overlap/containment area across cases; overlap issue metrics are the intersection area.
+    table: issues
+    expression: round(sum(metric), 1)
+    filter: "\"check\" = 'overlap'"
+    group_by: [severity]
+  cases_by_confidence:
+    label: Case files by confidence
+    unit: cases
+    description: Number of overlap/containment case files by proposed-verdict confidence.
+    table: cases
+    expression: count(*)
+    group_by: [confidence, check, basis]
+  deed_closure_ratio:
+    label: Deed traverse closure ratio
+    unit: "1:N (higher is better)"
+    description: Closure ratio of each deed-checked traverse (perimeter / misclosure).
+    table: verdicts
+    expression: max(closure_ratio)
+    filter: closure_ratio IS NOT NULL
+    group_by: [case_id, orb]
+    caveats: ["Traverses come from OCR'd deed text and best-fit placement; not field measurements."]
