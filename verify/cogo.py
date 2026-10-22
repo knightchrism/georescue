@@ -55,6 +55,6 @@ def traverse(calls, start=(0.0, 0.0), arc_radius=None, arc_sweep_sign=1, az_over
 
 def compare(trav_poly, gis_poly):
     return dict(trav_acres=trav_poly.area / 43560, gis_acres=gis_poly.area / 43560,
-                hausdorff_ft=trav_poly.exterior.hausdorff_distance(gis_poly.exterior),
+                hausdorff_ft=trav_poly.boundary.hausdorff_distance(gis_poly.boundary),
                 sym_diff_sqft=trav_poly.symmetric_difference(gis_poly).area,
                 iou=trav_poly.intersection(gis_poly).area / unary_union([trav_poly, gis_poly]).area)
