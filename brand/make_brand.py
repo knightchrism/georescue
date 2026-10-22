@@ -44,6 +44,7 @@ out = {
  "logo-mark-flat.svg": svg(512, 512, mark(flat=True), bg=False),
  "logo-horizontal.svg": svg(1400, 360, mark(tx=10, ty=-76, sc=1.0) + f"<text x=540 y=225 font-size=170 {WORD}>GeoRescue</text>", bg=False),
  "logo-stacked.svg": svg(800, 820, mark(tx=144, ty=40, sc=1.0) + f"<text x=400 y=690 text-anchor=middle font-size=150 {WORD}>GeoRescue</text>", bg=False),
+ "logo-horizontal-light.svg": svg(1400, 360, mark(tx=10, ty=-76, sc=1.0) + f"<text x=540 y=225 font-size=170 {WORD.replace('#f4f8ff', '#0b1630')}>GeoRescue</text>", bg=False),
  "favicon.svg": svg(512, 512, "<rect width=512 height=512 rx=96 fill='#05070d'/>" + mark(flat=True, tx=-8, ty=-8, sc=1.03), bg=False),
 }
 for k, v in out.items():

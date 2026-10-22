@@ -15,6 +15,7 @@ with sync_playwright() as p:
     shot(b, "favicon.svg", 180, 180, D / "apple-touch-icon.png")
     shot(b, "favicon.svg", 256, 256, D / "_fav256.png")
     shot(b, "logo-horizontal.svg", 1400, 360, D / "logo-horizontal.png")
+    shot(b, "logo-horizontal-light.svg", 1400, 360, D / "logo-horizontal-light.png")
     shot(b, "logo-stacked.svg", 800, 820, D / "logo-stacked.png")
     pg = b.new_page(viewport={"width": 1200, "height": 630})
     pg.set_content(f"""<html><body style="margin:0;width:1200px;height:630px;background:radial-gradient(circle at 50% 38%,#0d1a33,#05070d 70%);display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:'Exo 2',sans-serif">

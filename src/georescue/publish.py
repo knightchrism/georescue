@@ -142,8 +142,8 @@ def publish(latest="out/latest", site="site", runs="out/runs", include_coj_image
     for f in ("logo-mark.svg", "logo-mark-flat.svg", "logo-horizontal.svg", "logo-stacked.svg", "favicon.svg", "favicon.ico",
               "apple-touch-icon.png", "logo-mark-512.png", "logo-mark-192.png", "logo-mark-32.png", "og.png"):
         if (B / f).exists(): shutil.copy2(B / f, S / "assets" / f)
-    fnt = Path("/usr/share/fonts/truetype/sand-box/google/Exo 2/Exo2-VariableFont_wght.ttf")
-    if fnt.exists(): (S / "assets" / "fonts").mkdir(exist_ok=True); shutil.copy2(fnt, S / "assets" / "fonts" / fnt.name)
+    fnt = B / "fonts" / "Exo2-VariableFont_wght.ttf"
+    if fnt.exists(): (S / "assets" / "fonts").mkdir(exist_ok=True); shutil.copy2(fnt, S / "assets" / "fonts" / fnt.name); shutil.copy2(B / "fonts" / "OFL.txt", S / "assets" / "fonts" / "OFL.txt")
     man = json.loads((L / "manifest.json").read_text())
     summ = json.loads((L / "summary.json").read_text()) if (L / "summary.json").exists() else {}
     iss = pd.read_csv(L / "issues.csv") if (L / "issues.csv").exists() else pd.DataFrame(columns=["feature_id", "check", "severity", "message"])
@@ -194,7 +194,7 @@ def publish(latest="out/latest", site="site", runs="out/runs", include_coj_image
             ps, pb, pr = _svg_paths([sieg, REDACTED, rec], bnd)
             grid = "".join(f"<line x1={i} y1=0 x2={i} y2=500 stroke='#ffffff08'/><line x1=0 y1={i} x2=500 y2={i} stroke='#ffffff08'/>" for i in range(0, 501, 50))
             before = f"<svg viewBox='0 0 500 500'>{grid}<path d='{ps}' fill='#ff9f1c33' stroke='#ff9f1c' stroke-width=2.5/><path d='{pb}' fill='#ff4d6d55' stroke='#ff4d6d' stroke-width=2 stroke-dasharray='5 4'/></svg>"
-            after = f"<svg viewBox='0 0 500 500' class=after style='background:#0b1320'>{grid}<defs><pattern id=hx width=8 height=8 patternUnits=userSpaceOnUse patternTransform='rotate(45)'><line x1=0 y1=0 x2=0 y2=8 stroke='#ff4d6d88' stroke-width=2/></pattern></defs><path d='{ps}' fill='none' stroke='#ff9f1c66' stroke-width=1 stroke-dasharray='3 4'/><path d='{pb}' fill='url(#hx)' stroke='#ff4d6d' stroke-width=1.5 stroke-dasharray='5 4'/><path d='{pr}' fill='#38d39f40' stroke='#38d39f' stroke-width=3.5/><text x=490 y=52 text-anchor=end fill='#cbd5e1' font-size=12 font-family=sans-serif>green = deed tract · hatched = REDACTED excluded</text></svg>"
+            after = f"<svg viewBox='0 0 500 500' class=after style='background:#0b1320'>{grid}<defs><pattern id=hx width=8 height=8 patternUnits=userSpaceOnUse patternTransform='rotate(45)'><line x1=0 y1=0 x2=0 y2=8 stroke='#ff4d6d88' stroke-width=2/></pattern></defs><path d='{ps}' fill='none' stroke='#ff9f1c66' stroke-width=1 stroke-dasharray='3 4'/><path d='{pb}' fill='url(#hx)' stroke='#ff4d6d' stroke-width=1.5 stroke-dasharray='5 4'/><path d='{pr}' fill='#38d39f40' stroke='#38d39f' stroke-width=3.5/></svg>"
             cl = travs["001542 0010"]["closure"]
             case_id = case_of.get("001542 0010", "")
             hero = f"""<section class=hero><div><div class=eyebrow>Featured case · Duval County, FL</div>

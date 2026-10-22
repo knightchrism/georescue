@@ -1,4 +1,8 @@
-<p align="center"><img src="brand/logo-horizontal.png" alt="GeoRescue" width="520"></p>
+<p align="center"><picture>
+  <source media="(prefers-color-scheme: dark)" srcset="brand/logo-horizontal.png">
+  <source media="(prefers-color-scheme: light)" srcset="brand/logo-horizontal-light.png">
+  <img src="brand/logo-horizontal-light.png" alt="GeoRescue" width="520">
+</picture></p>
 
 # GeoRescue (V1 core)
 GIS data-quality & repair for parcel datasets. Load (SHP/GPKG/GeoJSON) → inspect → classify issues → propose repairs on a copy (every change logged) → export `corrected.gpkg`, `changelog.csv`, `issues.csv`, `diff.csv`, `summary.json`, `report.html`.

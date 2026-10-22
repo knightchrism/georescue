@@ -9,3 +9,7 @@ data/
 out/
 *.pdf
 __pycache__/
+
+# COJ-imagery verification figures and v1 figures stay local
+out/duval/verify/*.png
+out/duval/verify/v1/
