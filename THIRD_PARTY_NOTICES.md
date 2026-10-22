@@ -46,3 +46,10 @@ Tesseract, Poppler, and RustGIS are invoked as external programs and are not bun
 - Recorded deeds: Columbia County Clerk of Court official records (https://www.myfloridacounty.com/orisearch/12)
 
 No data files are included in this repository; scripts fetch them from the sources above.
+
+## Imagery and records used in verification figures
+
+| Source | Use | Terms / credit |
+|---|---|---|
+| City of Jacksonville GIS — Duval 2026 orthoimagery (https://maps.coj.net/coj/rest/services/imagery/Duval2026/MapServer, layer `Duval_2026`) | Basemap for `out/duval/verify/deed_*_overlay.png` | Public ArcGIS REST service; no license text published in service metadata (copyrightText empty). Credited as "City of Jacksonville GIS, Duval 2026 orthoimagery". Figures are for internal verification; confirm COJ terms before redistribution. |
+| Duval County Clerk of Courts Official Records (or.duvalclerk.com) | Deed legal descriptions | Public records; credited as "Duval Clerk of Courts Official Records". |
