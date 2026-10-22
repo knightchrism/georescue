@@ -1,0 +1,50 @@
+[
+ {
+  "run_id": "20261022T152125-0400",
+  "finished": "2026-10-22T15:25:02.100224-04:00",
+  "features": 408934,
+  "issues": 2976,
+  "by_check": {
+   "gap": 1089,
+   "sliver_polygon": 995,
+   "attribute_missing": 837,
+   "overlap": 36,
+   "geometry_invalid": 14,
+   "contained_parcel": 5
+  },
+  "steps": {
+   "fetch": "skipped",
+   "inspect": "ok",
+   "safe_repair": "ok",
+   "pao_triage": "ok",
+   "clerk_index": "ok",
+   "first_pass_verdicts": "ok",
+   "deed_verification": "ok",
+   "collect_verification": "ok"
+  }
+ },
+ {
+  "run_id": "20261022T151743-0400",
+  "finished": "2026-10-22T15:19:44.507061-04:00",
+  "features": 408934,
+  "issues": 2976,
+  "by_check": {
+   "gap": 1089,
+   "sliver_polygon": 995,
+   "attribute_missing": 837,
+   "overlap": 36,
+   "geometry_invalid": 14,
+   "contained_parcel": 5
+  },
+  "steps": {
+   "fetch": "skipped",
+   "inspect": "ok",
+   "safe_repair": "ok",
+   "pao_triage": "error",
+   "clerk_index": "ok",
+   "first_pass_verdicts": "ok",
+   "deed_verification": "ok",
+   "collect_verification": "ok"
+  }
+ }
+]

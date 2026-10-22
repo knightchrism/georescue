@@ -11,3 +11,13 @@ fields:
 bounds: {minx: -82.06, miny: 30.10, maxx: -81.32, maxy: 30.60, crs: EPSG:4326}
 topology: {overlap_min_area: 10.0, sliver_max_area: 50.0, sliver_max_compactness: 0.02, gap_max_area: 500.0}
 repair: {trim_overlaps_below_area: 0.0}   # flag-only: overlaps are deed-verification candidates
+service:
+  source_url: https://maps.coj.net/coj/rest/services/CityBiz/Parcels/MapServer/0
+  data_path: data/real/duval_parcels.geojson
+  max_age_hours: 168
+  out_fields: OBJECTID,RE,LNAMEOWNER,ACRES,PARCELTYPE,STREET_NO,ST_NAME,ZIPCODE
+  pao: true
+  clerk: true
+  max_lookups: 60
+  deeds_dir: data/deeds/duval
+  verify_dir: out/duval/verify

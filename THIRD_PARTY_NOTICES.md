@@ -53,3 +53,9 @@ No data files are included in this repository; scripts fetch them from the sourc
 |---|---|---|
 | City of Jacksonville GIS — Duval 2026 orthoimagery (https://maps.coj.net/coj/rest/services/imagery/Duval2026/MapServer, layer `Duval_2026`) | Basemap for `out/duval/verify/deed_*_overlay.png` | Public ArcGIS REST service; no license text published in service metadata (copyrightText empty). Credited as "City of Jacksonville GIS, Duval 2026 orthoimagery". Figures are for internal verification; confirm COJ terms before redistribution. |
 | Duval County Clerk of Courts Official Records (or.duvalclerk.com) | Deed legal descriptions | Public records; credited as "Duval Clerk of Courts Official Records". |
+| Leaflet 1.9.4 (dashboard map, loaded from unpkg CDN) | Interactive map in `site/` | BSD-2-Clause, https://leafletjs.com |
+| OpenStreetMap tiles (tile.openstreetmap.org) | Dashboard basemap | Data © OpenStreetMap contributors, ODbL; tile usage policy applies (low-traffic demo) |
+| Duval Property Appraiser (paopropertysearch.coj.net) | Owner/legal/sales triage in `georescue run` | Public records; cached, low-rate HTTP lookups |
+| GitHub Actions: actions/checkout, cache, upload-pages-artifact, deploy-pages; astral-sh/setup-uv | CI workflow | MIT |
+
+Public site note: COJ Duval orthoimagery (no published licence) is excluded from `site/` by default (`georescue publish --include-coj-imagery` to override locally).

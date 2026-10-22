@@ -38,3 +38,23 @@ Deed PDFs, page images, and raw county data are excluded from the repo.
 ## Credits
 
 See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) for open-source licenses and data sources.
+
+## Live demo
+
+Static dashboard (GitHub Pages): **https://knightchrism.github.io/georescue/** (placeholder until Pages is enabled)
+
+- KPIs per check, filterable issues table, Leaflet map of *flagged parcels only* (small GeoJSON, not the 584 MB county layer),
+  per-overlap case files (verdict, confidence, ORB refs, deed closure/acreage, overlay PNGs) and run history.
+- Basemap: OpenStreetMap tiles. The COJ Duval orthoimagery has no published licence, so imagery-backed figures are **not** published;
+  case pages use the plain (no-imagery) overlay PNGs.
+
+```bash
+PYTHONPATH=. uv run --extra verify georescue run --config configs/duval_fl.yaml   # -> out/runs/<ts>/, out/latest/
+PYTHONPATH=. uv run --extra verify georescue publish                               # -> site/
+python -m http.server -d site 8765                                                  # preview locally
+```
+
+Automation: `.github/workflows/pipeline.yml` (weekly cron + manual dispatch) runs the pipeline on a bbox extract
+(`configs/duval_fl_ci.yaml`), fetching parcels at runtime, and deploys `site/` to Pages.
+To enable: push the repo to GitHub, then *Settings → Pages → Source: GitHub Actions*, and allow Actions under *Settings → Actions*.
+Only invalid-geometry repair is ever auto-applied; every other fix is a proposal recorded in `changelog.csv`.

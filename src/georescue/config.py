@@ -50,6 +50,23 @@ class RepairRules(BaseModel):
     cut_contained_from_container: bool = Field(False, description="apply the 'cut smaller from larger' proposal for contained_parcel issues; default flag-only")
 
 
+class ServiceRules(BaseModel):
+    """Settings for `georescue run` (automated pipeline)."""
+    source_url: Optional[str] = None          # ArcGIS REST layer URL (…/MapServer/0)
+    data_path: Optional[str] = None           # local GeoJSON written by fetch / read by inspect
+    max_age_hours: float = 168.0              # skip fetch if data_path is younger than this
+    where: str = "1=1"                        # ArcGIS where filter (size control)
+    bbox: Optional[list[float]] = None        # [minx, miny, maxx, maxy] EPSG:4326 envelope filter
+    out_fields: str = "*"
+    fetch_workers: int = 6
+    write_corrected: bool = True              # write corrected.gpkg (invalid-geometry fixes only)
+    pao: bool = False                         # Duval PA HTTP triage of overlap/containment parcels
+    clerk: bool = False                       # Duval Clerk book/page index lookups (HTTP)
+    max_lookups: int = 60                     # cap on PAO parcels per run
+    deeds_dir: Optional[str] = None           # deed PDFs already present -> deed verification step
+    verify_dir: Optional[str] = None          # existing verification outputs (verdicts, PNGs) to include
+
+
 class Config(BaseModel):
     name: str = "parcels"
     id_field: Optional[str] = None
@@ -59,6 +76,7 @@ class Config(BaseModel):
     bounds: Optional[Bounds] = None
     topology: TopologyRules = TopologyRules()
     repair: RepairRules = RepairRules()
+    service: ServiceRules = ServiceRules()
 
     @field_validator("expected_crs", "working_crs")
     @classmethod

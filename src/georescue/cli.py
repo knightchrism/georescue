@@ -26,5 +26,23 @@ def report(src: str, out: str = typer.Option("georescue_out", "--out", "-o"), co
     typer.echo(pipeline.run_repair(src, out, config)["outputs"]["report.html"])
 
 
+@app.command()
+def run(config: str = typer.Option(..., "--config", "-c"), out: str = typer.Option("out", "--out", "-o"),
+        force_fetch: bool = typer.Option(False, "--force-fetch")):
+    """Automated pipeline: fetch (if stale) -> inspect -> safe repair -> PAO/clerk triage -> verdicts -> deed checks.
+    Writes out/runs/<ts>/ (+ manifest.json) and copies it to out/latest/."""
+    from . import service
+    m = service.run(config, out, force_fetch, log=typer.echo)
+    typer.echo(json.dumps({s["name"]: s["status"] for s in m["steps"]}, indent=1))
+
+
+@app.command()
+def publish(latest: str = "out/latest", site: str = "site", runs: str = "out/runs",
+            include_coj_imagery: bool = typer.Option(False, help="include COJ-orthoimagery figures (no published licence)")):
+    """Generate the static dashboard (site/) from out/latest."""
+    from . import publish as pub
+    typer.echo(json.dumps(pub.publish(latest, site, runs, include_coj_imagery), indent=1))
+
+
 def main():
     app()
