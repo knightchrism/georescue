@@ -21,3 +21,16 @@ Real data: `uv run python scripts/fetch_columbia.py` (Columbia County FL LCParce
 
 ## Known gaps
 Gap detection uses holes in the unioned fabric (misses gaps open to the outside edge); overlap trimming is greedy (higher row loses); DuckDB batch mode not implemented; no map of issue geometries in the UI (points only); type rules don't parse unit-suffixed text (e.g. "3 Ac").
+
+## Automated vs. manual steps
+
+| Step | Status |
+|---|---|
+| Inspect, classify, repair, change log, QA report | Automated (`georescue` CLI / MCP) |
+| RustGIS visualization loop | Automated (`agent_demo/run_demo.py`) |
+| Appraiser legal descriptions, PLSS corner tie (BLM CadNSDI) | Automated (`verify/`) |
+| **Fetching recorded deed images** (myfloridacounty.com ORI) | **Manual today**: portal sits behind a human-verification check; production path is a bulk/API agreement with the Clerk |
+| Deed OCR, metes-and-bounds + curve parsing, COGO traverse, closure and GIS comparison | Automated (`verify/run_deeds.py`) |
+| Final boundary position within ~3 ft | Needs a licensed surveyor |
+
+Deed PDFs, page images, and raw county data are excluded from the repo.
