@@ -1,0 +1,105 @@
+{
+ "owner_0015420010_001542_0010_vs_owner_0015315300_001531_5300": {
+  "deed": "ORB 19870-841 (WD 2021, Owner of 001542 0010 -> Owner of 001542 0010)",
+  "has_bearings": true,
+  "closure": {
+   "n_calls": 6,
+   "perimeter_ft": 2393.44,
+   "misclosure_ft": 0.007,
+   "precision": "1:353363"
+  },
+  "acres_record_cogo": 7.963,
+  "acres_record_stated": 7.83,
+  "acres_gis_owner_0015420010": 10.59,
+  "acres_gis_owner_0015315300": 2.476,
+  "fit": {
+   "iou": 0.734,
+   "rot_deg": 0.75,
+   "dx": -30,
+   "dy": -150,
+   "note": "no monument tie; rotation+translation best fit to GIS"
+  },
+  "vs_gis": {
+   "trav_acres": 7.963280071754969,
+   "gis_acres": 10.590474480604477,
+   "hausdorff_ft": 760.0164627015591,
+   "sym_diff_sqft": 123766.21069532735,
+   "iou": 0.7343980851255185
+  },
+  "fit_to_gis_minus_owner_0015315300": {
+   "iou": 0.981,
+   "rot_deg": 0.0,
+   "dx": 0,
+   "dy": 0,
+   "vs": {
+    "trav_acres": 7.963280071757022,
+    "gis_acres": 8.113988951119698,
+    "hausdorff_ft": 6.062836426609725,
+    "sym_diff_sqft": 6765.312247389504,
+    "iou": 0.9808643843472461
+   },
+   "owner_0015315300_inside_record_fraction": 0.0
+  },
+  "gis_excess_outside_record_ac": 2.734,
+  "owner_0015315300_inside_record_fraction": 0.023,
+  "owner_0015315300_inside_gis_owner_0015420010_fraction": 1.0,
+  "gis_owner_0015420010_minus_owner_0015315300_ac": 8.114,
+  "parent_17966_196": {
+   "calls_parsed": 5,
+   "closure": {
+    "n_calls": 5,
+    "perimeter_ft": 1602.65,
+    "misclosure_ft": 0.005,
+    "precision": "1:294447"
+   },
+   "acres_cogo": 3.413,
+   "stated_acres": 3.41,
+   "note": "3.41 ac piece of Tract 8 (folio 001542-0100); OCR of bearings partly garbled; superseded by 19870-841 'All of Tract 8'"
+  }
+ },
+ "owner_0130300010_013030_0010_vs_owner_0130300300_013030_0300": {
+  "deeds": {
+   "owner_0130300300": "ORB 13639-288 (WD 2006, metes & bounds w/ lake meander)",
+   "owner_0130300010": "ORB 20536-187 (WD 2022, plat ref Tracts 12-13 Blk 1 PB 5-93)"
+  },
+  "owner_0130300010_has_bearings": false,
+  "owner_0130300300_has_bearings": "partial (one 344 ft meander call has no bearing)",
+  "owner_0130300010_exception_text": "Less and except ... Official Records Book 13639, Page 288 ...",
+  "owner_0130300300_tie_calls": 4,
+  "owner_0130300300_figure_calls_with_bearing": 3,
+  "meander_chord_ft": 220.8,
+  "meander_record_ft": 344.0,
+  "acres_record_cogo_chorded": 0.339,
+  "acres_gis_owner_0130300300": 0.5,
+  "acres_gis_owner_0130300010": 7.382,
+  "fit": {
+   "iou": 0.667,
+   "rot_deg": -1.5,
+   "dx": 10,
+   "dy": 10
+  },
+  "vs_gis": {
+   "trav_acres": 0.33866635678282647,
+   "gis_acres": 0.5004255346472647,
+   "hausdorff_ft": 55.58208831512795,
+   "sym_diff_sqft": 7305.211809604573,
+   "iou": 0.6668550385492327
+  },
+  "owner_0130300300_inside_owner_0130300010_gis_fraction": 1.0
+ },
+ "city_004307_0320_vs_owner_0043070230_004307_0230": {
+  "deed": "ORB 13934-1037 (Tax Deed 2007, TD# 99-1006, to City of Jacksonville)",
+  "has_bearings": false,
+  "legal": "07-1S-26E DINSMORE FARMS S/D PT PVT RD LYING E OF O/R 4690-669, 4886-64, 5528-1903, LYING SOUTH OF O/R 4321-590, 4886-64, 5554-2032, 6460-2252 RECD O/R 2384-383",
+  "acres_stated": null,
+  "acres_gis_city": 1.229,
+  "acres_gis_owner_0043070230": 0.481,
+  "owner_0043070230_inside_city_fraction": 1.0,
+  "owner_0043070230_deed": "not supplied"
+ },
+ "_pngs": [
+  "out/duval/verify/deed_Owner of 001542 0010_overlay.png",
+  "out/duval/verify/deed_Owner of 013030 0010_Owner of 013030 0300_overlay.png",
+  "out/duval/verify/deed_city_Owner of 004307 0230_overlay.png"
+ ]
+}

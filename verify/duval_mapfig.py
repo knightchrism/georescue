@@ -8,7 +8,7 @@ from matplotlib.patches import Patch, FancyArrow, Rectangle
 from matplotlib.lines import Line2D
 from shapely import affinity
 from shapely.geometry import Polygon
-import verify.run_duval_deeds as R   # rebuilds record polygons (r19 fit, REDACTED fit) and GIS dict G
+import verify.run_duval_deeds as R   # rebuilds record polygons (r19 fit, OwnerD fit) and GIS dict G
 
 IMG = "https://maps.coj.net/coj/rest/services/imagery/Duval2026/MapServer/export"
 IMG_CREDIT = "Imagery: City of Jacksonville GIS, Duval 2026 orthoimagery (maps.coj.net imagery/Duval2026)"
@@ -72,16 +72,16 @@ def fig(fn, title, sub, parcels, records, hatch=None, focus=None, pad=0.18):
     p = R.OUT / fn; f.savefig(p, dpi=200); plt.close(f); return str(p)
 
 G = R.G; s, b = G["001542 0010"], G["001531 5300"]; pat, lock = G["013030 0010"], G["013030 0300"]; city, star = G["004307 0320"], G["004307 0230"]
-P = [fig("deed_REDACTED_overlay.png", "REDACTED tract vs. REDACTED parcel",
-         "GIS 001542 0010 (REDACTED, 10.59 ac) & 001531 5300 (REDACTED, 2.48 ac)  •  Deed ORB 19870-841 (7.83 ac record)",
-         [("GIS 001542 0010 REDACTED", s, "#4f8fbf"), ("GIS 001531 5300 REDACTED", b, "#d98c3f")],
-         [("Deed record ORB 19870-841 (COGO)", R.f19b, "#e0303a")], hatch=("Overlap: REDACTED inside REDACTED GIS (exclude)", s.intersection(b))),
-     fig("deed_patriot_REDACTED_overlay.png", "Patriot Ridge vs. REDACTED parcel",
-         "GIS 013030 0010 (Patriot Ridge, 7.38 ac) & 013030 0300 (REDACTED, 0.50 ac)  •  ORB 20536-187 excepts ORB 13639-288",
-         [("GIS 013030 0010 Patriot Ridge", pat, "#5aa469"), ("GIS 013030 0300 REDACTED", lock, "#9b6fc0")],
-         [("Deed record ORB 13639-288 (lake side chorded)", R.fl, "#e0303a")], hatch=("Overlap: REDACTED inside Patriot GIS (excepted)", pat.intersection(lock))),
-     fig("deed_city_REDACTED_overlay.png", "City private-road parcel vs. REDACTED parcel",
-         "GIS 004307 0320 (City of Jacksonville, 1.23 ac) & 004307 0230 (REDACTED, 0.48 ac)  •  Tax deed ORB 13934-1037 (no bearings)",
-         [("GIS 004307 0320 City (tax deed)", city, "#8a8a8a"), ("GIS 004307 0230 REDACTED", star, "#c95f5f")], [],
-         hatch=("Overlap: REDACTED inside City GIS", city.intersection(star)))]
+P = [fig("deed_owner_a_overlay.png", "OwnerA tract vs. OwnerB parcel",
+         "GIS 001542 0010 (OwnerA, 10.59 ac) & 001531 5300 (OwnerB, 2.48 ac)  •  Deed ORB 19870-841 (7.83 ac record)",
+         [("GIS 001542 0010 OwnerA", s, "#4f8fbf"), ("GIS 001531 5300 OwnerB", b, "#d98c3f")],
+         [("Deed record ORB 19870-841 (COGO)", R.f19b, "#e0303a")], hatch=("Overlap: OwnerB inside OwnerA GIS (exclude)", s.intersection(b))),
+     fig("deed_patriot_owner_d_overlay.png", "Patriot Ridge vs. OwnerD parcel",
+         "GIS 013030 0010 (Patriot Ridge, 7.38 ac) & 013030 0300 (OwnerD, 0.50 ac)  •  ORB 20536-187 excepts ORB 13639-288",
+         [("GIS 013030 0010 Patriot Ridge", pat, "#5aa469"), ("GIS 013030 0300 OwnerD", lock, "#9b6fc0")],
+         [("Deed record ORB 13639-288 (lake side chorded)", R.fl, "#e0303a")], hatch=("Overlap: OwnerD inside Patriot GIS (excepted)", pat.intersection(lock))),
+     fig("deed_city_owner_f_overlay.png", "City private-road parcel vs. OwnerF parcel",
+         "GIS 004307 0320 (City of Jacksonville, 1.23 ac) & 004307 0230 (OwnerF, 0.48 ac)  •  Tax deed ORB 13934-1037 (no bearings)",
+         [("GIS 004307 0320 City (tax deed)", city, "#8a8a8a"), ("GIS 004307 0230 OwnerF", star, "#c95f5f")], [],
+         hatch=("Overlap: OwnerF inside City GIS", city.intersection(star)))]
 print("\n".join(P))

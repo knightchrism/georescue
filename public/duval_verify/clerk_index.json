@@ -1,0 +1,202 @@
+{
+ "001531 5300": [
+  {
+   "book": "11504",
+   "page": "2030",
+   "rows": [
+    {
+     "InstrumentNumber": "2003391461",
+     "DocTypeDescription": "DEED",
+     "RecordDate": "2003/12/03",
+     "NumberOfPages": 1,
+     "DocLegalDescription": "L3 SANDY RIDGE",
+     "error": null
+    }
+   ]
+  }
+ ],
+ "001542 0010": [
+  {
+   "book": "19870",
+   "page": "841",
+   "rows": [
+    {
+     "InstrumentNumber": "2021215312",
+     "DocTypeDescription": "DEED",
+     "RecordDate": "2021/08/19",
+     "NumberOfPages": 1,
+     "DocLegalDescription": "PIN 001542-0000  TRACT 8 SEC 14 TWN 2S RANGE 24E &C",
+     "error": null
+    }
+   ]
+  },
+  {
+   "book": "19870",
+   "page": "871",
+   "rows": [
+    {
+     "InstrumentNumber": "2021215320",
+     "DocTypeDescription": "MORTGAGE",
+     "RecordDate": "2021/08/19",
+     "NumberOfPages": 23,
+     "DocLegalDescription": "LOT 108 ETOWN PARCEL E2 PHASE TWO PLAT BK 75 PGS 95 THROUGH 101",
+     "error": null
+    }
+   ]
+  },
+  {
+   "book": "17966",
+   "page": "196",
+   "rows": [
+    {
+     "InstrumentNumber": "2017101136",
+     "DocTypeDescription": "DEED",
+     "RecordDate": "2017/05/02",
+     "NumberOfPages": 2,
+     "DocLegalDescription": "PT TRACT 8 SEC 14 2 24 &C",
+     "error": null
+    }
+   ]
+  }
+ ],
+ "013030 0300": [
+  {
+   "book": "13639",
+   "page": "288",
+   "rows": [
+    {
+     "InstrumentNumber": "2006394811",
+     "DocTypeDescription": "DEED",
+     "RecordDate": "2006/11/14",
+     "NumberOfPages": 2,
+     "DocLegalDescription": "PT TR 12 13 B1 SEC 9 3 25",
+     "error": null
+    }
+   ]
+  },
+  {
+   "book": "10793",
+   "page": "35",
+   "rows": [
+    {
+     "InstrumentNumber": "2002342596",
+     "DocTypeDescription": "DEED",
+     "RecordDate": "2002/12/03",
+     "NumberOfPages": 2,
+     "DocLegalDescription": "PT TR 12 13 B1JAX HTS 9 3 25",
+     "error": null
+    }
+   ]
+  }
+ ],
+ "013030 0010": [
+  {
+   "book": "20536",
+   "page": "187",
+   "rows": [
+    {
+     "InstrumentNumber": "2022310459",
+     "DocTypeDescription": "DEED",
+     "RecordDate": "2022/12/27",
+     "NumberOfPages": 4,
+     "DocLegalDescription": "PIN 013030-0000 TRACTS 12 13 B 1 SEC 9 TWN 3S RANGE 25E &C",
+     "error": null
+    }
+   ]
+  },
+  {
+   "book": "10793",
+   "page": "33",
+   "rows": [
+    {
+     "InstrumentNumber": "2002342595",
+     "DocTypeDescription": "DEED",
+     "RecordDate": "2002/12/03",
+     "NumberOfPages": 2,
+     "DocLegalDescription": "PT TR 12 13 B1JAX HTS 9 3 25",
+     "error": null
+    }
+   ]
+  },
+  {
+   "book": "10801",
+   "page": "2015",
+   "rows": [
+    {
+     "InstrumentNumber": "2002348176",
+     "DocTypeDescription": "DEED",
+     "RecordDate": "2002/12/06",
+     "NumberOfPages": 2,
+     "DocLegalDescription": "PT TR 13 B1 JAX HTS  9 3 25",
+     "error": null
+    }
+   ]
+  },
+  {
+   "book": "10801",
+   "page": "2017",
+   "rows": [
+    {
+     "InstrumentNumber": "2002348177",
+     "DocTypeDescription": "DEED",
+     "RecordDate": "2002/12/06",
+     "NumberOfPages": 2,
+     "DocLegalDescription": "PT TR 13 B1 JAX HTS  9 3 25 OR 7182 177",
+     "error": null
+    }
+   ]
+  },
+  {
+   "book": "21496",
+   "page": "5",
+   "rows": [
+    {
+     "InstrumentNumber": "2025131993",
+     "DocTypeDescription": "DEED",
+     "RecordDate": "2025/06/05",
+     "NumberOfPages": 5,
+     "DocLegalDescription": "PIN 013024 0000 TRACTS 2 3 4 5 6 PT OF TRACTS 12 13 15 16 B 1 JACKSONVILLE HEIGHTS SEC 9-3S-25E",
+     "error": null
+    }
+   ]
+  }
+ ],
+ "004307 0320": [
+  {
+   "book": "13934",
+   "page": "1037",
+   "rows": [
+    {
+     "InstrumentNumber": "2007131069",
+     "DocTypeDescription": "DEED",
+     "RecordDate": "2007/04/19",
+     "NumberOfPages": 1,
+     "DocLegalDescription": "PT DINSMORE FARMS SEC 7 1 26",
+     "error": null
+    }
+   ]
+  },
+  {
+   "book": "2384",
+   "page": "383",
+   "rows": []
+  },
+  {
+   "book": "4690",
+   "page": "669",
+   "rows": []
+  },
+  {
+   "book": "5528",
+   "page": "1903",
+   "rows": []
+  }
+ ],
+ "004307 0230": [
+  {
+   "book": "4886",
+   "page": "64",
+   "rows": []
+  }
+ ]
+}

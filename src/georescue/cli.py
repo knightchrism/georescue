@@ -43,11 +43,13 @@ def run(config: str = typer.Option(..., "--config", "-c"), out: str = typer.Opti
 @app.command()
 def publish(latest: str = "out/latest", site: str = "site", runs: str = "out/runs",
             include_coj_imagery: bool = typer.Option(False, help="include COJ-orthoimagery figures (no published licence)"),
-            min_cases: int = typer.Option(1, help="refuse to publish if the latest run has fewer cases")):
+            min_cases: int = typer.Option(1, help="refuse to publish if the latest run has fewer cases"),
+            redact_owners: bool = typer.Option(True, "--redact-owners/--no-redact-owners", help="replace owner/person names with labels (default on; use --no-redact-owners only for private builds)"),
+            owner_key: str = typer.Option("out/owner_key.csv", help="private label->name CSV written when redacting (keep out of git)")):
     """Generate the static dashboard (site/) from out/latest."""
     from . import publish as pub
     try:
-        typer.echo(json.dumps(pub.publish(latest, site, runs, include_coj_imagery, min_cases), indent=1))
+        typer.echo(json.dumps(pub.publish(latest, site, runs, include_coj_imagery, min_cases, redact_owners, owner_key), indent=1))
     except pub.NotPublishable as e:
         typer.echo(f"publish refused, existing {site}/ left untouched: {e}", err=True); raise typer.Exit(2)
 

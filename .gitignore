@@ -13,3 +13,9 @@ __pycache__/
 # COJ-imagery verification figures and v1 figures stay local
 out/duval/verify/*.png
 out/duval/verify/v1/
+
+# private: owner names / raw evidence (public copies live in public/duval_verify)
+out/duval/verify/
+out/duval_v2/
+out/owner_key.csv
+site_private/

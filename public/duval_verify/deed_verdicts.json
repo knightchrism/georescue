@@ -1,0 +1,47 @@
+{
+ "owner_0015420010_001542_0010_vs_owner_0015315300_001531_5300": {
+  "verdict": "Owner of 001542 0010 GIS polygon over-includes Owner of 001531 5300 001531 5300; cut Owner of 001531 5300 from Owner of 001542 0010 (contained_parcel: cut smaller from larger)",
+  "confidence": "high",
+  "confidence_score": 0.85,
+  "evidence": [
+   "ORB 19870-841 closes 1:353363 (misclosure 0.007 ft), COGO 7.963 ac vs stated 7.83",
+   "Record fits GIS-minus-Owner of 001531 5300 (8.11 ac) with IoU 0.981, Hausdorff 6.1 ft, zero rotation/shift",
+   "Owner of 001531 5300 inside record tract: 0%; GIS Owner of 001542 0010 10.59 = 8.11 + Owner of 001531 5300 2.48 ac",
+   "Deed's 60 ft ingress/egress strip is an easement ('Together with'), not fee - consistent with excluding the northern strip",
+   "Parent 17966-196 (3.41 ac, folio 001542-0100) closes 1:294k and lies within Tract 8"
+  ],
+  "caveat": "no monument/PLSS tie; placement is best-fit to GIS (it lands at 0,0 offset, which is itself corroborating)"
+ },
+ "owner_0130300010_013030_0010_vs_owner_0130300300_013030_0300": {
+  "verdict": "Owner of 013030 0300 is outside Owner of 013030 0010 Ridge by record; cut Owner of 013030 0300 from Owner of 013030 0010",
+  "confidence": "high",
+  "confidence_score": 0.9,
+  "evidence": [
+   "Owner of 013030 0010 deed ORB 20536-187 (plat reference, no bearings) expressly excepts 'Official Records Book 13639, Page 288' = the Owner of 013030 0300 deed",
+   "Owner of 013030 0300 COGO matches GIS on bearing sides (IoU 0.667, chorded lake side 220.8 ft vs 344 ft meander explains 0.34 vs 0.50 ac)",
+   "GIS Owner of 013030 0300 100% inside GIS Owner of 013030 0010"
+  ]
+ },
+ "city_004307_0320_vs_owner_0043070230_004307_0230": {
+  "verdict": "Likely City GIS polygon over-drawn; lean cut Owner of 004307 0230 from City, but not resolvable from the tax deed",
+  "confidence": "low",
+  "confidence_score": 0.45,
+  "evidence": [
+   "Tax deed ORB 13934-1037 conveys only 'PT PVT RD' in Dinsmore Farms by reference to adjoining O/R deeds; no bearings, no acreage",
+   "A private-road strip should not wholly contain a 0.481 ac lot (100% inside, City GIS 1.229 ac)"
+  ],
+  "needed": [
+   "Owner of 004307 0230 vesting deed",
+   "O/R 2384-383 and the adjoiner deeds 4690-669, 4886-64, 5528-1903, 4321-590, 5554-2032, 6460-2252"
+  ]
+ },
+ "plat_reference_deeds_without_bearings": [
+  "ORB 20536-187 (Owner of 013030 0010 Ridge: Tracts 12-13 Blk 1 PB 5-93 less exceptions)",
+  "ORB 13934-1037 (City tax deed: 'PT PVT RD' by adjoiner reference)"
+ ],
+ "pngs": [
+  "out/duval/verify/deed_Owner of 001542 0010_overlay.png",
+  "out/duval/verify/deed_Owner of 013030 0010_Owner of 013030 0300_overlay.png",
+  "out/duval/verify/deed_city_Owner of 004307 0230_overlay.png"
+ ]
+}

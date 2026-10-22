@@ -31,7 +31,7 @@ main{padding:20px 24px;max-width:1240px;margin:auto}h2{margin:28px 0 10px;font-s
 .hero{display:grid;grid-template-columns:1.1fr 1fr;gap:22px;align-items:start}@media(max-width:860px){.hero{grid-template-columns:1fr}}
 .eyebrow{text-transform:uppercase;font-size:12px;letter-spacing:1.5px;color:var(--acc);font-weight:700}.hero h1{font-size:34px;line-height:1.15;margin:6px 0 14px}
 .big{display:flex;gap:14px;flex-wrap:wrap}.big div{flex:1;min-width:120px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px}
-.big b{font-size:34px;display:block;font-variant-numeric:tabular-nums}.big small{color:var(--mut)}.gis b{color:#ff9f1c}.deed b{color:#38d39f}.REDACTED b{color:var(--acc)}
+.big b{font-size:34px;display:block;font-variant-numeric:tabular-nums}.big small{color:var(--mut)}.gis b{color:#ff9f1c}.deed b{color:#38d39f}.excl b{color:var(--acc)}.banner{background:#3b2a05;color:#ffd98a;border-bottom:1px solid #6b4e10;padding:7px 24px;font-size:13px;text-align:center}.disc{border-left:4px solid #c18a1d;font-size:13px}
 .counters{display:flex;gap:26px;flex-wrap:wrap;margin:18px 0}.counters b{font-size:30px;color:var(--acc2);font-variant-numeric:tabular-nums}.counters span{display:block;font-size:12px;color:var(--mut)}
 .steps{counter-reset:s;list-style:none;padding:0;margin:0}.steps li{counter-increment:s;position:relative;padding:4px 0 12px 40px;border-left:2px solid var(--line);margin-left:14px}
 .steps li:before{content:counter(s);position:absolute;left:-15px;top:0;width:28px;height:28px;border-radius:50%;background:var(--acc);color:#fff;font-weight:700;display:grid;place-items:center;font-size:13px}
@@ -58,7 +58,13 @@ addEventListener('DOMContentLoaded',()=>{const b=document.getElementById('tt');i
 FOOT = ("Data: City of Jacksonville / Duval Property Appraiser parcels (maps.coj.net CityBiz/Parcels); Duval Property Appraiser "
         "(paopropertysearch.coj.net); Duval Clerk of Courts Official Records (or.duvalclerk.com). Basemap " + ATTR + ". "
         "Map library: MapLibre GL JS (BSD-3-Clause). Deed outlines are COGO traverses best-fit to GIS, not surveys; "
-        "all fixes except invalid-geometry repair are proposals for review.")
+        "all fixes except invalid-geometry repair are proposals for review. ")
+
+BANNER = "Test demo — not authoritative. Not a survey, title opinion, or legal determination. For testing and demonstration only."
+DISCLAIMER = ("Disclaimer: results are automated, experimental data quality test results computed from public data. Verdicts are proposals, not findings. "
+              "Boundary placements are best-fit, not measured in the field. Consult a licensed surveyor or attorney and the official records. "
+              "GeoRescue is not affiliated with the City of Jacksonville, the Duval County Clerk of Courts or the Duval County Property Appraiser, and does not own their data.")
+ISSUES_URL = "https://github.com/knightchrism/georescue/issues"
 
 
 def page(title, body, depth=0, head="", desc="Evidence-based parcel overlap resolution"):
@@ -68,8 +74,8 @@ def page(title, body, depth=0, head="", desc="Evidence-based parcel overlap reso
 <meta property=og:title content="GeoRescue · {E(title)}"><meta property=og:description content="{E(desc)}"><meta property=og:image content="{SITE_URL}assets/og.png">
 <meta property=og:type content=website><meta name=twitter:card content=summary_large_image><link rel=icon href="{up}assets/favicon.svg" type="image/svg+xml"><link rel=icon href="{up}assets/favicon.ico" sizes=any><link rel=apple-touch-icon href="{up}assets/apple-touch-icon.png"><meta property=og:image:width content=1200><meta property=og:image:height content=630>
 <link rel=stylesheet href="{up}assets/style.css">{THEME_JS}{head}</head><body>
-<header><a class=brand href="{up}index.html">{LOGO.format(up=up)}<span class=wm>GeoRescue</span></a><nav><a href="{up}index.html">Dashboard</a><a href="{up}index.html#map-sec">Map</a><a href="{up}cases.html">Case files</a><a href="{up}history.html">Run history</a></nav><button id=tt>☀ light</button></header>
-<main>{body}</main><footer>{FOOT}</footer></body></html>"""
+<header><a class=brand href="{up}index.html">{LOGO.format(up=up)}<span class=wm>GeoRescue</span></a><nav><a href="{up}index.html">Dashboard</a><a href="{up}index.html#map-sec">Map</a><a href="{up}cases.html">Case files</a><a href="{up}history.html">Run history</a></nav><button id=tt>☀ light</button></header><div class=banner role=note>{BANNER}</div>
+<main>{body}</main><footer>{FOOT}<br>{DISCLAIMER}<br>Questions, corrections or removal requests: open an issue at <a href='{ISSUES_URL}'>{ISSUES_URL}</a> · <a href='{up}terms.html'>Terms of use</a> · <a href='{up}terms.html#sources'>Data sources</a></footer></body></html>"""
 
 
 # ---------- geometry helpers ----------
@@ -96,11 +102,12 @@ def _deed_index(vdir: Path):
     vf, cf = vdir / "deed_verdicts.json", vdir / "deed_cogo_duval.json"
     if not vf.exists(): return out
     v = json.loads(vf.read_text()); c = json.loads(cf.read_text()) if cf.exists() else {}
-    keys = {"REDACTED_001542_0010_vs_REDACTED_001531_5300": ("001542 0010", "001531 5300", "deed_REDACTED_overlay.png", "001542 0010"),
-            "patriot_013030_0010_vs_REDACTED_013030_0300": ("013030 0010", "013030 0300", "deed_patriot_REDACTED_overlay.png", "013030 0300"),
-            "city_004307_0320_vs_REDACTED_004307_0230": ("004307 0320", "004307 0230", "deed_city_REDACTED_overlay.png", None)}
-    for k, (a, b, png, tr) in keys.items():
-        if k in v: out[(a, b)] = dict(verdict=v[k], cogo=c.get(k, {}), png=png, traverse_parcel=tr)
+    pairs = [("001542 0010", "001531 5300", "001542 0010"), ("013030 0010", "013030 0300", "013030 0300"), ("004307 0320", "004307 0230", None)]
+    for k in v:
+        for a, b, tr in pairs:
+            if a.replace(" ", "_") in k and b.replace(" ", "_") in k and isinstance(v[k], dict):
+                ck = next((kk for kk in c if a.replace(" ", "_") in kk and b.replace(" ", "_") in kk), None)
+                out[(a, b)] = dict(verdict=v[k], cogo=c.get(ck, {}) if ck else {}, png=f"fig_{a.replace(' ', '')}_{b.replace(' ', '')}.png", traverse_parcel=tr)
     return out
 
 
@@ -148,7 +155,8 @@ def _check_publishable(L: Path, min_cases: int):
     if n < min_cases: raise NotPublishable(f"only {n} cases (< {min_cases})")
 
 
-def publish(latest="out/latest", site="site", runs="out/runs", include_coj_imagery=False, min_cases=1) -> dict:
+def publish(latest="out/latest", site="site", runs="out/runs", include_coj_imagery=False, min_cases=1,
+            redact_owners=True, owner_key="out/owner_key.csv") -> dict:
     import geopandas as gpd
     L, S = Path(latest), Path(site)
     _check_publishable(L, min_cases)
@@ -196,41 +204,47 @@ def publish(latest="out/latest", site="site", runs="out/runs", include_coj_image
     kpis = "".join(f"<div class=kpi><b data-n={n}>{n:,}</b><span><i style='display:inline-block;width:8px;height:8px;border-radius:2px;background:{COLORS.get(k, '#888')}'></i> {E(k)}</span></div>" for k, n in sorted(by.items(), key=lambda x: -x[1]))
     if not (S / "assets" / "og.png").exists(): _og_image(S / "assets" / "og.png", n_par, n_ov)
 
-    # ---- hero: REDACTED vs REDACTED ----
+    # ---- hero: featured contained-parcel case ----
     hero = ""
     sb = deeds.get(("001542 0010", "001531 5300"))
     trav_path = L / "verify" / "deed_traverses_2236.json"
-    for src in [Path("out/duval/verify/deed_traverses_2236.json")]:  # pull from the run's verify output if missing/stale
+    for src in [Path("out/duval/verify/deed_traverses_2236.json"), Path("public/duval_verify/deed_traverses_2236.json")]:  # pull from the run's verify output if missing/stale
         if src.exists() and (not trav_path.exists() or src.stat().st_mtime > trav_path.stat().st_mtime):
             trav_path.parent.mkdir(parents=True, exist_ok=True); shutil.copy2(src, trav_path)
     travs = json.loads(trav_path.read_text()) if trav_path.exists() else {}
     if sb and fg is not None and "001542 0010" in travs:
         c = sb["cogo"]; g2236 = fg.set_index("fid").to_crs(2236).geometry
-        sieg, REDACTED = g2236.get("001542 0010"), g2236.get("001531 5300")
+        pa_geom, pb_geom = g2236.get("001542 0010"), g2236.get("001531 5300")
+        _ow = next((v.get("owners") or {} for v in verdicts if "001542 0010" in v["parcels"]), {})
+        _sn = lambda pid, L_: (str(_ow.get(pid) or "").split() or [f"Parcel {L_}"])[0].title() if not redact_owners else f"Parcel {L_}"
+        NA, NB = _sn("001542 0010", "A"), _sn("001531 5300", "B")
+        fit = next((vv for kk, vv in c.items() if kk.startswith("fit_to_gis_minus") and isinstance(vv, dict)), {})
+        ac_a = round(pa_geom.area / 43560, 2) if pa_geom is not None else 10.59; ac_b = round(pb_geom.area / 43560, 2) if pb_geom is not None else 2.48
         from shapely.geometry import Polygon
         rec = Polygon(travs["001542 0010"]["vertices"])
-        if sieg is not None and REDACTED is not None:
-            bnd = sieg.union(REDACTED).bounds
-            ps, pb, pr = _svg_paths([sieg, REDACTED, rec], bnd)
+        if pa_geom is not None and pb_geom is not None:
+            bnd = pa_geom.union(pb_geom).bounds
+            ps, pb, pr = _svg_paths([pa_geom, pb_geom, rec], bnd)
             grid = "".join(f"<line x1={i} y1=0 x2={i} y2=500 stroke='#ffffff08'/><line x1=0 y1={i} x2=500 y2={i} stroke='#ffffff08'/>" for i in range(0, 501, 50))
             before = f"<svg viewBox='0 0 500 500'>{grid}<path d='{ps}' fill='#ff9f1c33' stroke='#ff9f1c' stroke-width=2.5/><path d='{pb}' fill='#ff4d6d55' stroke='#ff4d6d' stroke-width=2 stroke-dasharray='5 4'/></svg>"
             after = f"<svg viewBox='0 0 500 500' class=after style='background:#0b1320'>{grid}<defs><pattern id=hx width=8 height=8 patternUnits=userSpaceOnUse patternTransform='rotate(45)'><line x1=0 y1=0 x2=0 y2=8 stroke='#ff4d6d88' stroke-width=2/></pattern></defs><path d='{ps}' fill='none' stroke='#ff9f1c66' stroke-width=1 stroke-dasharray='3 4'/><path d='{pb}' fill='url(#hx)' stroke='#ff4d6d' stroke-width=1.5 stroke-dasharray='5 4'/><path d='{pr}' fill='#38d39f40' stroke='#38d39f' stroke-width=3.5/></svg>"
             cl = travs["001542 0010"]["closure"]
             case_id = case_of.get("001542 0010", "")
-            hero = f"""<section class=hero><div><div class=eyebrow>Featured case · Duval County, FL</div>
-<h1>The county map gave REDACTED 2.6 acres the deed never conveyed.</h1>
-<div class=big><div class=gis><small>GIS polygon</small><b data-n={c.get('acres_gis_REDACTED', 10.59)} data-d=2>{c.get('acres_gis_REDACTED', 10.59)}</b><small>acres · 001542 0010</small></div>
-<div class=deed><small>Deed traverse</small><b data-n={c.get('acres_record_cogo', 7.96):.2f} data-d=2>{c.get('acres_record_cogo', 7.96):.2f}</b><small>acres · ORB 19870-841</small></div>
-<div class=REDACTED><small>REDACTED lot inside</small><b data-n={c.get('acres_gis_REDACTED', 2.48):.2f} data-d=2>{c.get('acres_gis_REDACTED', 2.48):.2f}</b><small>acres · 001531 5300</small></div></div>
+            hero = f"""<section class=hero><div><div class=eyebrow>Featured test case · Duval County, FL</div>
+<h1>Test result: the county GIS may give {NA} ~{ac_a - c.get('acres_record_cogo', 7.96):.1f} acres its deed does not appear to convey.</h1>
+<div class=big><div class=gis><small>GIS polygon</small><b data-n={ac_a} data-d=2>{ac_a}</b><small>acres · 001542 0010</small></div>
+<div class=deed><small>Deed traverse (best-fit)</small><b data-n={c.get('acres_record_cogo', 7.96):.2f} data-d=2>{c.get('acres_record_cogo', 7.96):.2f}</b><small>acres · ORB 19870-841</small></div>
+<div class=excl><small>{NB} lot inside</small><b data-n={ac_b:.2f} data-d=2>{ac_b:.2f}</b><small>acres · 001531 5300</small></div></div>
 <div class=counters><div><b data-n={n_par}>{n_par:,}</b><span>parcels checked</span></div><div><b data-n={n_ov}>{n_ov}</b><span>overlaps found</span></div><div><b data-n={n_deed}>{n_deed}</b><span>deed-checked</span></div></div>
-<div class=card><h3 style=margin-top:0>How we proved it</h3><ol class=steps>
-<li><b>Flagged</b>REDACTED's 2.48 ac lot sits 100% inside REDACTED's polygon — a <code>contained_parcel</code>, not an edge sliver.</li>
-<li><b>Appraiser mismatch</b>REDACTED's legal says 7.83 ac; GIS says 10.59 ac. REDACTED is Lot 3 of a 2003 plat.</li>
-<li><b>Deed pulled</b>Official Records 19870-841 (2021 warranty deed), OCR'd and parsed call by call.</li>
-<li><b>Traverse closes {E(cl.get('precision', ''))}</b>{cl.get('n_calls', '')} calls, misclosure {cl.get('misclosure_ft', '')} ft. Fits GIS-minus-REDACTED at IoU {c.get('fit_to_gis_minus_REDACTED', {}).get('iou', '')}; 0% of REDACTED inside the deed.</li>
-<li><b>Verdict proposed for review</b>Cut REDACTED from REDACTED (cut smaller from larger) — high confidence, not auto-applied. <a href="cases/{case_id}.html">Open the case file →</a></li></ol></div></div>
-<div><div class=ba id=ba>{before}{after}<div class=bar></div><span class='lab l'>Before · GIS</span><span class='lab r'>After · deed</span><input type=range min=0 max=100 value=15 aria-label="before/after"></div>
-<p style="font-size:12px;color:var(--mut)">Drag the handle to compare. Before: orange = county GIS polygon for REDACTED, red dashed = REDACTED lot inside it. After: green = REDACTED's deed tract (7.96 ac, best-fit COGO traverse, not a survey), red hatching = REDACTED lot excluded from REDACTED.</p></div></section>
+<div class=card><h3 style=margin-top:0>How the test analysis works <span class='badge medium'>Proposed · test result</span></h3><ol class=steps>
+<li><b>Flagged</b>The {NB} lot appears to sit fully inside the {NA} polygon — a <code>contained_parcel</code> flag, not an edge sliver.</li>
+<li><b>Appraiser mismatch</b>The {NA} legal description states 7.83 ac; GIS shows {ac_a} ac. The {NB} lot is Lot 3 of a 2003 plat.</li>
+<li><b>Deed pulled</b>Official Records 19870-841 (2021 warranty deed), OCR'd and parsed call by call (OCR may contain errors).</li>
+<li><b>Traverse closes {E(cl.get('precision', ''))}</b>{cl.get('n_calls', '')} calls, misclosure {cl.get('misclosure_ft', '')} ft. A best-fit placement matches GIS minus the {NB} lot at IoU {fit.get('iou', '')}, which suggests that lot lies outside the deed.</li>
+<li><b>Verdict proposed for review</b>The test result suggests cutting the {NB} lot from the {NA} polygon — a proposal, not a finding, and not applied. <a href="cases/{case_id}.html">Open the case file →</a></li></ol></div></div>
+<div><div class=ba id=ba>{before}{after}<div class=bar></div><span class='lab l'>Before · GIS</span><span class='lab r'>After · deed (best-fit)</span><input type=range min=0 max=100 value=15 aria-label="before/after"></div>
+<p style="font-size:12px;color:var(--mut)">Drag the handle to compare. Before: orange = county GIS polygon for {NA}, red dashed = {NB} lot inside it. After: green = {NA} deed tract (best-fit COGO traverse), red hatching = {NB} lot shown as excluded. Illustration of a data quality test result only.</p>
+<div class="card disc"><b>Not authoritative.</b> {DISCLAIMER}</div></div></section>
 <script>(()=>{{const b=document.getElementById('ba'),r=b.querySelector('input'),a=b.querySelector('.after'),bar=b.querySelector('.bar');r.oninput=()=>{{a.style.clipPath=`inset(0 0 0 ${{r.value}}%)`;bar.style.left=r.value+'%'}};bar.style.left='15%'}})()</script>"""
 
     legend = "".join(f"<span><i style='background:{c}'></i>{k}</span>" for k, c in COLORS.items())
@@ -274,11 +288,11 @@ fetch('data/issues.json').then(r=>r.json()).then(d=>{{D=d;draw()}});document.get
     for v in verdicts:
         a, b = v["parcels"]; d = deeds.get((a, b)); conf = (d["verdict"]["confidence"] if d else v["confidence"])
         rows.append(f"<tr><td><a href='cases/{v['case_id']}.html'>{E(a)} × {E(b)}</a></td><td>{E(v['check'])}</td><td>{v.get('overlap_sqft') or ''}</td>"
-                    f"<td>{E(d['verdict']['verdict'] if d else v['proposal'])}</td><td><span class='badge {conf.split()[0]}'>{E(conf)}</span></td><td>{'deed-verified' if d else 'first-pass'}</td></tr>")
-        cb = [f"<div class=card><div class=eyebrow>{E(v['check'])} · {'deed-verified' if d else 'first-pass'}</div><h2 style=margin-top:4px>{E(d['verdict']['verdict'] if d else v['proposal'])}</h2>"
-              f"<p><span class='badge {conf.split()[0]}'>{E(conf)}</span> · status: <b>proposed</b> (not applied) · overlap {v.get('overlap_sqft') or '?'} sq ft</p><p>{E(v['rationale'])}</p></div>"]
+                    f"<td>{E(d['verdict']['verdict'] if d else v['proposal'])}</td><td><span class='badge {conf.split()[0]}'>Proposed · {E(conf)}</span></td><td>{'deed-checked (test)' if d else 'first-pass (test)'}</td></tr>")
+        cb = [f"<div class=card><div class=eyebrow>{E(v['check'])} · {'deed-checked (test)' if d else 'first-pass (test)'}</div><h2 style=margin-top:4px>{E(d['verdict']['verdict'] if d else v['proposal'])}</h2>"
+              f"<p><span class='badge {conf.split()[0]}'>Proposed · test result · {E(conf)}</span> · status: <b>proposed</b> (not applied, not a finding) · overlap {v.get('overlap_sqft') or '?'} sq ft</p><p>{E(v['rationale'])}</p></div>"]
         cb.append("<div class=card><h3>Parcels & ORB references</h3><table><tr><th>parcel</th><th>owner (PA)</th><th>ORB book-page</th></tr>" + "".join(
-            f"<tr><td><a href='https://paopropertysearch.coj.net/Basic/Detail.aspx?RE={p.replace(' ', '')}'>{E(p)}</a></td><td>{E(str((v.get('owners') or {}).get(p) or ''))}</td><td>{E(', '.join((v.get('orb_refs') or {}).get(p) or []))}</td></tr>" for p in (a, b)) + "</table></div>")
+            f"<tr><td><a href='https://paopropertysearch.coj.net/Basic/Detail.aspx?RE={p.replace(' ', '')}'>{E(p)}</a></td><td>{E(('Owner ' + 'AB'[(a, b).index(p)]) if redact_owners else str((v.get('owners') or {}).get(p) or ''))}</td><td>{E(', '.join((v.get('orb_refs') or {}).get(p) or []))}</td></tr>" for p in (a, b)) + "</table></div>")
         head = ""
         if d:
             tp = d.get("traverse_parcel"); tr = travs.get(tp) if tp else None
@@ -313,15 +327,13 @@ if(k<n)raf=requestAnimationFrame(step);else document.getElementById('clo').inner
             ev = "".join(f"<li>{E(x)}</li>" for x in d["verdict"].get("evidence", []))
             c = d["cogo"]; nums = []
             if c.get("closure"): nums.append(f"closure {c['closure']['precision']} (misclosure {c['closure']['misclosure_ft']} ft)")
-            for k in ("acres_record_cogo", "acres_record_stated", "acres_record_cogo_chorded", "acres_gis_REDACTED", "acres_gis_REDACTED", "acres_gis_patriot", "acres_gis_REDACTED", "acres_gis_city", "acres_gis_REDACTED"):
+            for k in [kk for kk in c if kk.startswith("acres_")]:
                 if c.get(k) is not None: nums.append(f"{k.replace('_', ' ')}: {c[k]}")
             cb.append(f"<div class=card><h3>Deed evidence</h3><p>{E(c.get('deed') or json.dumps(c.get('deeds', '')))}</p><p>{E(' · '.join(nums))}</p><ul>{ev}</ul>"
                       + (f"<p><i>{E(d['verdict']['caveat'])}</i></p>" if d['verdict'].get('caveat') else "") + "</div>")
-            srcpng = next((q for q in (imgsrc / d["png"], keep_img / d["png"]) if q.exists()), None)
-            if srcpng is not None:
-                shutil.copy2(srcpng, S / "img" / d["png"])
-                note = "" if include_coj_imagery else "<p><small>Static overlay shown without aerial basemap: the COJ orthoimagery has no published licence, so imagery figures are kept out of the public site.</small></p>"
-                cb.append(f"<div class=card><h3>Overlay figure</h3><img class=fig src='../img/{d['png']}' alt='overlay'>{note}</div>")
+            if fg is not None and _fig(S / "img" / d["png"], fg, a, b, travs.get(d.get("traverse_parcel") or "", {}), d["verdict"].get("orb") or ""):
+                note = "<p><small>Figure generated from county GIS outlines and the best-fit deed traverse (no aerial basemap; parcel IDs only). Data quality test result, not authoritative.</small></p>"
+                cb.append(f"<div class=card><h3>Overlay figure</h3><img class=fig src='../img/{d['png']}' alt='GIS outlines of parcels {E(a)} and {E(b)} with best-fit deed traverse'>{note}</div>")
         (S / "cases" / f"{v['case_id']}.html").write_text(page(f"Case {a} × {b}", "".join(cb), depth=1, head=head))
     (S / "cases.html").write_text(page("Case files", "<h2>Case files</h2><div class=tbl><table><tr><th>pair</th><th>check</th><th>sq ft</th><th>verdict / proposal</th><th>confidence</th><th>basis</th></tr>" + "".join(rows) + "</table></div>"))
 
@@ -333,4 +345,73 @@ if(k<n)raf=requestAnimationFrame(step);else document.getElementById('clo').inner
     (S / "data" / "history.json").write_text(json.dumps(hist, indent=1))
     hr = "".join(f"<tr><td>{E(h['run_id'])}</td><td>{E(str(h['finished']))}</td><td>{h['features'] or ''}</td><td>{h['issues'] or ''}</td><td>{E(json.dumps(h['by_check']))}</td><td>{E(' '.join(f'{k}:{v}' for k, v in h['steps'].items()))}</td></tr>" for h in hist)
     (S / "history.html").write_text(page("Run history", f"<h2>Run history</h2><div class=tbl><table><tr><th>run</th><th>finished</th><th>parcels</th><th>issues</th><th>by check</th><th>steps</th></tr>{hr}</table></div>"))
-    return dict(site=str(S), cases=len(verdicts), issues=len(recs), runs=len(hist), hero=bool(hero))
+    (S / "terms.html").write_text(page("Terms of use", TERMS_HTML))
+    red = {}
+    if redact_owners:
+        red = _redact_site(S, L, verdicts, owner_key)
+    return dict(site=str(S), cases=len(verdicts), issues=len(recs), runs=len(hist), hero=bool(hero), redacted=redact_owners, **red)
+
+
+def _fig(dst, fg, a, b, trav, orb):
+    """Overlay figure without owner names: GIS outlines (EPSG:2236) + best-fit deed traverse, labelled by parcel ID."""
+    try:
+        import matplotlib; matplotlib.use("Agg"); import matplotlib.pyplot as plt
+    except ImportError:
+        return False
+    g = fg.set_index("fid").to_crs(2236).geometry
+    ga, gb = g.get(a), g.get(b)
+    if ga is None or gb is None: return False
+    fig, ax = plt.subplots(figsize=(6, 7), dpi=110)
+    for geom, col, lab in ((ga, "#4c8fd6", f"GIS parcel {a} (Owner A)"), (gb, "#f0a04b", f"GIS parcel {b} (Owner B)")):
+        for poly in getattr(geom, "geoms", [geom]):
+            x, y = poly.exterior.xy; ax.fill(x, y, color=col, alpha=.45, label=lab); lab = None
+    if trav.get("vertices"):
+        xs, ys = zip(*trav["vertices"]); ax.plot(xs, ys, "--", color="#d62828", lw=2, label=f"Deed traverse (best-fit){' ORB ' + orb if orb else ''}")
+    ax.set_aspect("equal"); ax.set_title(f"Test result: parcels {a} vs {b}", fontsize=10); ax.set_xlabel("EPSG:2236 ft")
+    ax.legend(fontsize=8, loc="best"); ax.ticklabel_format(useOffset=False, style="plain"); fig.tight_layout()
+    dst.parent.mkdir(parents=True, exist_ok=True); fig.savefig(dst); plt.close(fig); return True
+
+
+def _redact_site(S: Path, L: Path, verdicts, owner_key):
+    from . import redact
+    found = redact.collect(L)
+    for extra in (Path("out/duval/verify"),):
+        if extra.exists():
+            for k, v in redact.collect(extra).items(): found.setdefault(k, set()).update(v)
+    deed_pids = {"001542 0010", "001531 5300", "013030 0010", "013030 0300", "004307 0320", "004307 0230"}
+    R = redact.Redactor(found, surname_pids=deed_pids)
+    orb = {}
+    for v in verdicts: orb.update(v.get("orb_refs") or {})
+    if owner_key: redact.write_key(found, owner_key, verdicts, orb)
+    case_parcels = {v["case_id"]: v["parcels"] for v in verdicts}
+    n = 0
+    for f in S.rglob("*"):
+        if f.suffix not in (".html", ".json", ".geojson"): continue
+        txt = f.read_text()
+        labels = {}
+        if f.parent.name == "cases" and f.stem in case_parcels:
+            labels = {p: f"Owner {'AB'[i]}" for i, p in enumerate(case_parcels[f.stem][:2])}
+        if f.name == "index.html": labels = {"001542 0010": "Parcel A", "001531 5300": "Parcel B"}
+        if f.suffix in (".json", ".geojson"):
+            new = json.dumps(R.obj(json.loads(txt), labels), separators=(",", ":"))
+        else:
+            new = R.text(txt, labels)
+        if new != txt: f.write_text(new); n += 1
+    return dict(redacted_files=n, names_known=len(R.names()))
+
+
+TERMS_HTML = """<h2>Terms of use</h2>
+<div class="card disc"><p><b>Test demo — not authoritative.</b> This site, its code and its data are provided <b>AS IS</b>, without warranty of any kind,
+express or implied, including accuracy, completeness, merchantability or fitness for a particular purpose. No liability is accepted for any
+decision or action taken using them. Everything here is for testing and demonstration only.</p>
+<p>Nothing on this site is a survey, a boundary determination, a title opinion or legal advice. Results are automated, experimental
+<b>data quality test results</b>; verdicts are proposals, not findings; placements of deed descriptions are best-fit, not measured in the field.
+In Florida, surveying and mapping is a licensed profession (Chapter 472, Florida Statutes). Consult a licensed surveyor and mapper or an attorney,
+and the official records, before relying on any boundary, acreage or ownership information.</p>
+<p>Data belongs to its sources (below). GeoRescue does not own their data and is not affiliated with, endorsed by or acting for them.</p>
+<p>Questions, corrections or removal requests: open an issue at <a href="https://github.com/knightchrism/georescue/issues">https://github.com/knightchrism/georescue/issues</a>.</p></div>
+<h2 id=sources>Data sources</h2><div class=card><ul>
+<li><b>City of Jacksonville GIS — parcels</b> (<a href="https://maps.coj.net/coj/rest/services/CityBiz/Parcels/MapServer/0">CityBiz/Parcels service</a>; <a href="https://maps.coj.net/">source disclaimer / home</a>).</li>
+<li><b>Duval County Property Appraiser</b> (<a href="https://paopropertysearch.coj.net">property search</a>; <a href="https://paopropertysearch.coj.net/Basic/Search.aspx">source disclaimer / home</a>). As the Property Appraiser notes for its own data, appraiser and GIS records are maintained for assessment purposes and are <b>not intended for legal use</b>, such as conveyances or boundary determinations.</li>
+<li><b>Duval County Clerk of Courts — Official Records</b> (<a href="https://or.duvalclerk.com">official records search</a>; <a href="https://www.duvalclerk.com/disclaimer">source disclaimer / home</a>).</li>
+</ul><p>GeoRescue does not own this data and is not affiliated with the City of Jacksonville, the Duval County Property Appraiser or the Duval County Clerk of Courts. Owner names are removed from this public site.</p></div>"""

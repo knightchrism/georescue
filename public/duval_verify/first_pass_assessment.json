@@ -1,0 +1,34 @@
+{
+ "method": "Duval PA legals (paopropertysearch.coj.net) + Clerk index (or.duvalclerk.com GridResults) + GIS containment test; no deed images read",
+ "geometry_finding": "In all 3 pairs the smaller polygon lies 100% inside the larger (overlap area == smaller parcel area). These are un-carved parent polygons / stacked parcels, not edge slivers. Trim-from-smaller heuristic would DELETE the smaller parcel entirely.",
+ "overlaps": [
+  {
+   "pair": "001531 5300 x 001542 0010",
+   "overlap_sqft": 107876,
+   "record_supports": "001531 5300 (Owner of 001531 5300) - LOT 3 SANDY RIDGE, plat book 56 page 42 (2003), WD 11504-2030; Owner of 001542 0010 legal is TRACT 8 JAX FARMS (PB 3-41) PT, 7.83 ac by legal vs GIS 10.59 ac",
+   "fix": "subtract Lot 3 from 001542 0010 polygon (GIS 10.59-2.48=8.11 ac, closer to legal 7.83)",
+   "type": "platted lot vs metes-and-bounds remainder",
+   "condo_common_easement": "none indicated; Owner of 001542 0010 legal mentions PT UNDEVELOPED R/W (vacated/undeveloped right of way) - check plat",
+   "confidence": "medium-high",
+   "caveat": "Owner of 001542 0010 legal cites O/R 19870-871, which the Clerk indexes as an unrelated mortgage (ETOWN lot 108) - PA typo; actual vesting deed is 19870-841"
+  },
+  {
+   "pair": "013030 0300 x 013030 0010",
+   "overlap_sqft": 21799,
+   "record_supports": "013030 0300 (Owner of 013030 0300) - PT TRACTS 12,13 BLK 1 JAX HEIGHTS (PB 5-93), 0.50 ac, OR 13639-288 / 10793-35; Owner of 013030 0010 Ridge legal expressly EXCEPTS O/R 10793-33, 10793-35, 10801-2015, 10801-2017, 21496-5, PB 59-185, PB 83-98",
+   "fix": "subtract Owner of 013030 0300 from 013030 0010 polygon; also audit the other exceptions (21496-5 = 2025 conveyance to Owner of 013030 0010, PB 59-185, 83-98 plats)",
+   "type": "metes-and-bounds out-parcel vs excepted remainder",
+   "condo_common_easement": "none indicated",
+   "confidence": "high (explicit exception in the larger parcel's legal)"
+  },
+  {
+   "pair": "004307 0320 x 004307 0230",
+   "overlap_sqft": 20974,
+   "record_supports": "004307 0230 (Owner of 004307 0230) - PT FARMS 41,42 DINSMORE FARMS, OR 4886-64 (1979); City parcel legal is PT PVT RD LYING E OF O/R 4690-669, 4886-64, 5528-1903 and S OF ..., i.e. it is defined as lying OUTSIDE Owner of 004307 0230 deed",
+   "fix": "subtract Owner of 004307 0230 from 004307 0320 polygon; City polygon (1.229 ac GIS) vs legal .900 ac also too big",
+   "type": "private-road strip (tax deed to City 2007) vs metes-and-bounds lot",
+   "condo_common_easement": "yes: parcel is a private road - road/access easement rights over it likely; not fee overlap",
+   "confidence": "high on direction; pre-1990 deeds (4886-64, 2384-383, 4690-669, 5528-1903) are not returned by the online book/page index, so geometry check needs those images"
+  }
+ ]
+}

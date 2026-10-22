@@ -52,3 +52,33 @@ def test_publish_refuses_empty_run(tmp_path):
     with pytest.raises(pub.NotPublishable):
         pub.publish(str(L), str(site), str(tmp_path / "runs"))
     assert (site / "index.html").read_text() == "good"
+
+
+def test_published_site_has_no_owner_names():
+    """The committed public site must not contain owner fields or known owner names."""
+    import json, re
+    from pathlib import Path
+    site = Path("site")
+    if not (site / "index.html").exists():
+        import pytest; pytest.skip("no published site")
+    import hashlib
+    bad_h = {'74b75149cbe6e496', '6df23ccc3ac208e5', 'cf38ea632d17b28e', 'a5146c9a626dff2b', 'd20b4ad6e953b622', 'dc7c1a6c18b099a4'}  # sha256 prefixes of known surnames (names themselves not stored)
+    class _B:
+        @staticmethod
+        def search(t):
+            return next((w for w in re.findall(r'[A-Za-z]+', t) if hashlib.sha256(w.lower().encode()).hexdigest()[:16] in bad_h), None)
+    bad = _B()
+    for f in site.rglob("*"):
+        if f.suffix in (".html", ".json", ".geojson"):
+            t = f.read_text()
+            assert not bad.search(t), f
+            assert not re.search(r'"(owner|owners|LNAMEOWNER|DirectName|IndirectName|grantor|grantee|mail\w*)"\s*:\s*"[A-Z]', t), f
+    assert "not authoritative" in (site / "index.html").read_text()
+    assert (site / "terms.html").exists()
+
+
+def test_redactor_replaces_names():
+    from georescue.redact import Redactor
+    r = Redactor({"001542 0010": {"DOE JOHN Q"}}, surname_pids={"001542 0010"})
+    assert r.text("Doe's lot; DOE JOHN Q owns 001542 0010") == "Owner of 001542 0010 lot; Owner of 001542 0010 owns 001542 0010"
+    assert r.obj({"owner": "DOE JOHN Q", "orb": "19870-841"}) == {"orb": "19870-841"}

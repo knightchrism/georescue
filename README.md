@@ -6,6 +6,13 @@
 
 > **Status:** early prototype, work in progress.
 
+> **Test demo — not authoritative.** Not a survey, title opinion, or legal determination; for testing and demonstration only.
+> Results are automated, experimental **data quality test results** computed from public data. Verdicts are proposals, not findings;
+> placements of deed descriptions are best-fit, not measured in the field. Consult a licensed surveyor and mapper or an attorney and the
+> official records. GeoRescue is not affiliated with the City of Jacksonville, the Duval County Clerk of Courts or the Duval County
+> Property Appraiser. See [TERMS.md](TERMS.md). Questions, corrections or removal requests: open an issue at
+> https://github.com/knightchrism/georescue/issues
+
 # GeoRescue (V1 core)
 GIS data-quality & repair for parcel datasets. Load (SHP/GPKG/GeoJSON) → inspect → classify issues → propose repairs on a copy (every change logged) → export `corrected.gpkg`, `changelog.csv`, `issues.csv`, `diff.csv`, `summary.json`, `report.html`.
 
@@ -66,3 +73,20 @@ Automation: `.github/workflows/pipeline.yml` (weekly cron + manual dispatch) run
 (`configs/duval_fl_ci.yaml`), fetching parcels at runtime, and deploys `site/` to Pages.
 To enable: push the repo to GitHub, then *Settings → Pages → Source: GitHub Actions*, and allow Actions under *Settings → Actions*.
 Only invalid-geometry repair is ever auto-applied; every other fix is a proposal recorded in `changelog.csv`.
+
+
+## Data sources
+
+GeoRescue does not own the data below and is not affiliated with, or endorsed by, any of these sources. Their records are maintained
+for their own purposes (for example, assessment) and, as the Property Appraiser states for its data, are **not intended for legal use**
+such as conveyances or boundary determinations.
+
+- City of Jacksonville GIS — parcels (CityBiz/Parcels service): https://maps.coj.net/coj/rest/services/CityBiz/Parcels/MapServer/0 · home/disclaimer: https://maps.coj.net/
+- Duval County Property Appraiser: https://paopropertysearch.coj.net/Basic/Search.aspx (disclaimer shown on the search site)
+- Duval County Clerk of Courts — Official Records: https://or.duvalclerk.com · disclaimer: https://www.duvalclerk.com/disclaimer
+
+Owner and person names are removed from the public site (`georescue publish` redacts by default; `--no-redact-owners` is for private local builds only).
+
+## Terms
+
+See [TERMS.md](TERMS.md). Questions, corrections or removal requests: open an issue at https://github.com/knightchrism/georescue/issues

@@ -22,4 +22,4 @@ service:
   pao: true
   clerk: true
   max_lookups: 40
-  verify_dir: out/duval/verify   # deed-browser steps skipped; committed verdict JSON/PNGs only if present
+  verify_dir: public/duval_verify   # name-redacted copies (regenerate: python -m georescue.redact)

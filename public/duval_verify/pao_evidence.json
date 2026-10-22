@@ -1,0 +1,289 @@
+[
+ {
+  "RE": "0015315300",
+  "url": "https://paopropertysearch.coj.net/Basic/Detail.aspx?RE=0015315300",
+  "property_use": "0100 Single Family",
+  "subdivision": "06097 SANDY RIDGE",
+  "total_area_sqft": "107876",
+  "or_book_page": "00056-00042",
+  "sales": [
+   {
+    "book_page": "00056-00042",
+    "date": "9/29/2003",
+    "price": "100.00",
+    "deed": "PB - Plat Book",
+    "qual": "Unqualified",
+    "vi": "Vacant"
+   },
+   {
+    "book_page": "11504-02030",
+    "date": "12/1/2003",
+    "price": "50,000.00",
+    "deed": "WD - Warranty Deed",
+    "qual": "Qualified",
+    "vi": "Vacant"
+   }
+  ],
+  "legal": [
+   "56-42 14-2S-24E 2.48",
+   "SANDY RIDGE",
+   "LOT 3"
+  ],
+  "land": null
+ },
+ {
+  "RE": "0015420010",
+  "url": "https://paopropertysearch.coj.net/Basic/Detail.aspx?RE=0015420010",
+  "property_use": "0100 Single Family",
+  "subdivision": "00020 JAX FARMS SEC",
+  "total_area_sqft": "461321",
+  "or_book_page": "19870-00841",
+  "sales": [
+   {
+    "book_page": "19870-00841",
+    "date": "8/6/2021",
+    "price": "640,000.00",
+    "deed": "WD - Warranty Deed",
+    "qual": "Unqualified",
+    "vi": "Improved"
+   },
+   {
+    "book_page": "17966-00196",
+    "date": "5/1/2017",
+    "price": "100.00",
+    "deed": "WD - Warranty Deed",
+    "qual": "Unqualified",
+    "vi": "Vacant"
+   },
+   {
+    "book_page": "16276-02117",
+    "date": "3/5/2013",
+    "price": "100.00",
+    "deed": "MS - Miscellaneous",
+    "qual": "Unqualified",
+    "vi": "Vacant"
+   },
+   {
+    "book_page": "12781-02349",
+    "date": "9/6/2005",
+    "price": "100.00",
+    "deed": "QC - Quit Claim",
+    "qual": "Unqualified",
+    "vi": "Vacant"
+   },
+   {
+    "book_page": "11954-01118",
+    "date": "7/26/2004",
+    "price": "100.00",
+    "deed": "QC - Quit Claim",
+    "qual": "Unqualified",
+    "vi": "Improved"
+   },
+   {
+    "book_page": "10417-00883",
+    "date": "3/15/2002",
+    "price": "66,000.00",
+    "deed": "WD - Warranty Deed",
+    "qual": "Qualified",
+    "vi": "Vacant"
+   }
+  ],
+  "legal": [
+   "3-41 14-2S-24E 7.83",
+   "TRACT 8,PT UNDEVELOPED R/W,",
+   "PT E1/2 OF SW1/4 RECD",
+   "O/R 19870-871"
+  ],
+  "land": null
+ },
+ {
+  "RE": "0130300300",
+  "url": "https://paopropertysearch.coj.net/Basic/Detail.aspx?RE=0130300300",
+  "property_use": "0200 Mobile Home",
+  "subdivision": "00019 JAX HEIGHTS SEC",
+  "total_area_sqft": "21799",
+  "or_book_page": "13639-00288",
+  "sales": [
+   {
+    "book_page": "13639-00288",
+    "date": "11/14/2006",
+    "price": "100.00",
+    "deed": "WD - Warranty Deed",
+    "qual": "Unqualified",
+    "vi": "Improved"
+   },
+   {
+    "book_page": "10793-00035",
+    "date": "11/21/2002",
+    "price": "100.00",
+    "deed": "WD - Warranty Deed",
+    "qual": "Unqualified",
+    "vi": "Improved"
+   },
+   {
+    "book_page": "06873-01960",
+    "date": "3/16/1990",
+    "price": "100.00",
+    "deed": "WD - Warranty Deed",
+    "qual": "Unqualified",
+    "vi": "Improved"
+   },
+   {
+    "book_page": "06434-00478",
+    "date": "12/22/1980",
+    "price": "500.00",
+    "deed": "WD - Warranty Deed",
+    "qual": "Unqualified",
+    "vi": "Improved"
+   }
+  ],
+  "legal": [
+   "5-93 09-3S-25E .50",
+   "JACKSONVILLE HEIGHTS",
+   "PT TRACT 12,13 RECD O/R 13639-288",
+   "BLK 1"
+  ],
+  "land": null
+ },
+ {
+  "RE": "0130300010",
+  "url": "https://paopropertysearch.coj.net/Basic/Detail.aspx?RE=0130300010",
+  "property_use": "0000 Vacant Res",
+  "subdivision": "00019 JAX HEIGHTS SEC",
+  "total_area_sqft": "321542",
+  "or_book_page": "20536-00187",
+  "sales": [
+   {
+    "book_page": "20536-00187",
+    "date": "12/22/2022",
+    "price": "500,000.00",
+    "deed": "WD - Warranty Deed",
+    "qual": "Unqualified",
+    "vi": "Improved"
+   },
+   {
+    "book_page": "20427-02030",
+    "date": "9/8/2022",
+    "price": "100.00",
+    "deed": "MS - Miscellaneous",
+    "qual": "Unqualified",
+    "vi": "Improved"
+   },
+   {
+    "book_page": "19128-02196",
+    "date": "3/3/2020",
+    "price": "100.00",
+    "deed": "MS - Miscellaneous",
+    "qual": "Unqualified",
+    "vi": "Improved"
+   },
+   {
+    "book_page": "18341-00341",
+    "date": "4/4/2018",
+    "price": "100.00",
+    "deed": "MS - Miscellaneous",
+    "qual": "Unqualified",
+    "vi": "Improved"
+   },
+   {
+    "book_page": "12782-00217",
+    "date": "9/28/2005",
+    "price": "100.00",
+    "deed": "QC - Quit Claim",
+    "qual": "Unqualified",
+    "vi": "Improved"
+   },
+   {
+    "book_page": "12782-00215",
+    "date": "9/28/2005",
+    "price": "100.00",
+    "deed": "MS - Miscellaneous",
+    "qual": "Unqualified",
+    "vi": "Improved"
+   },
+   {
+    "book_page": "09882-00939",
+    "date": "2/6/2001",
+    "price": "100.00",
+    "deed": "WD - Warranty Deed",
+    "qual": "Unqualified",
+    "vi": "Improved"
+   },
+   {
+    "book_page": "03322-00928",
+    "date": "2/29/1972",
+    "price": "52,766.00",
+    "deed": "WD - Warranty Deed",
+    "qual": "Unqualified",
+    "vi": "Improved"
+   }
+  ],
+  "legal": [
+   "5-93 09-3S-25E 7.19",
+   "JACKSONVILLE HEIGHTS",
+   "TRACTS 12,13(EX O/R 10793-33,",
+   "10793-35,10801-2015,10801-2017,",
+   "21496-5,PBK 59-185,PBK 83-98) BLK 1"
+  ],
+  "land": null
+ },
+ {
+  "RE": "0043070320",
+  "url": "https://paopropertysearch.coj.net/Basic/Detail.aspx?RE=0043070320",
+  "property_use": "8000 Vacant Governmental",
+  "subdivision": "00041 HOME GARDEN ESTATES",
+  "total_area_sqft": "53527",
+  "or_book_page": "13934-01037",
+  "sales": [
+   {
+    "book_page": "13934-01037",
+    "date": "4/19/2007",
+    "price": "100.00",
+    "deed": "TD - Tax Deed",
+    "qual": "Unqualified",
+    "vi": "Vacant"
+   },
+   {
+    "book_page": "02384-00383",
+    "date": "1/15/1965",
+    "price": "100.00",
+    "deed": "WD - Warranty Deed",
+    "qual": "Unqualified",
+    "vi": "Vacant"
+   }
+  ],
+  "legal": [
+   "07-1S-26E .900",
+   "DINSMORE FARMS S/D",
+   "PT PVT RD LYING E OF O/R 4690-669,",
+   "4886-64,5528-1903,LYING SOUTH OF",
+   "O/R 4321-590,4886-64,5554-2032,",
+   "6460-2252 RECD O/R 2384-383"
+  ],
+  "land": null
+ },
+ {
+  "RE": "0043070230",
+  "url": "https://paopropertysearch.coj.net/Basic/Detail.aspx?RE=0043070230",
+  "property_use": "0100 Single Family",
+  "subdivision": "20045 DINSMORE FARMS",
+  "total_area_sqft": "20974",
+  "or_book_page": "04886-00064",
+  "sales": [
+   {
+    "book_page": "04886-00064",
+    "date": "5/3/1979",
+    "price": "5,500.00",
+    "deed": "WD - Warranty Deed",
+    "qual": "Unqualified",
+    "vi": "Vacant"
+   }
+  ],
+  "legal": [
+   "07-1S-26E",
+   "DINSMORE FARMS S/D",
+   "PT FARMS 41,42 RECD O/R BK 4886-64"
+  ],
+  "land": null
+ }
+]

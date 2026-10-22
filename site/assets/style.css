@@ -12,7 +12,7 @@ main{padding:20px 24px;max-width:1240px;margin:auto}h2{margin:28px 0 10px;font-s
 .hero{display:grid;grid-template-columns:1.1fr 1fr;gap:22px;align-items:start}@media(max-width:860px){.hero{grid-template-columns:1fr}}
 .eyebrow{text-transform:uppercase;font-size:12px;letter-spacing:1.5px;color:var(--acc);font-weight:700}.hero h1{font-size:34px;line-height:1.15;margin:6px 0 14px}
 .big{display:flex;gap:14px;flex-wrap:wrap}.big div{flex:1;min-width:120px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px}
-.big b{font-size:34px;display:block;font-variant-numeric:tabular-nums}.big small{color:var(--mut)}.gis b{color:#ff9f1c}.deed b{color:#38d39f}.REDACTED b{color:var(--acc)}
+.big b{font-size:34px;display:block;font-variant-numeric:tabular-nums}.big small{color:var(--mut)}.gis b{color:#ff9f1c}.deed b{color:#38d39f}.excl b{color:var(--acc)}.banner{background:#3b2a05;color:#ffd98a;border-bottom:1px solid #6b4e10;padding:7px 24px;font-size:13px;text-align:center}.disc{border-left:4px solid #c18a1d;font-size:13px}
 .counters{display:flex;gap:26px;flex-wrap:wrap;margin:18px 0}.counters b{font-size:30px;color:var(--acc2);font-variant-numeric:tabular-nums}.counters span{display:block;font-size:12px;color:var(--mut)}
 .steps{counter-reset:s;list-style:none;padding:0;margin:0}.steps li{counter-increment:s;position:relative;padding:4px 0 12px 40px;border-left:2px solid var(--line);margin-left:14px}
 .steps li:before{content:counter(s);position:absolute;left:-15px;top:0;width:28px;height:28px;border-radius:50%;background:var(--acc);color:#fff;font-weight:700;display:grid;place-items:center;font-size:13px}
