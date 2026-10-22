@@ -14,6 +14,7 @@ repair: {trim_overlaps_below_area: 0.0}
 service:
   source_url: https://maps.coj.net/coj/rest/services/CityBiz/Parcels/MapServer/0
   data_path: data/real/duval_ci.geojson
+  fetch_workers: 4           # be gentle with the COJ server
   max_age_hours: 0            # always refetch on CI (no persistent disk)
   # bbox: [-81.80, 30.15, -81.60, 30.35]   # optional extract; full county needed for all 41 published cases
   out_fields: OBJECTID,RE,LNAMEOWNER,ACRES

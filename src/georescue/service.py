@@ -16,10 +16,13 @@ SAFE_REPAIR = dict(fix_invalid=True, coerce_types=False, assign_crs_if_missing=F
 # ---------------- fetch (streaming, filterable) ----------------
 def _q(url, **p):
     err = None
-    for a in range(5):
+    for a in range(6):
         try:
             body = urllib.parse.urlencode(p).encode()  # POST: 1000 objectIds overflow GET URL limits (HTTP 404/414)
-            return json.load(urllib.request.urlopen(urllib.request.Request(url + "/query", data=body, headers={"Content-Type": "application/x-www-form-urlencoded"}), timeout=180))
+            r = json.load(urllib.request.urlopen(urllib.request.Request(url + "/query", data=body, headers={"Content-Type": "application/x-www-form-urlencoded"}), timeout=180))
+            if isinstance(r, dict) and "error" in r:  # ArcGIS returns HTTP 200 + {"error":...} when busy
+                raise RuntimeError(f"ArcGIS error: {r['error']}")
+            return r
         except Exception as e:  # noqa: BLE001
             err = e; time.sleep(2 * (a + 1))
     raise err
