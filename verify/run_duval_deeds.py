@@ -123,5 +123,20 @@ res["city_004307_0320_vs_REDACTED_004307_0230"] = dict(
 plot_c = plot("deed_city_REDACTED_overlay.png", f"City 004307 0320 ({A(city)} ac, tax deed: 'PT PVT RD', no bearings) vs REDACTED 004307 0230 ({A(star)} ac)",
               [("GIS City 004307 0320", city, "tab:gray"), ("GIS REDACTED 004307 0230", star, "tab:red")], [])
 res["_pngs"] = [plot_s, plot_p, plot_c]
+# traverse export for the web (EPSG:2236 vertices in call order, best-fit placement)
+def _brg(az):
+    az %= 360; q = ("N", "E") if az < 90 else ("S", "E") if az < 180 else ("S", "W") if az < 270 else ("N", "W")
+    a = {"NE": az, "SE": 180 - az, "SW": az - 180, "NW": 360 - az}[q[0] + q[1]]
+    d = int(a); m = int((a - d) * 60); sec = round(((a - d) * 60 - m) * 60)
+    if sec == 60: m, sec = m + 1, 0
+    return f"{q[0]} {d}°{m:02d}'{sec:02d}\" {q[1]}"
+mc = [dict(label=f"{_brg(c['az'])}  {c['dist']:.2f} ft") for c in c19]
+lc = [dict(label=f"{_brg(cl[0]['az'])}  240.00 ft"), dict(label=f"{_brg(cl[1]['az'])}  20.00 ft ± to lake"),
+      dict(label=f"lake meander 344.00 ft ± (no bearing; drawn as {chord:.1f} ft chord)"), dict(label=f"{_brg(cl[2]['az'])}  120.00 ft to POB")]
+trav = {"001542 0010": dict(orb="ORB 19870-841", vertices=list(f19b.exterior.coords), calls=mc,
+                            closure=res["REDACTED_001542_0010_vs_REDACTED_001531_5300"]["closure"], acres=A(r19)),
+        "013030 0300": dict(orb="ORB 13639-288", vertices=list(fl.exterior.coords), calls=lc,
+                            closure=dict(note="closes by construction: meander call has no bearing"), acres=A(rl))}
+json.dump(trav, open(OUT / "deed_traverses_2236.json", "w"), indent=1, default=float)
 json.dump(res, open(OUT / "deed_cogo_duval.json", "w"), indent=2, default=float)
 print(json.dumps(res, indent=1, default=float))

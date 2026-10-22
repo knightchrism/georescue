@@ -59,3 +59,8 @@ No data files are included in this repository; scripts fetch them from the sourc
 | GitHub Actions: actions/checkout, cache, upload-pages-artifact, deploy-pages; astral-sh/setup-uv | CI workflow | MIT |
 
 Public site note: COJ Duval orthoimagery (no published licence) is excluded from `site/` by default (`georescue publish --include-coj-imagery` to override locally).
+
+| MapLibre GL JS 4.7.1 (unpkg CDN) | Interactive web maps on the static site | BSD-3-Clause, © MapLibre contributors |
+| CARTO Dark Matter basemap | Site basemap tiles/style | © CARTO, map data © OpenStreetMap contributors (ODbL); free use with attribution |
+
+Note: Leaflet is no longer used by the site (replaced by MapLibre).
