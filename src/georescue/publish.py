@@ -12,7 +12,8 @@ ATTR = '© <a href="https://carto.com/attributions">CARTO</a> © <a href="https:
 SITE_URL = "https://knightchrism.github.io/georescue/"
 E = html.escape
 COLORS = {"contained_parcel": "#ff4d6d", "overlap": "#ff9f1c", "geometry_invalid": "#b388ff", "gap": "#4cc9f0",
-          "sliver_polygon": "#80ffdb", "attribute_missing": "#8d99ae"}
+          "sliver_polygon": "#80ffdb", "attribute_missing": "#ffd166"}
+LABELS = {"attribute_missing": "Missing attribute (e.g. owner name)"}
 ORDER = list(COLORS)
 
 LOGO = '<img class=logo src="{up}assets/logo-mark-flat.svg" alt="" width=30 height=30>'
@@ -40,7 +41,7 @@ main{padding:20px 24px;max-width:1240px;margin:auto}h2{margin:28px 0 10px;font-s
 .ba svg{position:absolute;inset:0;width:100%;height:100%}.ba .after{clip-path:inset(0 0 0 15%)}.ba input{position:absolute;inset:auto 0 8px 0;width:92%;margin:auto;left:4%}
 .ba .bar{position:absolute;top:0;bottom:0;left:15%;width:2px;background:#fff;box-shadow:0 0 8px #fff;pointer-events:none}
 .ba .lab{position:absolute;top:8px;font-size:12px;background:#000a;color:#fff;padding:2px 8px;border-radius:8px}.ba .l{left:8px}.ba .r{right:8px}
-#map,.tmap{height:520px;border-radius:12px;border:1px solid var(--line)}.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:12px;margin:8px 0}.legend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:4px;vertical-align:-1px}
+#map,.tmap{height:520px;border-radius:12px;border:1px solid var(--line)}dl dt{font-weight:600;margin-top:10px}dl dd{margin:2px 0 0 0;color:var(--mut)}.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:12px;margin:8px 0}.legend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:4px;vertical-align:-1px}
 .maplibregl-popup-content{background:#161b22;color:#e6edf3;border-radius:10px;box-shadow:0 6px 24px #0008}.maplibregl-popup-tip{border-top-color:#161b22!important}
 .pop b{font-size:14px}.pop a{display:inline-block;margin-top:6px;background:var(--acc);color:#fff;padding:3px 10px;border-radius:8px;text-decoration:none}
 table{border-collapse:collapse;width:100%;font-size:13px}th,td{border-bottom:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}th{background:var(--card);position:sticky;top:0}
@@ -74,7 +75,7 @@ def page(title, body, depth=0, head="", desc="Evidence-based parcel overlap reso
 <meta property=og:title content="GeoRescue · {E(title)}"><meta property=og:description content="{E(desc)}"><meta property=og:image content="{SITE_URL}assets/og.png">
 <meta property=og:type content=website><meta name=twitter:card content=summary_large_image><link rel=icon href="{up}assets/favicon.svg" type="image/svg+xml"><link rel=icon href="{up}assets/favicon.ico" sizes=any><link rel=apple-touch-icon href="{up}assets/apple-touch-icon.png"><meta property=og:image:width content=1200><meta property=og:image:height content=630>
 <link rel=stylesheet href="{up}assets/style.css">{THEME_JS}{head}</head><body>
-<header><a class=brand href="{up}index.html">{LOGO.format(up=up)}<span class=wm>GeoRescue</span></a><nav><a href="{up}index.html">Dashboard</a><a href="{up}index.html#map-sec">Map</a><a href="{up}cases.html">Case files</a><a href="{up}history.html">Run history</a></nav><button id=tt>☀ light</button></header><div class=banner role=note>{BANNER}</div>
+<header><a class=brand href="{up}index.html">{LOGO.format(up=up)}<span class=wm>GeoRescue</span></a><nav><a href="{up}index.html">Dashboard</a><a href="{up}index.html#map-sec">Map</a><a href="{up}cases.html">Case files</a><a href="{up}history.html">Run history</a><a href="{up}glossary.html">Glossary</a></nav><button id=tt>☀ light</button></header><div class=banner role=note>{BANNER}</div>
 <main>{body}</main><footer>{FOOT}<br>{DISCLAIMER}<br>Questions, corrections or removal requests: open an issue at <a href='{ISSUES_URL}'>{ISSUES_URL}</a> · <a href='{up}terms.html'>Terms of use</a> · <a href='{up}terms.html#sources'>Data sources</a></footer></body></html>"""
 
 
@@ -201,7 +202,7 @@ def publish(latest="out/latest", site="site", runs="out/runs", include_coj_image
 
     by = summ.get("issues_by_check") or iss["check"].value_counts().to_dict()
     n_par = int(summ.get("features", 0) or 0); n_ov = sum(1 for v in verdicts); n_deed = len(deeds)
-    kpis = "".join(f"<div class=kpi><b data-n={n}>{n:,}</b><span><i style='display:inline-block;width:8px;height:8px;border-radius:2px;background:{COLORS.get(k, '#888')}'></i> {E(k)}</span></div>" for k, n in sorted(by.items(), key=lambda x: -x[1]))
+    kpis = "".join(f"<div class=kpi><b data-n={n}>{n:,}</b><span><a href='glossary.html#{k}' style='color:inherit'><i style='display:inline-block;width:8px;height:8px;border-radius:2px;background:{COLORS.get(k, '#888')}'></i> {E(k)}</a></span></div>" for k, n in sorted(by.items(), key=lambda x: -x[1]))
     if not (S / "assets" / "og.png").exists(): _og_image(S / "assets" / "og.png", n_par, n_ov)
 
     # ---- hero: featured contained-parcel case ----
@@ -247,7 +248,7 @@ def publish(latest="out/latest", site="site", runs="out/runs", include_coj_image
 <div class="card disc"><b>Not authoritative.</b> {DISCLAIMER}</div></div></section>
 <script>(()=>{{const b=document.getElementById('ba'),r=b.querySelector('input'),a=b.querySelector('.after'),bar=b.querySelector('.bar');r.oninput=()=>{{a.style.clipPath=`inset(0 0 0 ${{r.value}}%)`;bar.style.left=r.value+'%'}};bar.style.left='15%'}})()</script>"""
 
-    legend = "".join(f"<span><i style='background:{c}'></i>{k}</span>" for k, c in COLORS.items())
+    legend = "".join(f"<a href='glossary.html#{k}' style='color:inherit;text-decoration:none'><span><i style='background:{c}'></i>{E(LABELS.get(k, k))}</span></a>" for k, c in COLORS.items())
     checks = sorted(iss["check"].dropna().unique()) if len(iss) else []
     steps = "".join(f"<tr><td>{E(s['name'])}</td><td>{E(s['status'])}</td><td>{s.get('seconds', '')}</td><td>{E(s.get('reason') or s.get('error') or '')}</td></tr>" for s in man["steps"])
     color_expr = json.dumps(["match", ["get", "kind"], *sum(([k, v] for k, v in COLORS.items()), []), "#8d99ae"])
@@ -278,7 +279,7 @@ m.on('mouseenter','fill',()=>m.getCanvas().style.cursor='pointer');m.on('mousele
 // table
 let D=[];const tb=document.getElementById('tb');function draw(){{const q=document.getElementById('q').value.toLowerCase(),c=document.getElementById('chk').value;
 const r=D.filter(x=>(!c||x.check==c)&&(!q||(x.feature_id+' '+x.message).toLowerCase().includes(q)));document.getElementById('cnt').textContent=r.length+' rows';
-tb.innerHTML=r.slice(0,1000).map(x=>`<tr><td>${{x.feature_id}}</td><td>${{x.check}}</td><td>${{x.severity}}</td><td>${{x.message}}</td><td>${{x.metric===''?'':(+x.metric).toFixed(3)}}</td></tr>`).join('')}}
+tb.innerHTML=r.slice(0,1000).map(x=>`<tr><td>${{x.feature_id}}</td><td><a href='glossary.html#${{x.check}}'>${{x.check}}</a></td><td>${{x.severity}}</td><td>${{x.message}}</td><td>${{x.metric===''?'':(+x.metric).toFixed(3)}}</td></tr>`).join('')}}
 fetch('data/issues.json').then(r=>r.json()).then(d=>{{D=d;draw()}});document.getElementById('q').oninput=draw;document.getElementById('chk').onchange=draw;</script>"""
     (S / "index.html").write_text(page("Dashboard", body, head=f'<link rel=stylesheet href="{ML_CSS}">'))
 
@@ -287,9 +288,9 @@ fetch('data/issues.json').then(r=>r.json()).then(d=>{{D=d;draw()}});document.get
     fgi = fg.set_index("fid") if fg is not None and len(fg) else None
     for v in verdicts:
         a, b = v["parcels"]; d = deeds.get((a, b)); conf = (d["verdict"]["confidence"] if d else v["confidence"])
-        rows.append(f"<tr><td><a href='cases/{v['case_id']}.html'>{E(a)} × {E(b)}</a></td><td>{E(v['check'])}</td><td>{v.get('overlap_sqft') or ''}</td>"
+        rows.append(f"<tr><td><a href='cases/{v['case_id']}.html'>{E(a)} × {E(b)}</a></td><td><a href='glossary.html#{E(v['check'])}'>{E(v['check'])}</a></td><td>{v.get('overlap_sqft') or ''}</td>"
                     f"<td>{E(d['verdict']['verdict'] if d else v['proposal'])}</td><td><span class='badge {conf.split()[0]}'>Proposed · {E(conf)}</span></td><td>{'deed-checked (test)' if d else 'first-pass (test)'}</td></tr>")
-        cb = [f"<div class=card><div class=eyebrow>{E(v['check'])} · {'deed-checked (test)' if d else 'first-pass (test)'}</div><h2 style=margin-top:4px>{E(d['verdict']['verdict'] if d else v['proposal'])}</h2>"
+        cb = [f"<div class=card><div class=eyebrow><a href='../glossary.html#{E(v['check'])}'>{E(v['check'])}</a> · <a href='../glossary.html'>glossary</a> · {'deed-checked (test)' if d else 'first-pass (test)'}</div><h2 style=margin-top:4px>{E(d['verdict']['verdict'] if d else v['proposal'])}</h2>"
               f"<p><span class='badge {conf.split()[0]}'>Proposed · test result · {E(conf)}</span> · status: <b>proposed</b> (not applied, not a finding) · overlap {v.get('overlap_sqft') or '?'} sq ft</p><p>{E(v['rationale'])}</p></div>"]
         cb.append("<div class=card><h3>Parcels & ORB references</h3><table><tr><th>parcel</th><th>owner (PA)</th><th>ORB book-page</th></tr>" + "".join(
             f"<tr><td><a href='https://paopropertysearch.coj.net/Basic/Detail.aspx?RE={p.replace(' ', '')}'>{E(p)}</a></td><td>{E(('Owner ' + 'AB'[(a, b).index(p)]) if redact_owners else str((v.get('owners') or {}).get(p) or ''))}</td><td>{E(', '.join((v.get('orb_refs') or {}).get(p) or []))}</td></tr>" for p in (a, b)) + "</table></div>")
@@ -346,6 +347,8 @@ if(k<n)raf=requestAnimationFrame(step);else document.getElementById('clo').inner
     hr = "".join(f"<tr><td>{E(h['run_id'])}</td><td>{E(str(h['finished']))}</td><td>{h['features'] or ''}</td><td>{h['issues'] or ''}</td><td>{E(json.dumps(h['by_check']))}</td><td>{E(' '.join(f'{k}:{v}' for k, v in h['steps'].items()))}</td></tr>" for h in hist)
     (S / "history.html").write_text(page("Run history", f"<h2>Run history</h2><div class=tbl><table><tr><th>run</th><th>finished</th><th>parcels</th><th>issues</th><th>by check</th><th>steps</th></tr>{hr}</table></div>"))
     (S / "terms.html").write_text(page("Terms of use", TERMS_HTML))
+    from .glossary import html_body as _gloss
+    (S / "glossary.html").write_text(page("Glossary", _gloss(COLORS)))
     red = {}
     if redact_owners:
         red = _redact_site(S, L, verdicts, owner_key)

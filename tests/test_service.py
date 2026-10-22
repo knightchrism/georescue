@@ -82,3 +82,12 @@ def test_redactor_replaces_names():
     r = Redactor({"001542 0010": {"DOE JOHN Q"}}, surname_pids={"001542 0010"})
     assert r.text("Doe's lot; DOE JOHN Q owns 001542 0010") == "Owner of 001542 0010 lot; Owner of 001542 0010 owns 001542 0010"
     assert r.obj({"owner": "DOE JOHN Q", "orb": "19870-841"}) == {"orb": "19870-841"}
+
+
+def test_glossary_covers_all_checks():
+    import re
+    from pathlib import Path
+    from georescue.glossary import checks, thresholds
+    emitted = set(re.findall(r'Issue\([^"]*"([a-z_]+)"', Path("src/georescue/checks.py").read_text()))
+    covered = {c[0] for c in checks(thresholds())}
+    assert emitted <= covered, emitted - covered
