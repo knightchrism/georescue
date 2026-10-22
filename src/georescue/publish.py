@@ -15,14 +15,13 @@ COLORS = {"contained_parcel": "#ff4d6d", "overlap": "#ff9f1c", "geometry_invalid
           "sliver_polygon": "#80ffdb", "attribute_missing": "#8d99ae"}
 ORDER = list(COLORS)
 
-LOGO = """<svg class=logo viewBox="0 0 32 32" aria-hidden=true><path d="M4 8l10-4 14 6v14l-10 4L4 22z" fill="none" stroke="currentColor" stroke-width="2"/>
-<path d="M14 4v24M4 8l14 6 10-4" fill="none" stroke="currentColor" stroke-width="1.4" opacity=".6"/><circle cx="18" cy="14" r="3" fill="#ff4d6d"/></svg>"""
+LOGO = '<img class=logo src="{up}assets/logo-mark-flat.svg" alt="" width=30 height=30>'
 
 CSS = """:root{--bg:#f5f6f8;--fg:#1d2430;--mut:#5d6878;--card:#fff;--line:#e2e5ea;--acc:#ff4d6d;--acc2:#4cc9f0;--hdr:#111827}
 [data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--mut:#8b96a5;--card:#161b22;--line:#2a313b;--hdr:#010409}
 *{box-sizing:border-box}body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;margin:0;color:var(--fg);background:var(--bg);line-height:1.5}
 a{color:var(--acc2)}header{background:var(--hdr);color:#fff;padding:10px 24px;display:flex;align-items:center;gap:18px;flex-wrap:wrap;position:sticky;top:0;z-index:10}
-.brand{display:flex;align-items:center;gap:8px;font-weight:800;font-size:19px;letter-spacing:.3px;color:#fff;text-decoration:none}.brand span{color:var(--acc)}
+.brand{display:flex;align-items:center;gap:8px;font-weight:800;font-size:19px;letter-spacing:.3px;color:#fff;text-decoration:none}@font-face{font-family:'Exo 2';src:url(fonts/Exo2-VariableFont_wght.ttf) format('truetype');font-weight:100 900;font-display:swap}.brand .wm{font-family:'Exo 2',Rajdhani,system-ui,sans-serif;font-weight:600;letter-spacing:.5px;background:linear-gradient(90deg,#f4f8ff,#9fe9ff);-webkit-background-clip:text;background-clip:text;color:transparent}.logo{filter:drop-shadow(0 0 4px #2ee6ff88)}
 .logo{width:28px;height:28px;color:#fff}nav{display:flex;gap:16px;flex:1;flex-wrap:wrap}nav a{color:#c9d4e0;text-decoration:none;font-size:14px}nav a:hover{color:#fff}
 #tt{background:none;border:1px solid #3a4452;color:#fff;border-radius:16px;padding:3px 10px;cursor:pointer}
 main{padding:20px 24px;max-width:1240px;margin:auto}h2{margin:28px 0 10px;font-size:20px}
@@ -51,7 +50,7 @@ img.fig{max-width:100%;border-radius:10px;border:1px solid var(--line);backgroun
 .tctl{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:8px 0}.btn{background:var(--acc);border:0;color:#fff;padding:7px 16px;border-radius:20px;font-weight:700;cursor:pointer}
 .call{font-family:ui-monospace,Menlo,monospace;background:var(--card);border:1px solid var(--line);padding:4px 10px;border-radius:8px}.closure{color:#38d39f;font-weight:700}
 footer{font-size:12px;color:var(--mut);padding:18px 24px;border-top:1px solid var(--line);max-width:1240px;margin:auto}code{background:var(--line);padding:1px 5px;border-radius:4px}
-@media(max-width:600px){main{padding:12px}.hero h1{font-size:26px}.big b{font-size:26px}#map,.tmap{height:380px}header{flex-wrap:wrap;gap:6px}header nav{display:flex;flex-wrap:wrap;gap:4px 12px;order:3;width:100%}header nav a{display:inline;padding:0}}"""
+@media(max-width:600px){main{padding:12px}.hero h1{font-size:26px}.big b{font-size:26px}#map,.tmap{height:380px}header{flex-wrap:wrap;gap:6px}header nav{display:flex;flex-wrap:wrap;gap:4px 14px;order:3;flex:1 0 100%}.brand .wm{font-size:17px}header nav a{display:inline;padding:0}}"""
 
 THEME_JS = """<script>(function(){const k='gr-theme',d=document.documentElement,s=localStorage.getItem(k)||(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark');d.dataset.theme=s;
 addEventListener('DOMContentLoaded',()=>{const b=document.getElementById('tt');if(b){b.textContent=s=='dark'?'☀ light':'☾ dark';b.onclick=()=>{const n=d.dataset.theme=='dark'?'light':'dark';d.dataset.theme=n;localStorage.setItem(k,n);b.textContent=n=='dark'?'☀ light':'☾ dark'}}})})()</script>"""
@@ -67,9 +66,9 @@ def page(title, body, depth=0, head="", desc="Evidence-based parcel overlap reso
     return f"""<!doctype html><html lang=en data-theme=dark><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1">
 <title>{E(title)} · GeoRescue</title><meta name=description content="{E(desc)}">
 <meta property=og:title content="GeoRescue · {E(title)}"><meta property=og:description content="{E(desc)}"><meta property=og:image content="{SITE_URL}assets/og.png">
-<meta property=og:type content=website><meta name=twitter:card content=summary_large_image><link rel=icon href="{up}assets/logo.svg">
+<meta property=og:type content=website><meta name=twitter:card content=summary_large_image><link rel=icon href="{up}assets/favicon.svg" type="image/svg+xml"><link rel=icon href="{up}assets/favicon.ico" sizes=any><link rel=apple-touch-icon href="{up}assets/apple-touch-icon.png"><meta property=og:image:width content=1200><meta property=og:image:height content=630>
 <link rel=stylesheet href="{up}assets/style.css">{THEME_JS}{head}</head><body>
-<header><a class=brand href="{up}index.html">{LOGO}Geo<span>Rescue</span></a><nav><a href="{up}index.html">Dashboard</a><a href="{up}index.html#map-sec">Map</a><a href="{up}cases.html">Case files</a><a href="{up}history.html">Run history</a></nav><button id=tt>☀ light</button></header>
+<header><a class=brand href="{up}index.html">{LOGO.format(up=up)}<span class=wm>GeoRescue</span></a><nav><a href="{up}index.html">Dashboard</a><a href="{up}index.html#map-sec">Map</a><a href="{up}cases.html">Case files</a><a href="{up}history.html">Run history</a></nav><button id=tt>☀ light</button></header>
 <main>{body}</main><footer>{FOOT}</footer></body></html>"""
 
 
@@ -139,7 +138,12 @@ def publish(latest="out/latest", site="site", runs="out/runs", include_coj_image
     if S.exists(): shutil.rmtree(S)
     for d in ("data", "assets", "cases", "img"): (S / d).mkdir(parents=True, exist_ok=True)
     (S / "assets" / "style.css").write_text(CSS); (S / ".nojekyll").write_text("")
-    (S / "assets" / "logo.svg").write_text(LOGO.replace("<svg class=logo", '<svg xmlns="http://www.w3.org/2000/svg"').replace("currentColor", "#4cc9f0"))
+    B = Path(__file__).resolve().parents[2] / "brand"
+    for f in ("logo-mark.svg", "logo-mark-flat.svg", "logo-horizontal.svg", "logo-stacked.svg", "favicon.svg", "favicon.ico",
+              "apple-touch-icon.png", "logo-mark-512.png", "logo-mark-192.png", "logo-mark-32.png", "og.png"):
+        if (B / f).exists(): shutil.copy2(B / f, S / "assets" / f)
+    fnt = Path("/usr/share/fonts/truetype/sand-box/google/Exo 2/Exo2-VariableFont_wght.ttf")
+    if fnt.exists(): (S / "assets" / "fonts").mkdir(exist_ok=True); shutil.copy2(fnt, S / "assets" / "fonts" / fnt.name)
     man = json.loads((L / "manifest.json").read_text())
     summ = json.loads((L / "summary.json").read_text()) if (L / "summary.json").exists() else {}
     iss = pd.read_csv(L / "issues.csv") if (L / "issues.csv").exists() else pd.DataFrame(columns=["feature_id", "check", "severity", "message"])
@@ -170,7 +174,7 @@ def publish(latest="out/latest", site="site", runs="out/runs", include_coj_image
     by = summ.get("issues_by_check") or iss["check"].value_counts().to_dict()
     n_par = int(summ.get("features", 0) or 0); n_ov = sum(1 for v in verdicts); n_deed = len(deeds)
     kpis = "".join(f"<div class=kpi><b data-n={n}>{n:,}</b><span><i style='display:inline-block;width:8px;height:8px;border-radius:2px;background:{COLORS.get(k, '#888')}'></i> {E(k)}</span></div>" for k, n in sorted(by.items(), key=lambda x: -x[1]))
-    _og_image(S / "assets" / "og.png", n_par, n_ov)
+    if not (S / "assets" / "og.png").exists(): _og_image(S / "assets" / "og.png", n_par, n_ov)
 
     # ---- hero: REDACTED vs REDACTED ----
     hero = ""
@@ -190,7 +194,7 @@ def publish(latest="out/latest", site="site", runs="out/runs", include_coj_image
             ps, pb, pr = _svg_paths([sieg, REDACTED, rec], bnd)
             grid = "".join(f"<line x1={i} y1=0 x2={i} y2=500 stroke='#ffffff08'/><line x1=0 y1={i} x2=500 y2={i} stroke='#ffffff08'/>" for i in range(0, 501, 50))
             before = f"<svg viewBox='0 0 500 500'>{grid}<path d='{ps}' fill='#ff9f1c33' stroke='#ff9f1c' stroke-width=2.5/><path d='{pb}' fill='#ff4d6d55' stroke='#ff4d6d' stroke-width=2 stroke-dasharray='5 4'/></svg>"
-            after = f"<svg viewBox='0 0 500 500' class=after style='background:#0b1320'>{grid}<defs><pattern id=hx width=8 height=8 patternUnits=userSpaceOnUse patternTransform='rotate(45)'><line x1=0 y1=0 x2=0 y2=8 stroke='#ff4d6d88' stroke-width=2/></pattern></defs><path d='{ps}' fill='none' stroke='#ff9f1c66' stroke-width=1 stroke-dasharray='3 4'/><path d='{pb}' fill='url(#hx)' stroke='#ff4d6d' stroke-width=1.5 stroke-dasharray='5 4'/><path d='{pr}' fill='#38d39f40' stroke='#38d39f' stroke-width=3.5/><text x=250 y=490 text-anchor=middle fill='#cbd5e1' font-size=13 font-family=sans-serif>green = deed tract 7.96 ac · hatched = REDACTED lot excluded</text></svg>"
+            after = f"<svg viewBox='0 0 500 500' class=after style='background:#0b1320'>{grid}<defs><pattern id=hx width=8 height=8 patternUnits=userSpaceOnUse patternTransform='rotate(45)'><line x1=0 y1=0 x2=0 y2=8 stroke='#ff4d6d88' stroke-width=2/></pattern></defs><path d='{ps}' fill='none' stroke='#ff9f1c66' stroke-width=1 stroke-dasharray='3 4'/><path d='{pb}' fill='url(#hx)' stroke='#ff4d6d' stroke-width=1.5 stroke-dasharray='5 4'/><path d='{pr}' fill='#38d39f40' stroke='#38d39f' stroke-width=3.5/><text x=490 y=52 text-anchor=end fill='#cbd5e1' font-size=12 font-family=sans-serif>green = deed tract · hatched = REDACTED excluded</text></svg>"
             cl = travs["001542 0010"]["closure"]
             case_id = case_of.get("001542 0010", "")
             hero = f"""<section class=hero><div><div class=eyebrow>Featured case · Duval County, FL</div>
@@ -206,7 +210,7 @@ def publish(latest="out/latest", site="site", runs="out/runs", include_coj_image
 <li><b>Traverse closes {E(cl.get('precision', ''))}</b>{cl.get('n_calls', '')} calls, misclosure {cl.get('misclosure_ft', '')} ft. Fits GIS-minus-REDACTED at IoU {c.get('fit_to_gis_minus_REDACTED', {}).get('iou', '')}; 0% of REDACTED inside the deed.</li>
 <li><b>Verdict proposed for review</b>Cut REDACTED from REDACTED (cut smaller from larger) — high confidence, not auto-applied. <a href="cases/{case_id}.html">Open the case file →</a></li></ol></div></div>
 <div><div class=ba id=ba>{before}{after}<div class=bar></div><span class='lab l'>Before · GIS</span><span class='lab r'>After · deed</span><input type=range min=0 max=100 value=15 aria-label="before/after"></div>
-<p style="font-size:12px;color:var(--mut)">Drag to compare: orange = GIS REDACTED polygon, red dashed = REDACTED lot, green = deed traverse (best-fit, not a survey).</p></div></section>
+<p style="font-size:12px;color:var(--mut)">Drag the handle to compare. Before: orange = county GIS polygon for REDACTED, red dashed = REDACTED lot inside it. After: green = REDACTED's deed tract (7.96 ac, best-fit COGO traverse, not a survey), red hatching = REDACTED lot excluded from REDACTED.</p></div></section>
 <script>(()=>{{const b=document.getElementById('ba'),r=b.querySelector('input'),a=b.querySelector('.after'),bar=b.querySelector('.bar');r.oninput=()=>{{a.style.clipPath=`inset(0 0 0 ${{r.value}}%)`;bar.style.left=r.value+'%'}};bar.style.left='15%'}})()</script>"""
 
     legend = "".join(f"<span><i style='background:{c}'></i>{k}</span>" for k, c in COLORS.items())

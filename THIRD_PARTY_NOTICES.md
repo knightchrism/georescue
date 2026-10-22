@@ -56,6 +56,7 @@ No data files are included in this repository; scripts fetch them from the sourc
 | MapLibre GL JS 4.7.1 (loaded from unpkg CDN) | Interactive maps in `site/` (dashboard + deed traverse animation) | BSD-3-Clause, © MapLibre contributors, https://maplibre.org |
 | CARTO Dark Matter basemap (basemaps.cartocdn.com) | Site basemap style/tiles | © CARTO; map data © OpenStreetMap contributors (ODbL); attribution shown on maps |
 | Duval Property Appraiser (paopropertysearch.coj.net) | Owner/legal/sales triage in `georescue run` | Public records; cached, low-rate HTTP lookups |
+| Exo 2 font (Natanael Gama), bundled as `site/assets/fonts/Exo2-VariableFont_wght.ttf` | Wordmark in site header | SIL Open Font License 1.1, https://github.com/googlefonts/Exo-2.0 |
 | GitHub Actions: actions/checkout, cache, upload-pages-artifact, deploy-pages; astral-sh/setup-uv | CI workflow | MIT |
 
 Public site note: COJ Duval orthoimagery (no published licence) is excluded from `site/` by default (`georescue publish --include-coj-imagery` to override locally).
