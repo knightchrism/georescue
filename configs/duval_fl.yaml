@@ -1,0 +1,13 @@
+# Duval County / City of Jacksonville parcels
+# Source: https://maps.coj.net/coj/rest/services/CityBiz/Parcels/MapServer/0 (exported as GeoJSON, EPSG:4326)
+name: Duval County FL parcels (COJ CityBiz/Parcels)
+id_field: RE                 # Real Estate number
+expected_crs: EPSG:4326
+working_crs: EPSG:2236       # NAD83 / Florida East (ftUS) -> areas in sq ft
+fields:
+  RE: {type: str}
+  LNAMEOWNER: {type: str}
+  ACRES: {type: float}
+bounds: {minx: -82.06, miny: 30.10, maxx: -81.32, maxy: 30.60, crs: EPSG:4326}
+topology: {overlap_min_area: 10.0, sliver_max_area: 50.0, sliver_max_compactness: 0.02, gap_max_area: 500.0}
+repair: {trim_overlaps_below_area: 0.0}   # flag-only: overlaps are deed-verification candidates

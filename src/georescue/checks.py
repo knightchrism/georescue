@@ -19,6 +19,8 @@ class Issue:
     severity: str
     message: str
     geometry_wkt: str | None = None
+    other_row: int | None = None
+    metric: float | None = None
 
 
 def _fid(gdf, cfg, i):
@@ -156,20 +158,25 @@ def check_topology(gdf, cfg):
     comp = np.where(per > 0, 4 * np.pi * area / np.maximum(per, 1e-12) ** 2, 0)
     for k in np.where((area < t.sliver_max_area) | (comp < t.sliver_max_compactness))[0]:
         i = int(idx[k])
-        out.append(Issue(i, _fid(gdf, cfg, i), "sliver_polygon", "warning", f"area={area[k]:.2f}, compactness={comp[k]:.3f}"))
-    # overlaps
+        out.append(Issue(i, _fid(gdf, cfg, i), "sliver_polygon", "warning", f"area={area[k]:.2f}, compactness={comp[k]:.3f}", metric=float(area[k])))
+    # overlaps: bbox candidates from STRtree, then a cheap DE-9IM interior test,
+    # and only then the expensive intersection (adjacent parcels share edges only).
     tree = shapely.STRtree(geoms)
-    a, b = tree.query(geoms, predicate="intersects")
+    a, b = tree.query(geoms)  # bbox-only candidate pairs
     m = a < b
     a, b = a[m], b[m]
     if len(a):
+        inter_mask = shapely.relate_pattern(geoms[a], geoms[b], "T********")
+        a, b = a[inter_mask], b[inter_mask]
+        same = shapely.equals(geoms[a], geoms[b])  # identical pairs are reported as duplicate_geometry
+        a, b = a[~same], b[~same]
         inter = shapely.intersection(geoms[a], geoms[b])
         ia = shapely.area(inter)
         for k in np.where(ia > t.overlap_min_area)[0]:
             i, j = int(idx[a[k]]), int(idx[b[k]])
             out.append(Issue(j, _fid(gdf, cfg, j), "overlap", "error",
                              f"overlaps row {i} ({_fid(gdf, cfg, i)}) by {ia[k]:.2f} units^2|other_row={i}",
-                             shapely.to_wkt(inter[k], rounding_precision=3)))
+                             shapely.to_wkt(inter[k], rounding_precision=3), other_row=i, metric=float(ia[k])))
     # gaps: small interior holes in the union of the fabric
     if len(geoms):
         u = shapely.union_all(shapely.buffer(geoms, 0))
@@ -179,7 +186,7 @@ def check_topology(gdf, cfg):
                 h = shapely.Polygon(ring)
                 if h.area <= t.gap_max_area:
                     out.append(Issue(None, "*", "gap", "warning", f"gap of {h.area:.2f} units^2 at {h.representative_point().wkt}",
-                                     shapely.to_wkt(h, rounding_precision=3)))
+                                     shapely.to_wkt(h, rounding_precision=3), metric=float(h.area)))
     return out
 
 

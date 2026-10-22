@@ -69,7 +69,7 @@ def repair(gdf: gpd.GeoDataFrame, cfg: Config, issues: pd.DataFrame | None = Non
         elif c == "duplicate_geometry" and r.drop_exact_duplicates:
             pass  # handled below
         elif c == "overlap" and r.trim_overlaps_below_area > 0:
-            area = float(iss["message"].split(" by ")[1].split(" ")[0])
+            area = float(iss["metric"])
             other = int(iss["message"].split("other_row=")[1])
             if area > r.trim_overlaps_below_area:
                 log.append(dict(feature_id=fid(i), row=i, check=c, action="flag_only", before=None, after=None,
@@ -107,6 +107,16 @@ def repair(gdf: gpd.GeoDataFrame, cfg: Config, issues: pd.DataFrame | None = Non
     return out, pd.DataFrame(log, columns=LOG_COLS)
 
 
+def _changed(a, b) -> bool:
+    """Value change, including text->number coercion; numpy vs python scalars are not a change."""
+    na, nb = isinstance(a, (int, float, np.number)) and not isinstance(a, bool), isinstance(b, (int, float, np.number)) and not isinstance(b, bool)
+    if na and nb:
+        return float(a) != float(b)
+    if na != nb:
+        return True
+    return str(a) != str(b)
+
+
 def diff(original: gpd.GeoDataFrame, corrected: gpd.GeoDataFrame) -> pd.DataFrame:
     rows = []
     kept = set(corrected["_src_row"])
@@ -124,6 +134,6 @@ def diff(original: gpd.GeoDataFrame, corrected: gpd.GeoDataFrame) -> pd.DataFram
             if c == original.geometry.name:
                 continue
             a, b = o[c], f[c]
-            if not (pd.isna(a) and pd.isna(b)) and (str(a) != str(b) or type(a) is not type(b)):
+            if not (pd.isna(a) and pd.isna(b)) and _changed(a, b):
                 rows.append(dict(row=i, change="attribute", detail=f"{c}: {a!r} -> {b!r}"))
     return pd.DataFrame(rows, columns=["row", "change", "detail"])
