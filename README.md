@@ -29,8 +29,12 @@ Gap detection uses holes in the unioned fabric (misses gaps open to the outside 
 | Inspect, classify, repair, change log, QA report | Automated (`georescue` CLI / MCP) |
 | RustGIS visualization loop | Automated (`agent_demo/run_demo.py`) |
 | Appraiser legal descriptions, PLSS corner tie (BLM CadNSDI) | Automated (`verify/`) |
-| **Fetching recorded deed images** (myfloridacounty.com ORI) | **Manual today**: portal sits behind a human-verification check; production path is a bulk/API agreement with the Clerk |
+| **Fetching recorded deed images** (myfloridacounty.com ORI) | **Manual today**: portal sits behind a human-verification check |
 | Deed OCR, metes-and-bounds + curve parsing, COGO traverse, closure and GIS comparison | Automated (`verify/run_deeds.py`) |
 | Final boundary position within ~3 ft | Needs a licensed surveyor |
 
 Deed PDFs, page images, and raw county data are excluded from the repo.
+
+## Credits
+
+See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) for open-source licenses and data sources.
