@@ -38,8 +38,8 @@ main{padding:20px 24px;max-width:1240px;margin:auto}h2{margin:28px 0 10px;font-s
 .steps li:before{content:counter(s);position:absolute;left:-15px;top:0;width:28px;height:28px;border-radius:50%;background:var(--acc);color:#fff;font-weight:700;display:grid;place-items:center;font-size:13px}
 .steps li:last-child{border-color:transparent}.steps b{display:block}
 .ba{position:relative;width:100%;aspect-ratio:1/1;border-radius:12px;overflow:hidden;background:#0b1320;border:1px solid var(--line);user-select:none}
-.ba svg{position:absolute;inset:0;width:100%;height:100%}.ba .after{clip-path:inset(0 0 0 50%)}.ba input{position:absolute;inset:auto 0 8px 0;width:92%;margin:auto;left:4%}
-.ba .bar{position:absolute;top:0;bottom:0;left:50%;width:2px;background:#fff;box-shadow:0 0 8px #fff;pointer-events:none}
+.ba svg{position:absolute;inset:0;width:100%;height:100%}.ba .after{clip-path:inset(0 0 0 15%)}.ba input{position:absolute;inset:auto 0 8px 0;width:92%;margin:auto;left:4%}
+.ba .bar{position:absolute;top:0;bottom:0;left:15%;width:2px;background:#fff;box-shadow:0 0 8px #fff;pointer-events:none}
 .ba .lab{position:absolute;top:8px;font-size:12px;background:#000a;color:#fff;padding:2px 8px;border-radius:8px}.ba .l{left:8px}.ba .r{right:8px}
 #map,.tmap{height:520px;border-radius:12px;border:1px solid var(--line)}.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:12px;margin:8px 0}.legend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:4px;vertical-align:-1px}
 .maplibregl-popup-content{background:#161b22;color:#e6edf3;border-radius:10px;box-shadow:0 6px 24px #0008}.maplibregl-popup-tip{border-top-color:#161b22!important}
@@ -51,7 +51,7 @@ img.fig{max-width:100%;border-radius:10px;border:1px solid var(--line);backgroun
 .tctl{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:8px 0}.btn{background:var(--acc);border:0;color:#fff;padding:7px 16px;border-radius:20px;font-weight:700;cursor:pointer}
 .call{font-family:ui-monospace,Menlo,monospace;background:var(--card);border:1px solid var(--line);padding:4px 10px;border-radius:8px}.closure{color:#38d39f;font-weight:700}
 footer{font-size:12px;color:var(--mut);padding:18px 24px;border-top:1px solid var(--line);max-width:1240px;margin:auto}code{background:var(--line);padding:1px 5px;border-radius:4px}
-@media(max-width:600px){main{padding:12px}.hero h1{font-size:26px}.big b{font-size:26px}#map,.tmap{height:380px}}"""
+@media(max-width:600px){main{padding:12px}.hero h1{font-size:26px}.big b{font-size:26px}#map,.tmap{height:380px}header{flex-wrap:wrap;gap:6px}header nav{display:flex;flex-wrap:wrap;gap:4px 12px;order:3;width:100%}header nav a{display:inline;padding:0}}"""
 
 THEME_JS = """<script>(function(){const k='gr-theme',d=document.documentElement,s=localStorage.getItem(k)||(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark');d.dataset.theme=s;
 addEventListener('DOMContentLoaded',()=>{const b=document.getElementById('tt');if(b){b.textContent=s=='dark'?'☀ light':'☾ dark';b.onclick=()=>{const n=d.dataset.theme=='dark'?'light':'dark';d.dataset.theme=n;localStorage.setItem(k,n);b.textContent=n=='dark'?'☀ light':'☾ dark'}}})})()</script>"""
@@ -176,6 +176,9 @@ def publish(latest="out/latest", site="site", runs="out/runs", include_coj_image
     hero = ""
     sb = deeds.get(("001542 0010", "001531 5300"))
     trav_path = L / "verify" / "deed_traverses_2236.json"
+    for src in [Path("out/duval/verify/deed_traverses_2236.json")]:  # pull from the run's verify output if missing/stale
+        if src.exists() and (not trav_path.exists() or src.stat().st_mtime > trav_path.stat().st_mtime):
+            trav_path.parent.mkdir(parents=True, exist_ok=True); shutil.copy2(src, trav_path)
     travs = json.loads(trav_path.read_text()) if trav_path.exists() else {}
     if sb and fg is not None and "001542 0010" in travs:
         c = sb["cogo"]; g2236 = fg.set_index("fid").to_crs(2236).geometry
@@ -187,7 +190,7 @@ def publish(latest="out/latest", site="site", runs="out/runs", include_coj_image
             ps, pb, pr = _svg_paths([sieg, REDACTED, rec], bnd)
             grid = "".join(f"<line x1={i} y1=0 x2={i} y2=500 stroke='#ffffff08'/><line x1=0 y1={i} x2=500 y2={i} stroke='#ffffff08'/>" for i in range(0, 501, 50))
             before = f"<svg viewBox='0 0 500 500'>{grid}<path d='{ps}' fill='#ff9f1c33' stroke='#ff9f1c' stroke-width=2.5/><path d='{pb}' fill='#ff4d6d55' stroke='#ff4d6d' stroke-width=2 stroke-dasharray='5 4'/></svg>"
-            after = f"<svg viewBox='0 0 500 500' class=after style='background:#0b1320'>{grid}<path d='{pb}' fill='#ff4d6d22' stroke='#ff4d6d' stroke-width=1.5/><path d='{pr}' fill='#38d39f33' stroke='#38d39f' stroke-width=2.5/></svg>"
+            after = f"<svg viewBox='0 0 500 500' class=after style='background:#0b1320'>{grid}<defs><pattern id=hx width=8 height=8 patternUnits=userSpaceOnUse patternTransform='rotate(45)'><line x1=0 y1=0 x2=0 y2=8 stroke='#ff4d6d88' stroke-width=2/></pattern></defs><path d='{ps}' fill='none' stroke='#ff9f1c66' stroke-width=1 stroke-dasharray='3 4'/><path d='{pb}' fill='url(#hx)' stroke='#ff4d6d' stroke-width=1.5 stroke-dasharray='5 4'/><path d='{pr}' fill='#38d39f40' stroke='#38d39f' stroke-width=3.5/><text x=250 y=490 text-anchor=middle fill='#cbd5e1' font-size=13 font-family=sans-serif>green = deed tract 7.96 ac · hatched = REDACTED lot excluded</text></svg>"
             cl = travs["001542 0010"]["closure"]
             case_id = case_of.get("001542 0010", "")
             hero = f"""<section class=hero><div><div class=eyebrow>Featured case · Duval County, FL</div>
@@ -202,9 +205,9 @@ def publish(latest="out/latest", site="site", runs="out/runs", include_coj_image
 <li><b>Deed pulled</b>Official Records 19870-841 (2021 warranty deed), OCR'd and parsed call by call.</li>
 <li><b>Traverse closes {E(cl.get('precision', ''))}</b>{cl.get('n_calls', '')} calls, misclosure {cl.get('misclosure_ft', '')} ft. Fits GIS-minus-REDACTED at IoU {c.get('fit_to_gis_minus_REDACTED', {}).get('iou', '')}; 0% of REDACTED inside the deed.</li>
 <li><b>Verdict proposed for review</b>Cut REDACTED from REDACTED (cut smaller from larger) — high confidence, not auto-applied. <a href="cases/{case_id}.html">Open the case file →</a></li></ol></div></div>
-<div><div class=ba id=ba>{before}{after}<div class=bar></div><span class='lab l'>Before · GIS</span><span class='lab r'>After · deed</span><input type=range min=0 max=100 value=50 aria-label="before/after"></div>
+<div><div class=ba id=ba>{before}{after}<div class=bar></div><span class='lab l'>Before · GIS</span><span class='lab r'>After · deed</span><input type=range min=0 max=100 value=15 aria-label="before/after"></div>
 <p style="font-size:12px;color:var(--mut)">Drag to compare: orange = GIS REDACTED polygon, red dashed = REDACTED lot, green = deed traverse (best-fit, not a survey).</p></div></section>
-<script>(()=>{{const b=document.getElementById('ba'),r=b.querySelector('input'),a=b.querySelector('.after'),bar=b.querySelector('.bar');r.oninput=()=>{{a.style.clipPath=`inset(0 0 0 ${{r.value}}%)`;bar.style.left=r.value+'%'}}}})()</script>"""
+<script>(()=>{{const b=document.getElementById('ba'),r=b.querySelector('input'),a=b.querySelector('.after'),bar=b.querySelector('.bar');r.oninput=()=>{{a.style.clipPath=`inset(0 0 0 ${{r.value}}%)`;bar.style.left=r.value+'%'}};bar.style.left='15%'}})()</script>"""
 
     legend = "".join(f"<span><i style='background:{c}'></i>{k}</span>" for k, c in COLORS.items())
     checks = sorted(iss["check"].dropna().unique()) if len(iss) else []

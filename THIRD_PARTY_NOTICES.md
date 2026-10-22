@@ -53,14 +53,10 @@ No data files are included in this repository; scripts fetch them from the sourc
 |---|---|---|
 | City of Jacksonville GIS — Duval 2026 orthoimagery (https://maps.coj.net/coj/rest/services/imagery/Duval2026/MapServer, layer `Duval_2026`) | Basemap for `out/duval/verify/deed_*_overlay.png` | Public ArcGIS REST service; no license text published in service metadata (copyrightText empty). Credited as "City of Jacksonville GIS, Duval 2026 orthoimagery". Figures are for internal verification; confirm COJ terms before redistribution. |
 | Duval County Clerk of Courts Official Records (or.duvalclerk.com) | Deed legal descriptions | Public records; credited as "Duval Clerk of Courts Official Records". |
-| Leaflet 1.9.4 (dashboard map, loaded from unpkg CDN) | Interactive map in `site/` | BSD-2-Clause, https://leafletjs.com |
-| OpenStreetMap tiles (tile.openstreetmap.org) | Dashboard basemap | Data © OpenStreetMap contributors, ODbL; tile usage policy applies (low-traffic demo) |
+| MapLibre GL JS 4.7.1 (loaded from unpkg CDN) | Interactive maps in `site/` (dashboard + deed traverse animation) | BSD-3-Clause, © MapLibre contributors, https://maplibre.org |
+| CARTO Dark Matter basemap (basemaps.cartocdn.com) | Site basemap style/tiles | © CARTO; map data © OpenStreetMap contributors (ODbL); attribution shown on maps |
 | Duval Property Appraiser (paopropertysearch.coj.net) | Owner/legal/sales triage in `georescue run` | Public records; cached, low-rate HTTP lookups |
 | GitHub Actions: actions/checkout, cache, upload-pages-artifact, deploy-pages; astral-sh/setup-uv | CI workflow | MIT |
 
 Public site note: COJ Duval orthoimagery (no published licence) is excluded from `site/` by default (`georescue publish --include-coj-imagery` to override locally).
 
-| MapLibre GL JS 4.7.1 (unpkg CDN) | Interactive web maps on the static site | BSD-3-Clause, © MapLibre contributors |
-| CARTO Dark Matter basemap | Site basemap tiles/style | © CARTO, map data © OpenStreetMap contributors (ODbL); free use with attribution |
-
-Note: Leaflet is no longer used by the site (replaced by MapLibre).
