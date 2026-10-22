@@ -1,0 +1,232 @@
+[
+ {
+  "step": "subset",
+  "path": "/workspace/georescue/agent_demo/data/demo_parcels.gpkg",
+  "features": 93
+ },
+ {
+  "step": "issues_layer",
+  "path": "/workspace/georescue/agent_demo/data/issues.geojson",
+  "n": 18
+ },
+ {
+  "step": "tools",
+  "georescue": [
+   "inspect_dataset",
+   "repair_dataset"
+  ],
+  "rustgis": [
+   "list_layers",
+   "search_commands",
+   "run_command",
+   "search_tools",
+   "describe_tool",
+   "run_tool",
+   "read_features",
+   "search_docs",
+   "read_doc",
+   "view_map"
+  ]
+ },
+ {
+  "step": "georescue.inspect_dataset",
+  "summary": {
+   "attribute_wrong_type": 77,
+   "gap": 16,
+   "geometry_invalid": 1,
+   "overlap": 1
+  }
+ },
+ {
+  "step": "agent.findings",
+  "geom_issues": [
+   {
+    "row": 2.0,
+    "feature_id": "04384-000",
+    "check": "geometry_invalid",
+    "severity": "error",
+    "message": "Ring Self-intersection[-82.6032448806187 30.5364376955466]"
+   }
+  ]
+ },
+ {
+  "step": "rustgis.layer.addData",
+  "params": {
+   "path": "/workspace/georescue/agent_demo/data/issues.geojson",
+   "name": "issues"
+  },
+  "error": false,
+  "result": "{\"layersAdded\":[\"issues\"],\"result\":{\"features\":18,\"layer\":2}}"
+ },
+ {
+  "step": "rustgis.layer.outline",
+  "params": {
+   "layer": "issues",
+   "color": "#FF0000",
+   "width": 3
+  },
+  "error": false,
+  "result": "{\"ok\":true}"
+ },
+ {
+  "step": "rustgis.list_layers",
+  "result": "{\"activeMap\":\"Map\",\"basemap\":\"paper\",\"center\":{\"lat\":30.378381627477847,\"lon\":-82.63342730181667},\"layers\":[{\"features\":18,\"fields\":[\"check (Text)\",\"feature_id (Text)\",\"message (Text)\",\"row (Double)\",\"severity (Text)\"],\"id\":2,\"name\":\"issues\",\"renderer\":\"Single Symbol\",\"selected\":0,\"type\":\"Polygon\",\""
+ },
+ {
+  "step": "rustgis.read_features",
+  "result": "{\"layer\":\"issues\",\"matched\":1,\"rows\":[{\"_lat\":30.20579,\"_lon\":-82.67645,\"_row\":1,\"check\":\"overlap\",\"feature_id\":\"02305-005\",\"message\":\"overlaps row 22 (02272-052) by 55.14 units^2|other_row=22\",\"row\":37.0,\"severity\":\"error\"}],\"total\":18}"
+ },
+ {
+  "step": "rustgis.layer.zoomTo",
+  "params": {
+   "layer": "demo_parcels"
+  },
+  "error": false,
+  "result": "{\"ok\":true}"
+ },
+ {
+  "step": "snapshot",
+  "path": "/workspace/georescue/agent_demo/snapshots/00_overview.png"
+ },
+ {
+  "step": "rustgis.select.byAttributes",
+  "params": {
+   "layer": "demo_parcels",
+   "where": "PARCEL_ID = '04384-000'"
+  },
+  "error": false,
+  "result": "{\"notices\":[\"1 features selected\"],\"selected\":1}"
+ },
+ {
+  "step": "rustgis.map.zoomToExtent",
+  "params": {
+   "extent": [
+    -82.61003649051754,
+    30.52762038433629,
+    -82.589917437262,
+    30.545402311740368
+   ]
+  },
+  "error": false,
+  "result": "{\"ok\":true}"
+ },
+ {
+  "step": "snapshot",
+  "path": "/workspace/georescue/agent_demo/snapshots/01_invalid_04384-000_before.png"
+ },
+ {
+  "step": "rustgis.select.byAttributes",
+  "params": {
+   "layer": "demo_parcels",
+   "where": "PARCEL_ID IN ('02305-005','02272-052')"
+  },
+  "error": false,
+  "result": "{\"notices\":[\"2 features selected\"],\"selected\":2}"
+ },
+ {
+  "step": "rustgis.map.zoomToExtent",
+  "params": {
+   "extent": [
+    -82.67744340229993,
+    30.204811033765367,
+    -82.67495140859782,
+    30.208398614930342
+   ]
+  },
+  "error": false,
+  "result": "{\"ok\":true}"
+ },
+ {
+  "step": "snapshot",
+  "path": "/workspace/georescue/agent_demo/snapshots/02_overlap_02305-005_02272-052_before.png"
+ },
+ {
+  "step": "agent.proposal",
+  "fix": "04384-000: make_valid (Ring Self-intersection); overlaps are flagged-only per config (manual review)"
+ },
+ {
+  "step": "georescue.repair_dataset",
+  "outputs": {
+   "corrected.gpkg": "/workspace/georescue/agent_demo/out/corrected.gpkg",
+   "changelog.csv": "/workspace/georescue/agent_demo/out/changelog.csv",
+   "issues.csv": "/workspace/georescue/agent_demo/out/issues.csv",
+   "diff.csv": "/workspace/georescue/agent_demo/out/diff.csv",
+   "report.html": "/workspace/georescue/agent_demo/out/report.html",
+   "summary.json": "/workspace/georescue/agent_demo/out/summary.json"
+  }
+ },
+ {
+  "step": "changelog",
+  "feature_id": "04384-000",
+  "check": "geometry_invalid",
+  "action": "make_valid",
+  "post_valid": "True",
+  "applied": "True"
+ },
+ {
+  "step": "changelog",
+  "feature_id": "04384-000",
+  "check": "attribute_wrong_type",
+  "action": "flag_only",
+  "post_valid": "False",
+  "applied": "False"
+ },
+ {
+  "step": "changelog",
+  "feature_id": "02272-052",
+  "check": "attribute_wrong_type",
+  "action": "flag_only",
+  "post_valid": "False",
+  "applied": "False"
+ },
+ {
+  "step": "rustgis.layer.addData",
+  "params": {
+   "path": "/workspace/georescue/agent_demo/out/corrected.gpkg",
+   "name": "corrected"
+  },
+  "error": false,
+  "result": "{\"layersAdded\":[\"corrected\"],\"result\":{\"features\":93,\"layer\":3,\"layers\":[3],\"streamed\":false}}"
+ },
+ {
+  "step": "rustgis.layer.outline",
+  "params": {
+   "layer": "corrected",
+   "color": "#00AA00",
+   "width": 2
+  },
+  "error": false,
+  "result": "{\"ok\":true}"
+ },
+ {
+  "step": "rustgis.select.byAttributes",
+  "params": {
+   "layer": "corrected",
+   "where": "PARCEL_ID = '04384-000'"
+  },
+  "error": false,
+  "result": "{\"notices\":[\"1 features selected\"],\"selected\":1}"
+ },
+ {
+  "step": "rustgis.map.zoomToExtent",
+  "params": {
+   "extent": [
+    -82.61003649051754,
+    30.52762038433629,
+    -82.589917437262,
+    30.545402311740368
+   ]
+  },
+  "error": false,
+  "result": "{\"ok\":true}"
+ },
+ {
+  "step": "snapshot",
+  "path": "/workspace/georescue/agent_demo/snapshots/03_invalid_04384-000_after.png"
+ },
+ {
+  "step": "rustgis.run_tool.calculateGeometry",
+  "error": false,
+  "result": "{\"notices\":[\"Calculated geometry attributes for corrected\"],\"updated\":\"corrected\"}"
+ }
+]

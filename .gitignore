@@ -3,3 +3,5 @@ data/real/
 out/
 out_columbia.json
 __pycache__/
+agent_demo/data/
+agent_demo/out/
