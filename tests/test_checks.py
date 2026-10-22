@@ -141,3 +141,18 @@ def test_overlap_above_max_flagged():
     r = log[log.check == "overlap"].iloc[0]
     assert r.action == "flag_only" and not r.applied
     assert fixed.geometry.iloc[1].equals(box(98, 0, 110, 10))
+
+def test_contained_parcel_cut_from_larger_not_trimmed():
+    big = dict(PID="BIG", ACRES=4.0, geometry=box(100, 0, 140, 40)); small = dict(PID="SM", ACRES=0.5, geometry=box(110, 10, 120, 20))
+    g = mk(base() + [big, small])
+    iss = checks.inspect(g, CFG)
+    c = iss[iss.check == "contained_parcel"]
+    assert len(c) == 1 and c.iloc[0].feature_id == "BIG" and "cut smaller from larger" in c.iloc[0].message
+    assert (iss.check == "overlap").sum() == 0
+    cfg = CFG.model_copy(deep=True); cfg.repair.trim_overlaps_below_area = 1e9   # even aggressive trimming must not delete SM
+    fixed, log = repair.repair(g, cfg)
+    assert fixed.geometry.iloc[3].area == 100 and fixed.geometry.iloc[2].area == 1600     # default: propose only
+    cfg.repair.cut_contained_from_container = True
+    fixed, log = repair.repair(g, cfg)
+    assert fixed.geometry.iloc[3].area == 100 and fixed.geometry.iloc[2].area == 1500
+    assert log[log.check == "contained_parcel"].iloc[0].action == "cut_contained"

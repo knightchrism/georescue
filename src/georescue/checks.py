@@ -172,8 +172,19 @@ def check_topology(gdf, cfg):
         a, b = a[~same], b[~same]
         inter = shapely.intersection(geoms[a], geoms[b])
         ia = shapely.area(inter)
+        amin = np.minimum(shapely.area(geoms[a]), shapely.area(geoms[b]))
+        frac = np.where(amin > 0, ia / np.maximum(amin, 1e-12), 0)
         for k in np.where(ia > t.overlap_min_area)[0]:
             i, j = int(idx[a[k]]), int(idx[b[k]])
+            if frac[k] >= t.containment_min_fraction:
+                # one parcel lies (almost) entirely inside the other: un-carved parent / stacked parcel.
+                # Never trim the smaller (that would delete it); propose cutting it out of the larger.
+                small, big = (i, j) if shapely.area(geoms[a[k]]) <= shapely.area(geoms[b[k]]) else (j, i)
+                out.append(Issue(big, _fid(gdf, cfg, big), "contained_parcel", "error",
+                                 f"{_fid(gdf, cfg, small)} is {frac[k]:.1%} inside {_fid(gdf, cfg, big)} ({ia[k]:.2f} units^2); "
+                                 f"proposal: cut smaller from larger|contained_row={small}|other_row={small}",
+                                 shapely.to_wkt(inter[k], rounding_precision=3), other_row=small, metric=float(frac[k])))
+                continue
             out.append(Issue(j, _fid(gdf, cfg, j), "overlap", "error",
                              f"overlaps row {i} ({_fid(gdf, cfg, i)}) by {ia[k]:.2f} units^2|other_row={i}",
                              shapely.to_wkt(inter[k], rounding_precision=3), other_row=i, metric=float(ia[k])))

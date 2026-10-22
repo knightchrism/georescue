@@ -36,6 +36,7 @@ class TopologyRules(BaseModel):
     sliver_max_area: float = Field(10.0, ge=0, description="polygons/gaps below this area are slivers")
     sliver_max_compactness: float = Field(0.05, ge=0, le=1, description="4*pi*A/P^2 below this = thin sliver")
     gap_max_area: float = Field(50.0, ge=0, description="holes in the parcel fabric up to this area are reported as gaps")
+    containment_min_fraction: float = Field(0.98, gt=0, le=1, description="overlap covering >= this share of the smaller parcel is reported as contained_parcel")
 
 
 class RepairRules(BaseModel):
@@ -46,6 +47,7 @@ class RepairRules(BaseModel):
     drop_exact_duplicates: bool = False
     trim_overlaps_below_area: float = Field(0.0, ge=0, description="max overlap area (working CRS units^2) to auto-trim; 0 = off")
     trim_overlap_from: Literal["smaller", "row"] = "smaller"
+    cut_contained_from_container: bool = Field(False, description="apply the 'cut smaller from larger' proposal for contained_parcel issues; default flag-only")
 
 
 class Config(BaseModel):

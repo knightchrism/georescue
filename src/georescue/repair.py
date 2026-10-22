@@ -68,6 +68,21 @@ def repair(gdf: gpd.GeoDataFrame, cfg: Config, issues: pd.DataFrame | None = Non
                             before=repr(v), after=repr(nv), reason=iss["message"], post_valid=ok, applied=ok))
         elif c == "duplicate_geometry" and r.drop_exact_duplicates:
             pass  # handled below
+        elif c == "contained_parcel":
+            small = int(iss["message"].split("contained_row=")[1].split("|")[0])
+            if not r.cut_contained_from_container:
+                log.append(dict(feature_id=fid(i), row=i, check=c, action="propose_cut_contained", before=None, after=None,
+                                reason=iss["message"], post_valid=None, applied=False))
+                continue
+            w = checks.working(out, cfg)
+            before = w.geometry.iloc[i]
+            after = _polygonal(shapely.make_valid(before.difference(w.geometry.iloc[small])))
+            valid = bool(after.is_valid and not after.is_empty)
+            if valid:
+                out.loc[i, out.geometry.name] = gpd.GeoSeries([after], crs=w.crs).to_crs(out.crs).iloc[0]
+            log.append(dict(feature_id=fid(i), row=i, check=c, action="cut_contained", before=_w(before), after=_w(after),
+                            reason=iss["message"] + f"; cut {fid(small)} out of container {fid(i)}",
+                            post_valid=valid, applied=valid, before_area=round(before.area, 3), after_area=round(after.area, 3)))
         elif c == "overlap" and r.trim_overlaps_below_area > 0:
             area = float(iss["metric"])
             other = int(iss["message"].split("other_row=")[1])
