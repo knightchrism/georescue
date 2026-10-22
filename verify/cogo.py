@@ -58,3 +58,82 @@ def compare(trav_poly, gis_poly):
                 hausdorff_ft=trav_poly.boundary.hausdorff_distance(gis_poly.boundary),
                 sym_diff_sqft=trav_poly.symmetric_difference(gis_poly).area,
                 iou=trav_poly.intersection(gis_poly).area / unary_union([trav_poly, gis_poly]).area)
+
+
+# ---------------- full metes-and-bounds with curves ----------------
+BRG = r"([NS])\s*(\d{1,3})\s*[°*]\s*(\d{1,2})\s*['’‘`]\s*(\d{1,2}(?:\.\d+)?)\s*[\"”“]?\s*([EW])"
+CONCAVE = {"NORTH": 0, "NORTHEAST": 45, "EAST": 90, "SOUTHEAST": 135, "SOUTH": 180, "SOUTHWEST": 225, "WEST": 270, "NORTHWEST": 315}
+
+def _az(m):
+    return azimuth_full(m[0], m[1], m[2], m[3], m[4])
+
+def clean_ocr(t):
+    t = re.sub(r"\s+", " ", t)
+    t = t.replace("°°", "°").replace("’", "'").replace("‘", "'")
+    t = re.sub(r"(\d)°(\d\d)°(\d\d)", r"\1°\2'\3", t)    # 87°58°04 -> 87°58'04
+    t = re.sub(r"(\d)'(\d\d)°", r"\1'\2\"", t)
+    return t
+
+def parse_full(text):
+    """Split on 'thence'; each segment -> line call (bearing + distance) or curve call.
+    Curve data (radius, central angle, chord bearing/length, concavity) may be stated in the
+    preceding segment ('said point being on a curve ...') and applied to the next 'along the arc' call.
+    Returns (commencement_calls, figure_calls)."""
+    t = clean_ocr(text)
+    segs = re.split(r"(?i);?\s*thence\s+", t)
+    calls, pending, tie, seen_pob = [], None, [], False
+    for s in segs:
+        cur = None
+        if re.search(r"(?i)curve", s) and re.search(r"(?i)radius", s):
+            R = float(re.search(r"(?i)radius of ([\d.,]+)", s).group(1).replace(",", ""))
+            ca = re.search(r"(?i)central angle of (\d+)\s*[°*]\s*(\d+)\s*['\"]?\s*(\d+)", s)
+            delta = float(ca.group(1)) + float(ca.group(2)) / 60 + float(ca.group(3)) / 3600 if ca else None
+            cb = re.search(r"(?i)chord having a bearing of\s*" + BRG, s)
+            cl = re.search(r"(?i)chord length of ([\d.]+)", s)
+            cc = re.search(r"(?i)concave (?:to|90) the (\w+)", s)
+            pending = dict(R=R, delta=delta, chord_az=_az(cb.groups()) if cb else None,
+                           chord=float(cl.group(1)) if cl else None,
+                           concave=CONCAVE.get(cc.group(1).upper()) if cc else None)
+        arc = re.search(r"(?i)arc (?:distance )?(?:of )?([\d.]+)\s*f", s)
+        if arc and re.search(r"(?i)along", s) and pending:
+            cur = dict(kind="arc", dist=float(arc.group(1)), **pending)
+            if not re.search(r"(?i)still along a curve", s): pending = None
+            # 'still along a curve having radius .. central angle' -> continuing curve without chord
+            if re.search(r"(?i)continue.*still along a curve", s):
+                ca = re.search(r"(?i)central angle of (\d+)\s*[°*]\s*(\d+)\s*['\"]?\s*(\d+)", s)
+                cur.update(delta=float(ca.group(1)) + float(ca.group(2)) / 60 + float(ca.group(3)) / 3600,
+                           chord_az=None, chord=None, continuing=True)
+        else:
+            m = re.search(BRG + r".{0,70}?([\d,]+\.\d+)\s*fe", s)
+            if m and not re.search(r"(?i)chord having", s[:m.start() + 1]):
+                cur = dict(kind="line", az=_az(m.groups()[:5]), dist=float(m.group(6).replace(",", "")))
+        if cur:
+            (calls if seen_pob else tie).append(cur)
+        if re.search(r"(?i)point of beginning", s) and not seen_pob: seen_pob = True
+    return tie, calls
+
+def walk(calls, start, n=48):
+    """Walk calls; arcs use chord bearing/length when given, else continue tangent from previous arc.
+    Turn direction from concavity side relative to travel. Returns points, per-call vertex indices."""
+    pts, x, y = [start], *start
+    last_tan = None; idx = []
+    for c in calls:
+        i0 = len(pts) - 1
+        if c["kind"] == "line":
+            r = math.radians(c["az"]); x += c["dist"] * math.sin(r); y += c["dist"] * math.cos(r); pts.append((x, y))
+            last_tan = c["az"]
+        else:
+            R, L = c["R"], c["dist"]; d = L / R
+            if c.get("chord_az") is not None:
+                ca = c["chord_az"]
+                side = ((c["concave"] - ca) + 360) % 360 if c.get("concave") is not None else 90
+                sign = 1 if side < 180 else -1   # concave to the right of travel -> turning right (+az)
+                a0 = math.radians(ca) - sign * d / 2
+            else:
+                sign = c.get("sign", last_sign); a0 = math.radians(last_tan)
+            for k in range(n):
+                ang = a0 + sign * d * (k + 0.5) / n
+                x += L / n * math.sin(ang); y += L / n * math.cos(ang); pts.append((x, y))
+            last_tan = math.degrees(a0 + sign * d); last_sign = sign
+        idx.append((i0, len(pts) - 1))
+    return pts, idx
