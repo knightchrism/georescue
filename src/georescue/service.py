@@ -18,7 +18,8 @@ def _q(url, **p):
     err = None
     for a in range(5):
         try:
-            return json.load(urllib.request.urlopen(url + "/query?" + urllib.parse.urlencode(p), timeout=180))
+            body = urllib.parse.urlencode(p).encode()  # POST: 1000 objectIds overflow GET URL limits (HTTP 404/414)
+            return json.load(urllib.request.urlopen(urllib.request.Request(url + "/query", data=body, headers={"Content-Type": "application/x-www-form-urlencoded"}), timeout=180))
         except Exception as e:  # noqa: BLE001
             err = e; time.sleep(2 * (a + 1))
     raise err
@@ -117,7 +118,7 @@ def run(config: str, out_root="out", force_fetch=False, now=None, log=print) -> 
             if age < s.max_age_hours or not s.source_url:
                 return dict(_status="skipped", reason=f"fresh ({age:.1f} h < {s.max_age_hours} h)" if age < s.max_age_hours else "no source_url", path=str(data), age_hours=round(age, 2))
         if not s.source_url: raise RuntimeError("no data and no service.source_url")
-        n = fetch_arcgis(s.source_url, data, s.where, s.bbox, s.out_fields, s.fetch_workers, log)
+        n = fetch_arcgis(s.source_url, data, where=s.where, bbox=s.bbox, fields=s.out_fields, workers=s.fetch_workers, log=log)
         return dict(path=str(data), features=n, where=s.where, bbox=s.bbox)
     step("fetch", do_fetch)
 

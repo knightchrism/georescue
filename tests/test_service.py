@@ -41,3 +41,14 @@ def test_publish_site(tmp_path):
     assert r["cases"] >= 1 and len(list((s / "cases").glob("*.html"))) == r["cases"]
     assert "contained_parcel" in (s / "index.html").read_text()
     assert m["run_id"] in (s / "history.html").read_text()
+
+
+def test_publish_refuses_empty_run(tmp_path):
+    import json, pytest
+    from georescue import publish as pub
+    L = tmp_path / "latest"; L.mkdir()
+    (L / "manifest.json").write_text(json.dumps({"steps": [{"name": "fetch", "status": "error", "error": "x"}, {"name": "inspect", "status": "error"}]}))
+    site = tmp_path / "site"; site.mkdir(); (site / "index.html").write_text("good")
+    with pytest.raises(pub.NotPublishable):
+        pub.publish(str(L), str(site), str(tmp_path / "runs"))
+    assert (site / "index.html").read_text() == "good"

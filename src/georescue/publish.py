@@ -132,9 +132,29 @@ def _og_image(dst: Path, n_parcels, n_cases):
     im.save(dst); return True
 
 
-def publish(latest="out/latest", site="site", runs="out/runs", include_coj_imagery=False) -> dict:
+class NotPublishable(RuntimeError):
+    """Latest run has no usable results; keep the committed site instead of deploying an empty one."""
+
+
+def _check_publishable(L: Path, min_cases: int):
+    mp = L / "manifest.json"
+    if not mp.exists(): raise NotPublishable(f"{mp} missing")
+    steps = {s["name"]: s for s in json.loads(mp.read_text()).get("steps", [])}
+    for k in ("fetch", "inspect"):
+        if steps.get(k, {}).get("status") == "error": raise NotPublishable(f"{k} step failed: {steps[k].get('error')}")
+    if steps.get("inspect", {}).get("status") != "ok": raise NotPublishable("inspect step did not run")
+    vp = L / "verdicts.json"
+    n = len(json.loads(vp.read_text())) if vp.exists() else 0
+    if n < min_cases: raise NotPublishable(f"only {n} cases (< {min_cases})")
+
+
+def publish(latest="out/latest", site="site", runs="out/runs", include_coj_imagery=False, min_cases=1) -> dict:
     import geopandas as gpd
     L, S = Path(latest), Path(site)
+    _check_publishable(L, min_cases)
+    import tempfile
+    keep_img = Path(tempfile.mkdtemp(prefix="georescue_img_"))  # committed site/img figures (CI has no deed PDFs / v1 PNGs)
+    if (S / "img").exists(): shutil.copytree(S / "img", keep_img, dirs_exist_ok=True)
     if S.exists(): shutil.rmtree(S)
     for d in ("data", "assets", "cases", "img"): (S / d).mkdir(parents=True, exist_ok=True)
     (S / "assets" / "style.css").write_text(CSS); (S / ".nojekyll").write_text("")
@@ -297,8 +317,9 @@ if(k<n)raf=requestAnimationFrame(step);else document.getElementById('clo').inner
                 if c.get(k) is not None: nums.append(f"{k.replace('_', ' ')}: {c[k]}")
             cb.append(f"<div class=card><h3>Deed evidence</h3><p>{E(c.get('deed') or json.dumps(c.get('deeds', '')))}</p><p>{E(' · '.join(nums))}</p><ul>{ev}</ul>"
                       + (f"<p><i>{E(d['verdict']['caveat'])}</i></p>" if d['verdict'].get('caveat') else "") + "</div>")
-            if (imgsrc / d["png"]).exists():
-                shutil.copy2(imgsrc / d["png"], S / "img" / d["png"])
+            srcpng = next((q for q in (imgsrc / d["png"], keep_img / d["png"]) if q.exists()), None)
+            if srcpng is not None:
+                shutil.copy2(srcpng, S / "img" / d["png"])
                 note = "" if include_coj_imagery else "<p><small>Static overlay shown without aerial basemap: the COJ orthoimagery has no published licence, so imagery figures are kept out of the public site.</small></p>"
                 cb.append(f"<div class=card><h3>Overlay figure</h3><img class=fig src='../img/{d['png']}' alt='overlay'>{note}</div>")
         (S / "cases" / f"{v['case_id']}.html").write_text(page(f"Case {a} × {b}", "".join(cb), depth=1, head=head))

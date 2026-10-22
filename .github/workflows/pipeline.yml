@@ -8,13 +8,13 @@ permissions: {contents: read, pages: write, id-token: write}
 concurrency: {group: pages, cancel-in-progress: false}
 jobs:
   run:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 120             # GH-hosted job limit is 6 h; runner has ~14 GB disk, 16 GB RAM
     steps:
-      - uses: actions/checkout@v4
-      - uses: astral-sh/setup-uv@v5
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v10
       - name: Restore run history + HTTP lookup cache
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: |
             out/runs/*/manifest.json
@@ -26,13 +26,13 @@ jobs:
       - name: Pipeline (fetch at runtime; PAO/clerk HTTP only; no deed-image/browser steps)
         run: PYTHONPATH=. uv run --extra verify georescue run --config "${{ inputs.config || 'configs/duval_fl_ci.yaml' }}"
       - name: Publish site
-        run: PYTHONPATH=. uv run --extra verify georescue publish
-      - uses: actions/upload-pages-artifact@v3
+        run: PYTHONPATH=. uv run --extra verify georescue publish --min-cases 10   # refuses (non-zero) rather than publish an empty/partial site
+      - uses: actions/upload-pages-artifact@v5
         with: {path: site}
   deploy:
     needs: run
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     environment: {name: github-pages, url: "${{ steps.d.outputs.page_url }}"}
     steps:
       - id: d
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5

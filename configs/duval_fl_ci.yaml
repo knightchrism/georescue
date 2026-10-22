@@ -15,7 +15,7 @@ service:
   source_url: https://maps.coj.net/coj/rest/services/CityBiz/Parcels/MapServer/0
   data_path: data/real/duval_ci.geojson
   max_age_hours: 0            # always refetch on CI (no persistent disk)
-  bbox: [-81.80, 30.15, -81.60, 30.35]   # SW Jacksonville incl. the verified cases; drop for full county
+  # bbox: [-81.80, 30.15, -81.60, 30.35]   # optional extract; full county needed for all 41 published cases
   out_fields: OBJECTID,RE,LNAMEOWNER,ACRES
   write_corrected: false      # keep artefacts small
   pao: true
