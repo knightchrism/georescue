@@ -246,7 +246,7 @@ addEventListener('DOMContentLoaded',()=>{const b=document.getElementById('tt');i
 }</pre><p><small>output</small></p><pre>{
  &quot;error&quot;: &quot;Error executing tool run_query: UnsafeQueryError: only SELECT / WITH queries are allowed&quot;
 }</pre></details><p><b>Answer (template from tool outputs):</b> The server refused: Error executing tool run_query: UnsafeQueryError: only SELECT / WITH queries are allowed (read-only by design).</p></div><h2 id=run>Run it yourself</h2><div class=card><ol>
-<li>Install <a href="https://docs.astral.sh/uv/">uv</a> and clone the repo, e.g. to <code>C:\Users\knigh\Documents\GitHub\georescue</code>.</li>
+<li>Install <a href="https://docs.astral.sh/uv/">uv</a> and clone the repo, e.g. to <code>C:\dev\georescue</code>.</li>
 <li>In that folder: <code>uv sync --extra verify</code>, then <code>uv run georescue run -c configs/duval_fl_ci.yaml</code> (fetches public COJ parcels; it also builds <code>out/georescue.duckdb</code>) or, if you already have <code>out/latest</code>, just <code>uv run georescue load-db</code>.</li>
 <li>Add the server to <b>Claude Desktop</b> (Settings → Developer → Edit Config, <code>claude_desktop_config.json</code>):<pre>{
  &quot;mcpServers&quot;: {
@@ -255,13 +255,13 @@ addEventListener('DOMContentLoaded',()=>{const b=document.getElementById('tt');i
    &quot;args&quot;: [
     &quot;run&quot;,
     &quot;--directory&quot;,
-    &quot;C:\\Users\\knigh\\Documents\\GitHub\\georescue&quot;,
+    &quot;C:\\dev\\georescue&quot;,
     &quot;--extra&quot;,
     &quot;verify&quot;,
     &quot;georescue-mcp&quot;
    ],
    &quot;env&quot;: {
-    &quot;PYTHONPATH&quot;: &quot;C:\\Users\\knigh\\Documents\\GitHub\\georescue&quot;
+    &quot;PYTHONPATH&quot;: &quot;C:\\dev\\georescue&quot;
    }
   }
  }
@@ -273,13 +273,13 @@ addEventListener('DOMContentLoaded',()=>{const b=document.getElementById('tt');i
    &quot;args&quot;: [
     &quot;run&quot;,
     &quot;--directory&quot;,
-    &quot;C:\\Users\\knigh\\Documents\\GitHub\\georescue&quot;,
+    &quot;C:\\dev\\georescue&quot;,
     &quot;--extra&quot;,
     &quot;verify&quot;,
     &quot;georescue-mcp&quot;
    ],
    &quot;env&quot;: {
-    &quot;PYTHONPATH&quot;: &quot;C:\\Users\\knigh\\Documents\\GitHub\\georescue&quot;
+    &quot;PYTHONPATH&quot;: &quot;C:\\dev\\georescue&quot;
    }
   }
  }

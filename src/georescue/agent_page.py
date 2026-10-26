@@ -4,7 +4,7 @@ import json
 from pathlib import Path
 
 E = html.escape
-WIN = r"C:\Users\knigh\Documents\GitHub\georescue"
+WIN = r"C:\dev\georescue"  # keep repos under C:\dev, outside OneDrive
 
 CLAUDE = {"mcpServers": {"georescue": {"command": "uv", "args": ["run", "--directory", WIN, "--extra", "verify", "georescue-mcp"],
                                        "env": {"PYTHONPATH": WIN}}}}

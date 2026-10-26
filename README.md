@@ -4,6 +4,19 @@
   <img src="brand/logo-horizontal-light.png" alt="GeoRescue" width="520">
 </picture></p>
 
+<p align="center"><b>Find, explain and propose fixes for broken parcel data &mdash; every change logged, nothing applied silently.</b></p>
+
+<p align="center">
+  <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-00e5ff?style=flat-square"></a>
+  <img alt="Python 3.13" src="https://img.shields.io/badge/python-3.13-00e5ff?style=flat-square&logo=python&logoColor=white">
+  <img alt="GeoPandas" src="https://img.shields.io/badge/GeoPandas-Shapely-0b1220?style=flat-square">
+  <img alt="DuckDB" src="https://img.shields.io/badge/DuckDB-results%20store-0b1220?style=flat-square&logo=duckdb">
+  <img alt="MCP" src="https://img.shields.io/badge/MCP-server-0b1220?style=flat-square">
+  <a href="https://github.com/knightchrism/georescue/actions/workflows/pipeline.yml"><img alt="pipeline" src="https://img.shields.io/github/actions/workflow/status/knightchrism/georescue/pipeline.yml?style=flat-square&label=pipeline"></a>
+</p>
+
+<p align="center"><a href="https://knightchrism.github.io/georescue/"><b>Live demo &rarr;</b></a> &middot; <a href="https://knightchrism.github.io/georescue/agent.html">Ask GeoRescue (agent sessions)</a> &middot; <a href="https://knightchrism.github.io/georescue/glossary.html">Glossary</a></p>
+
 > **Status:** early prototype, work in progress.
 
 > **Test demo — not authoritative.** Not a survey, title opinion, or legal determination; for testing and demonstration only.
@@ -13,16 +26,63 @@
 > Property Appraiser. See [TERMS.md](TERMS.md). Questions, corrections or removal requests: open an issue at
 > https://github.com/knightchrism/georescue/issues
 
-# GeoRescue (V1 core)
+
+## What it does
+
+- **Inspects** parcel layers (SHP / GPKG / GeoJSON) for invalid or empty geometry, duplicate IDs and geometries, CRS problems, out-of-bounds features, overlaps, slivers, gaps and attribute-rule violations (YAML rules, Pydantic-validated).
+- **Proposes repairs on a copy** &mdash; the source file is never modified; every proposed change is written to `changelog.csv` with before/after, reason and whether it was applied (an audit trail for review).
+- **Checks overlaps against the record**: appraiser legal descriptions, deed OCR, metes-and-bounds / COGO traverses and closure, compared back to the GIS fabric (`verify/`).
+- **Publishes** a static dashboard with per-case evidence pages, owner names redacted by default.
+- **Talks to agents** through an MCP server backed by a redacted DuckDB results store.
+
+## Architecture
+
+```mermaid
+flowchart LR
+  A[Parcel layer<br/>SHP · GPKG · GeoJSON · ArcGIS REST] --> B[inspect<br/>checks.py + YAML rules]
+  B --> C[repair on a copy<br/>repair.py]
+  C --> D[(out/<br/>corrected.gpkg · changelog.csv<br/>issues.csv · diff.csv · report.html)]
+  B --> V[verify/<br/>PAO legal desc · deed OCR · COGO · PLSS]
+  D --> P[publish<br/>redact owners]
+  V --> P
+  P --> S[Static site<br/>GitHub Pages]
+  D --> L[load-db<br/>redacted DuckDB]
+  L --> M[georescue-mcp<br/>read-only tools · logs/mcp.log]
+  M --> AG[AI agent<br/>Claude · Cursor · ...]
+```
+
+## Quickstart
+
+```bash
+git clone https://github.com/knightchrism/georescue.git && cd georescue
+uv sync --extra verify
+PYTHONPATH=. uv run --extra verify pytest -q          # test suite
+uv run georescue inspect data.gpkg -c configs/columbia_fl.yaml
+uv run georescue repair  data.gpkg -c configs/columbia_fl.yaml -o out/
+```
+
+On Windows, clone to a local folder such as `C:\dev\georescue` (keep projects out of OneDrive-synced folders).
+
+## AI / agent angle
+
+- `georescue-mcp` exposes inspection, repair-to-a-new-folder, guarded read-only SQL, governed metrics and case lookups to any MCP client (details below).
+- `scripts/mcp_demo.py` records real agent sessions; `agent_demo/` drives a visualization loop and saves before/after snapshots.
+- Agents get the redacted store only &mdash; never owner names, never write access to source data.
+
+## Tech stack
+
+Python 3.13 · uv · GeoPandas · Shapely · pyogrio · PyProj · DuckDB · Pydantic · Typer · Jinja2 · Streamlit + Folium · MCP Python SDK · MapLibre GL JS · GitHub Actions + Pages
+
+## Core (V1)
 GIS data-quality & repair for parcel datasets. Load (SHP/GPKG/GeoJSON) → inspect → classify issues → propose repairs on a copy (every change logged) → export `corrected.gpkg`, `changelog.csv`, `issues.csv`, `diff.csv`, `summary.json`, `report.html`.
 
-## Checks
+### Checks
 missing/empty/invalid geometry · duplicate IDs · duplicate geometries · required attributes & types (YAML rules, Pydantic-validated) · CRS missing/unexpected · out-of-bounds · overlaps · slivers · small gaps · original-vs-corrected diff.
 
-## Repairs (all logged: feature_id, check, action, before, after, reason, post_valid, applied)
+### Repairs (all logged: feature_id, check, action, before, after, reason, post_valid, applied)
 make_valid (polygonal parts kept) · numeric text→number coercion · assign CRS if missing · optional: drop empty geoms, drop exact duplicates, trim overlaps below an area. Everything else is `flag_only`. The source file is never modified.
 
-## Usage
+### Usage
 ```
 uv sync
 uv run georescue inspect data.gpkg -c configs/columbia_fl.yaml
@@ -30,7 +90,7 @@ uv run georescue repair  data.gpkg -c configs/columbia_fl.yaml -o out/
 uv run georescue report  data.gpkg -c configs/columbia_fl.yaml -o out/
 uv run streamlit run app.py          # demo UI (docs/demo.png)
 uv run georescue-mcp                 # MCP stdio server: inspect_dataset, repair_dataset
-uv run pytest
+PYTHONPATH=. uv run --extra verify pytest -q
 ```
 Real data: `uv run python scripts/fetch_columbia.py` (Columbia County FL LCParcels FeatureServer).
 
@@ -52,11 +112,11 @@ Deed PDFs, page images, and raw county data are excluded from the repo.
 
 ## Credits
 
-See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) for open-source licenses and data sources.
+See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) for open-source licenses and data sources, and [Data sources](#data-sources) below. Brand font: Exo 2 (SIL Open Font License, `brand/fonts/OFL.txt`).
 
 ## Live demo
 
-Static dashboard (GitHub Pages): **https://knightchrism.github.io/georescue/** (placeholder until Pages is enabled)
+Static dashboard (GitHub Pages): **https://knightchrism.github.io/georescue/**
 
 - KPIs per check, filterable issues table, Leaflet map of *flagged parcels only* (small GeoJSON, not the 584 MB county layer),
   per-overlap case files (verdict, confidence, ORB refs, deed closure/acreage, overlay PNGs) and run history.
@@ -103,3 +163,7 @@ The site's [glossary](https://knightchrism.github.io/georescue/glossary.html) (g
 ## Terms
 
 See [TERMS.md](TERMS.md). Questions, corrections or removal requests: open an issue at https://github.com/knightchrism/georescue/issues
+
+## License
+
+Code: MIT, see [LICENSE](LICENSE). Third-party software and data keep their own licenses and terms ([THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)).
