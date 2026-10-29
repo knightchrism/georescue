@@ -4,17 +4,22 @@ on:
   workflow_dispatch:
     inputs:
       config: {description: "config file", default: "configs/duval_fl_ci.yaml"}
-permissions: {contents: read, pages: write, id-token: write}
+permissions: {contents: read}         # least privilege; only the deploy job gets pages/id-token
 concurrency: {group: pages, cancel-in-progress: false}
 jobs:
   run:
     runs-on: ubuntu-24.04
     timeout-minutes: 120             # GH-hosted job limit is 6 h; runner has ~14 GB disk, 16 GB RAM
+    permissions: {contents: read}
     steps:
-      - uses: actions/checkout@v7
-      - uses: astral-sh/setup-uv@v10.3.2
+      - name: Harden runner (audit egress)
+        uses: step-security/harden-runner@46b06cea07f9e64621fdf066ba77ac6915163d43 # v2.22.3
+        with: {egress-policy: audit}
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with: {persist-credentials: false}
+      - uses: astral-sh/setup-uv@07a047e608db84b3d8c06cd9a7c7dcc9c355c18e # v10.3.2
       - name: Restore run history + HTTP lookup cache
-        uses: actions/cache@v6
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: |
             out/runs/*/manifest.json
@@ -24,7 +29,14 @@ jobs:
       - name: Tests
         run: PYTHONPATH=. uv run --extra verify pytest -q tests
       - name: Pipeline (fetch at runtime; PAO/clerk HTTP only; no deed-image/browser steps)
-        run: PYTHONPATH=. uv run --extra verify georescue run --config "${{ inputs.config || 'configs/duval_fl_ci.yaml' }}"
+        env:
+          CONFIG: ${{ inputs.config || 'configs/duval_fl_ci.yaml' }}   # passed via env, never interpolated into the script
+        run: |
+          case "$CONFIG" in
+            configs/*.yaml|configs/*.yml) ;;
+            *) echo "::error::config must be a YAML file under configs/"; exit 1 ;;
+          esac
+          PYTHONPATH=. uv run --extra verify georescue run --config "$CONFIG"
       - name: Results store (redacted DuckDB for the MCP server)
         run: PYTHONPATH=. uv run --extra verify georescue load-db
       - name: Record Ask GeoRescue sessions (on failure the committed examples/agent_sessions.json is kept)
@@ -32,12 +44,16 @@ jobs:
         run: PYTHONPATH=. timeout 300 uv run --extra verify python scripts/mcp_demo.py
       - name: Publish site
         run: PYTHONPATH=. uv run --extra verify georescue publish --min-cases 10   # refuses (non-zero) rather than publish an empty/partial site
-      - uses: actions/upload-pages-artifact@v5
+      - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
         with: {path: site}
   deploy:
     needs: run
     runs-on: ubuntu-24.04
+    permissions: {pages: write, id-token: write}
     environment: {name: github-pages, url: "${{ steps.d.outputs.page_url }}"}
     steps:
+      - name: Harden runner (audit egress)
+        uses: step-security/harden-runner@46b06cea07f9e64621fdf066ba77ac6915163d43 # v2.22.3
+        with: {egress-policy: audit}
       - id: d
-        uses: actions/deploy-pages@v5
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1
