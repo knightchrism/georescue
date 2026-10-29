@@ -4,6 +4,8 @@
   <img src="brand/logo-horizontal-light.png" alt="GeoRescue" width="520">
 </picture></p>
 
+<p align="center"><a href="https://scorecard.dev/viewer/?uri=github.com/knightchrism/georescue"><img alt="OpenSSF Scorecard" src="https://api.scorecard.dev/projects/github.com/knightchrism/georescue/badge"></a></p>
+
 <p align="center"><b>Find, explain and propose fixes for broken parcel data &mdash; every change logged, nothing applied silently.</b></p>
 
 <p align="center">
