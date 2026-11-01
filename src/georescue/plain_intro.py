@@ -51,7 +51,7 @@ CSS = """
 .p-hero h1{font-family:'Exo 2',system-ui,sans-serif;font-size:clamp(26px,3.6vw,44px);line-height:1.12;margin:10px 0 14px;max-width:24ch}
 .p-lede{font-size:clamp(16px,1.4vw,19px);max-width:62ch;color:#cfdaea}.p-note{font-size:13px;color:#9fb0c8;margin:14px 0 0}
 .p-cta{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}.btn{display:inline-block;padding:11px 18px;border-radius:10px;font-weight:700;text-decoration:none}
-.btn.gold{background:linear-gradient(180deg,var(--gold2),var(--gold));color:#1a1405}.btn.ghost{border:1px solid #f2c14e88;color:#f6e3b0}
+.plain .btn.gold{background:linear-gradient(180deg,var(--gold2),var(--gold));color:#1a1405;border:0}.plain .btn.ghost{background:transparent;border:1px solid #f2c14e88;color:#f6e3b0}
 .plain h2{font-family:'Exo 2',system-ui,sans-serif;margin:34px 0 12px;border-left:4px solid var(--gold);padding-left:10px}
 .p-steps{list-style:none;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.p-steps li,.p-cards div{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px}
 .p-steps span{display:inline-grid;place-items:center;width:34px;height:34px;border-radius:50%;background:var(--navy2);color:var(--gold);font-weight:800;margin-bottom:8px;border:1px solid #f2c14e66}
