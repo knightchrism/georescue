@@ -16,6 +16,8 @@ COLORS = {"contained_parcel": "#ff4d6d", "overlap": "#ff9f1c", "geometry_invalid
 LABELS = {"attribute_missing": "Missing attribute (e.g. owner name)"}
 ORDER = list(COLORS)
 
+from .plain_intro import INTRO, CSS as PLAIN_CSS, apply_static
+
 LOGO = '<img class=logo src="{up}assets/logo-mark-flat.svg" alt="" width=30 height=30>'
 
 CSS = """:root{--bg:#f5f6f8;--fg:#1d2430;--mut:#5d6878;--card:#fff;--line:#e2e5ea;--acc:#ff4d6d;--acc2:#4cc9f0;--hdr:#111827}
@@ -51,7 +53,7 @@ img.fig{max-width:100%;border-radius:10px;border:1px solid var(--line);backgroun
 .tctl{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:8px 0}.btn{background:var(--acc);border:0;color:#fff;padding:7px 16px;border-radius:20px;font-weight:700;cursor:pointer}
 .call{font-family:ui-monospace,Menlo,monospace;background:var(--card);border:1px solid var(--line);padding:4px 10px;border-radius:8px}.closure{color:#38d39f;font-weight:700}
 footer{font-size:12px;color:var(--mut);padding:18px 24px;border-top:1px solid var(--line);max-width:1240px;margin:auto}code{background:var(--line);padding:1px 5px;border-radius:4px}
-@media(max-width:600px){main{padding:12px}.hero h1{font-size:26px}.big b{font-size:26px}#map,.tmap{height:380px}header{flex-wrap:wrap;gap:6px}header nav{display:flex;flex-wrap:wrap;gap:4px 14px;order:3;flex:1 0 100%}.brand .wm{font-size:17px}header nav a{display:inline;padding:0}}"""
+@media(max-width:600px){main{padding:12px}.hero h1{font-size:26px}.big b{font-size:26px}#map,.tmap{height:380px}header{flex-wrap:wrap;gap:6px}header nav{display:flex;flex-wrap:wrap;gap:4px 14px;order:3;flex:1 0 100%}.brand .wm{font-size:17px}header nav a{display:inline;padding:0}}"""+PLAIN_CSS
 
 THEME_JS = """<script>(function(){const k='gr-theme',d=document.documentElement,s=localStorage.getItem(k)||(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark');d.dataset.theme=s;
 addEventListener('DOMContentLoaded',()=>{const b=document.getElementById('tt');if(b){b.textContent=s=='dark'?'☀ light':'☾ dark';b.onclick=()=>{const n=d.dataset.theme=='dark'?'light':'dark';d.dataset.theme=n;localStorage.setItem(k,n);b.textContent=n=='dark'?'☀ light':'☾ dark'}}})})()</script>"""
@@ -75,7 +77,7 @@ def page(title, body, depth=0, head="", desc="Evidence-based parcel overlap reso
 <meta property=og:title content="GeoRescue · {E(title)}"><meta property=og:description content="{E(desc)}"><meta property=og:image content="{SITE_URL}assets/og.png">
 <meta property=og:type content=website><meta name=twitter:card content=summary_large_image><link rel=icon href="{up}assets/favicon.svg" type="image/svg+xml"><link rel=icon href="{up}assets/favicon.ico" sizes=any><link rel=apple-touch-icon href="{up}assets/apple-touch-icon.png"><meta property=og:image:width content=1200><meta property=og:image:height content=630>
 <link rel=stylesheet href="{up}assets/style.css">{THEME_JS}{head}</head><body>
-<header><a class=brand href="{up}index.html">{LOGO.format(up=up)}<span class=wm>GeoRescue</span></a><nav><a href="{up}index.html">Dashboard</a><a href="{up}index.html#map-sec">Map</a><a href="{up}cases.html">Case files</a><a href="{up}history.html">Run history</a><a href="{up}glossary.html">Glossary</a><a href="{up}agent.html">Ask GeoRescue</a></nav><button id=tt>☀ light</button></header><div class=banner role=note>{BANNER}</div>
+<header><a class=brand href="{up}index.html">{LOGO.format(up=up)}<span class=wm>GeoRescue</span></a><nav><a href="{up}index.html#start">Start here</a><a href="{up}index.html">Dashboard</a><a href="{up}index.html#map-sec">Map</a><a href="{up}cases.html">Case files</a><a href="{up}history.html">Run history</a><a href="{up}glossary.html">Glossary</a><a href="{up}agent.html">Ask GeoRescue</a></nav><button id=tt>☀ light</button></header><div class=banner role=note>{BANNER}</div>
 <main>{body}</main><footer>{FOOT}<br>{DISCLAIMER}<br>Questions, corrections or removal requests: open an issue at <a href='{ISSUES_URL}'>{ISSUES_URL}</a> · <a href='{up}terms.html'>Terms of use</a> · <a href='{up}terms.html#sources'>Data sources</a></footer></body></html>"""
 
 
@@ -252,7 +254,7 @@ def publish(latest="out/latest", site="site", runs="out/runs", include_coj_image
     checks = sorted(iss["check"].dropna().unique()) if len(iss) else []
     steps = "".join(f"<tr><td>{E(s['name'])}</td><td>{E(s['status'])}</td><td>{s.get('seconds', '')}</td><td>{E(s.get('reason') or s.get('error') or '')}</td></tr>" for s in man["steps"])
     color_expr = json.dumps(["match", ["get", "kind"], *sum(([k, v] for k, v in COLORS.items()), []), "#8d99ae"])
-    body = f"""{hero}<h2>Latest run</h2><p style="color:var(--mut)">Run <code>{E(man['run_id'])}</code> · {E(man.get('dataset', ''))} · finished {E(man.get('finished', ''))}<br><small>{E(man['policy'])}</small></p>
+    body = f"""{INTRO}{hero}<h2>Latest run</h2><p style="color:var(--mut)">Run <code>{E(man['run_id'])}</code> · {E(man.get('dataset', ''))} · finished {E(man.get('finished', ''))}<br><small>{E(man['policy'])}</small></p>
 <div class=kpis><div class=kpi><b data-n={n_par}>{n_par:,}</b><span>parcels</span></div><div class=kpi><b data-n={n_ov}>{n_ov}</b><span>overlap case files</span></div>{kpis}</div>
 <h2 id=map-sec>Flagged parcels</h2><div class=legend>{legend}<span style="color:var(--mut)">· heatmap at low zoom, click a parcel</span></div><div id=map></div>
 <h2>Issues</h2><input type=search id=q placeholder="search id / message"><select id=chk><option value="">all checks</option>{''.join(f'<option>{E(c)}</option>' for c in checks)}</select><span id=cnt></span>
