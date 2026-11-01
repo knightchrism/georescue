@@ -20,8 +20,8 @@ from .plain_intro import INTRO, CSS as PLAIN_CSS, apply_static
 
 LOGO = '<img class=logo src="{up}assets/logo-mark-flat.svg" alt="" width=30 height=30>'
 
-CSS = """:root{--bg:#f5f6f8;--fg:#1d2430;--mut:#5d6878;--card:#fff;--line:#e2e5ea;--acc:#ff4d6d;--acc2:#4cc9f0;--hdr:#111827}
-[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--mut:#8b96a5;--card:#161b22;--line:#2a313b;--hdr:#010409}
+CSS = """:root{--bg:#f5f6f8;--fg:#1d2430;--mut:#5d6878;--card:#fff;--line:#e2e5ea;--acc:#ff4d6d;--acc2:#4cc9f0;--hdr:#0b1b33}
+[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--mut:#8b96a5;--card:#161b22;--line:#2a313b;--hdr:#071222}
 *{box-sizing:border-box}body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;margin:0;color:var(--fg);background:var(--bg);line-height:1.5}
 a{color:var(--acc2)}header{background:var(--hdr);color:#fff;padding:10px 24px;display:flex;align-items:center;gap:18px;flex-wrap:wrap;position:sticky;top:0;z-index:10}
 .brand{display:flex;align-items:center;gap:8px;font-weight:800;font-size:19px;letter-spacing:.3px;color:#fff;text-decoration:none}@font-face{font-family:'Exo 2';src:url(fonts/Exo2-VariableFont_wght.ttf) format('truetype');font-weight:100 900;font-display:swap}.brand .wm{font-family:'Exo 2',Rajdhani,system-ui,sans-serif;font-weight:600;letter-spacing:.5px;background:linear-gradient(90deg,#f4f8ff,#9fe9ff);-webkit-background-clip:text;background-clip:text;color:transparent}.logo{filter:drop-shadow(0 0 4px #2ee6ff88)}
@@ -53,7 +53,7 @@ img.fig{max-width:100%;border-radius:10px;border:1px solid var(--line);backgroun
 .tctl{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:8px 0}.btn{background:var(--acc);border:0;color:#fff;padding:7px 16px;border-radius:20px;font-weight:700;cursor:pointer}
 .call{font-family:ui-monospace,Menlo,monospace;background:var(--card);border:1px solid var(--line);padding:4px 10px;border-radius:8px}.closure{color:#38d39f;font-weight:700}
 footer{font-size:12px;color:var(--mut);padding:18px 24px;border-top:1px solid var(--line);max-width:1240px;margin:auto}code{background:var(--line);padding:1px 5px;border-radius:4px}
-@media(max-width:600px){main{padding:12px}.hero h1{font-size:26px}.big b{font-size:26px}#map,.tmap{height:380px}header{flex-wrap:wrap;gap:6px}header nav{display:flex;flex-wrap:wrap;gap:4px 14px;order:3;flex:1 0 100%}.brand .wm{font-size:17px}header nav a{display:inline;padding:0}}"""+PLAIN_CSS
+@media(max-width:600px){main{padding:12px}.hero h1{font-size:26px}.big b{font-size:26px}#map,.tmap{height:380px}header{flex-wrap:wrap;gap:6px}header nav{display:flex;flex-wrap:wrap;gap:4px 14px;order:3;flex:1 0 100%}.brand .wm{font-size:17px}header nav a{display:inline;padding:0}}.gkbrand{color:#f2c14e;font-weight:800;text-decoration:none;letter-spacing:.3px;border-right:1px solid #f2c14e66;padding-right:12px}.gkbrand:hover{color:#ffd97a}header nav a.gkback{color:#f2c14e}"""+PLAIN_CSS
 
 THEME_JS = """<script>(function(){const k='gr-theme',d=document.documentElement,s=localStorage.getItem(k)||(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark');d.dataset.theme=s;
 addEventListener('DOMContentLoaded',()=>{const b=document.getElementById('tt');if(b){b.textContent=s=='dark'?'☀ light':'☾ dark';b.onclick=()=>{const n=d.dataset.theme=='dark'?'light':'dark';d.dataset.theme=n;localStorage.setItem(k,n);b.textContent=n=='dark'?'☀ light':'☾ dark'}}})})()</script>"""
@@ -77,8 +77,8 @@ def page(title, body, depth=0, head="", desc="Evidence-based parcel overlap reso
 <meta property=og:title content="GeoRescue · {E(title)}"><meta property=og:description content="{E(desc)}"><meta property=og:image content="{SITE_URL}assets/og.png">
 <meta property=og:type content=website><meta name=twitter:card content=summary_large_image><link rel=icon href="{up}assets/favicon.svg" type="image/svg+xml"><link rel=icon href="{up}assets/favicon.ico" sizes=any><link rel=apple-touch-icon href="{up}assets/apple-touch-icon.png"><meta property=og:image:width content=1200><meta property=og:image:height content=630>
 <link rel=stylesheet href="{up}assets/style.css">{THEME_JS}{head}</head><body>
-<header><a class=brand href="{up}index.html">{LOGO.format(up=up)}<span class=wm>GeoRescue</span></a><nav><a href="{up}index.html#start">Start here</a><a href="{up}index.html">Dashboard</a><a href="{up}index.html#map-sec">Map</a><a href="{up}cases.html">Case files</a><a href="{up}history.html">Run history</a><a href="{up}glossary.html">Glossary</a><a href="{up}agent.html">Ask GeoRescue</a></nav><button id=tt>☀ light</button></header><div class=banner role=note>{BANNER}</div>
-<main>{body}</main><footer>{FOOT}<br>{DISCLAIMER}<br>Questions, corrections or removal requests: open an issue at <a href='{ISSUES_URL}'>{ISSUES_URL}</a> · <a href='{up}terms.html'>Terms of use</a> · <a href='{up}terms.html#sources'>Data sources</a></footer></body></html>"""
+<header><a class=gkbrand href="https://knightchrism.github.io/">GeoKnight GIS</a><a class=brand href="{up}index.html">{LOGO.format(up=up)}<span class=wm>GeoRescue</span></a><nav><a href="{up}index.html#start">Start here</a><a href="{up}index.html">Dashboard</a><a href="{up}index.html#map-sec">Map</a><a href="{up}cases.html">Case files</a><a href="{up}history.html">Run history</a><a href="{up}glossary.html">Glossary</a><a href="{up}agent.html">Ask GeoRescue</a><a class=gkback href="https://knightchrism.github.io/">← Back to GeoKnight GIS</a></nav><button id=tt>☀ light</button></header><div class=banner role=note>{BANNER}</div>
+<main>{body}</main><footer>{FOOT}<br>{DISCLAIMER}<br>Questions, corrections or removal requests: open an issue at <a href='{ISSUES_URL}'>{ISSUES_URL}</a> · <a href='{up}terms.html'>Terms of use</a> · <a href='{up}terms.html#sources'>Data sources</a> · <a href='https://knightchrism.github.io/'>Part of GeoKnight GIS</a></footer></body></html>"""
 
 
 # ---------- geometry helpers ----------

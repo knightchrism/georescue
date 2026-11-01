@@ -1,5 +1,5 @@
-:root{--bg:#f5f6f8;--fg:#1d2430;--mut:#5d6878;--card:#fff;--line:#e2e5ea;--acc:#ff4d6d;--acc2:#4cc9f0;--hdr:#111827}
-[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--mut:#8b96a5;--card:#161b22;--line:#2a313b;--hdr:#010409}
+:root{--bg:#f5f6f8;--fg:#1d2430;--mut:#5d6878;--card:#fff;--line:#e2e5ea;--acc:#ff4d6d;--acc2:#4cc9f0;--hdr:#0b1b33}
+[data-theme=dark]{--bg:#0d1117;--fg:#e6edf3;--mut:#8b96a5;--card:#161b22;--line:#2a313b;--hdr:#071222}
 *{box-sizing:border-box}body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;margin:0;color:var(--fg);background:var(--bg);line-height:1.5}
 a{color:var(--acc2)}header{background:var(--hdr);color:#fff;padding:10px 24px;display:flex;align-items:center;gap:18px;flex-wrap:wrap;position:sticky;top:0;z-index:10}
 .brand{display:flex;align-items:center;gap:8px;font-weight:800;font-size:19px;letter-spacing:.3px;color:#fff;text-decoration:none}@font-face{font-family:'Exo 2';src:url(fonts/Exo2-VariableFont_wght.ttf) format('truetype');font-weight:100 900;font-display:swap}.brand .wm{font-family:'Exo 2',Rajdhani,system-ui,sans-serif;font-weight:600;letter-spacing:.5px;background:linear-gradient(90deg,#f4f8ff,#9fe9ff);-webkit-background-clip:text;background-clip:text;color:transparent}.logo{filter:drop-shadow(0 0 4px #2ee6ff88)}
@@ -53,3 +53,4 @@ header{border-bottom:2px solid #f2c14e66}
 @media(max-width:1000px){.p-legend{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:760px){.p-steps,.p-cards,.p-legend{grid-template-columns:1fr}.btn{flex:1 1 100%;text-align:center}}
 @media(min-width:1700px){.plain{max-width:1400px}}
+.gkbrand{color:#f2c14e;font-weight:800;text-decoration:none;letter-spacing:.3px;border-right:1px solid #f2c14e66;padding-right:12px}.gkbrand:hover{color:#ffd97a}header nav a.gkback{color:#f2c14e}
