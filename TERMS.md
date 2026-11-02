@@ -13,6 +13,6 @@ Data belongs to its sources (see "Data sources" in the README): City of Jacksonv
 County Clerk of Courts. GeoRescue does not own their data and is not affiliated with, endorsed by or acting for them. Owner names are removed
 from the public site.
 
-The source code is licensed under the MIT License (see LICENSE); that license's warranty disclaimer also applies.
+The source code is proprietary: Copyright (c) 2026 GeoKnight GIS. All rights reserved (see LICENSE). It is provided as is, without warranty of any kind.
 
 Questions, corrections or removal requests: open an issue at https://github.com/knightchrism/georescue/issues

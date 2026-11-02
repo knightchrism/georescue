@@ -9,7 +9,7 @@
 <p align="center"><b>Find, explain and propose fixes for broken parcel data &mdash; every change logged, nothing applied silently.</b></p>
 
 <p align="center">
-  <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-00e5ff?style=flat-square"></a>
+  <a href="LICENSE"><img alt="License: All rights reserved" src="https://img.shields.io/badge/license-All%20rights%20reserved-00e5ff?style=flat-square"></a>
   <img alt="Python 3.13" src="https://img.shields.io/badge/python-3.13-00e5ff?style=flat-square&logo=python&logoColor=white">
   <img alt="GeoPandas" src="https://img.shields.io/badge/GeoPandas-Shapely-0b1220?style=flat-square">
   <img alt="DuckDB" src="https://img.shields.io/badge/DuckDB-results%20store-0b1220?style=flat-square&logo=duckdb">
@@ -156,7 +156,7 @@ Owner and person names are removed from the public site (`georescue publish` red
 
 `scripts/mcp_demo.py` drives the server over stdio through realistic questions and records the real calls and outputs to `examples/agent_sessions.{json,md}`. The site's [Ask GeoRescue](https://knightchrism.github.io/georescue/agent.html) page renders those sessions. Each answer is filled in by a fixed template from the tool outputs. The page also has Claude Desktop / Cursor config snippets for running it yourself. These are recorded sessions and test results, not authoritative.
 
-The server structure, SQL guard, metrics layer, logging and demo are adapted from the author's own [census-pipeline](https://github.com/knightchrism/census-pipeline) (MIT). GeoRescue keeps its existing MCP SDK (`mcp>=2.3`, `MCPServer`).
+The server structure, SQL guard, metrics layer, logging and demo are adapted from the author's own [census-pipeline](https://github.com/knightchrism/census-pipeline). GeoRescue keeps its existing MCP SDK (`mcp>=2.3`, `MCPServer`).
 
 ## Glossary
 
@@ -168,4 +168,4 @@ See [TERMS.md](TERMS.md). Questions, corrections or removal requests: open an is
 
 ## License
 
-Code: MIT, see [LICENSE](LICENSE). Third-party software and data keep their own licenses and terms ([THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)).
+Copyright (c) 2026 GeoKnight GIS. All rights reserved. No copying or reuse without written permission; see [LICENSE](LICENSE). Third-party libraries and data keep their own licenses and terms (listed in [LICENSE](LICENSE) and [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)).

@@ -1,5 +1,6 @@
 [project]
 name = "georescue"
+license = { text = "Proprietary" }
 version = "0.1.0"
 description = "Audit-first GIS data-quality checks and logged, reviewable repairs for parcel datasets, with an MCP server for AI agents"
 readme = "README.md"
