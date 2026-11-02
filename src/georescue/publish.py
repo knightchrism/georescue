@@ -70,6 +70,10 @@ DISCLAIMER = ("Disclaimer: results are automated, experimental data quality test
 ISSUES_URL = "https://github.com/knightchrism/georescue/issues"
 
 
+# Round house-icon button (bottom-left) back to the GeoKnight GIS home page; added to every page with a web map.
+HOME_BTN = '<!-- GeoKnight home button -->\n<style>.gk-home{position:fixed;left:12px;bottom:12px;z-index:10000;width:44px;height:44px;border-radius:50%;background:#0b1f3a;border:1.5px solid #c9a227;display:grid;place-items:center;box-shadow:0 2px 8px rgba(0,0,0,.45);box-sizing:border-box;text-decoration:none}.gk-home:hover,.gk-home:focus{background:#13305a;outline:none}.gk-home:focus-visible{box-shadow:0 0 0 3px rgba(201,162,39,.6)}.gk-home svg{display:block}.leaflet-bottom.leaflet-left,.maplibregl-ctrl-bottom-left,.mapboxgl-ctrl-bottom-left,.cesium-viewer-bottom,.ol-scale-line{margin-bottom:60px!important}.maplibregl-ctrl-bottom-right .maplibregl-ctrl-attrib.maplibregl-compact-show,.leaflet-bottom.leaflet-right .leaflet-control-attribution{max-width:calc(100vw - 80px)!important;box-sizing:border-box}</style>\n<a class="gk-home" href="https://geoknightgis.com/" title="Home" aria-label="Home"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false"><path d="M3 11.5 12 4l9 7.5M5.5 10v10h4.5v-5.5h4V20h4.5V10" fill="none" stroke="#c9a227" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/></svg></a>'
+
+
 def page(title, body, depth=0, head="", desc="Evidence-based parcel overlap resolution"):
     up = "../" * depth
     return f"""<!doctype html><html lang=en data-theme=dark><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1">
@@ -78,7 +82,7 @@ def page(title, body, depth=0, head="", desc="Evidence-based parcel overlap reso
 <meta property=og:type content=website><meta name=twitter:card content=summary_large_image><link rel=icon href="{up}assets/favicon.svg" type="image/svg+xml"><link rel=icon href="{up}assets/favicon.ico" sizes=any><link rel=apple-touch-icon href="{up}assets/apple-touch-icon.png"><meta property=og:image:width content=1200><meta property=og:image:height content=630>
 <link rel=stylesheet href="{up}assets/style.css">{THEME_JS}{head}</head><body>
 <header><a class=gkbrand href="https://knightchrism.github.io/">GeoKnight GIS</a><a class=brand href="{up}index.html">{LOGO.format(up=up)}<span class=wm>GeoRescue</span></a><nav><a href="{up}index.html#start">Start here</a><a href="{up}index.html">Dashboard</a><a href="{up}index.html#map-sec">Map</a><a href="{up}cases.html">Case files</a><a href="{up}history.html">Run history</a><a href="{up}glossary.html">Glossary</a><a href="{up}agent.html">Ask GeoRescue</a><a class=gkback href="https://knightchrism.github.io/">← Back to GeoKnight GIS</a></nav><button id=tt>☀ light</button></header><div class=banner role=note>{BANNER}</div>
-<main>{body}</main><footer>{FOOT}<br>{DISCLAIMER}<br>Questions, corrections or removal requests: open an issue at <a href='{ISSUES_URL}'>{ISSUES_URL}</a> · <a href='{up}terms.html'>Terms of use</a> · <a href='{up}terms.html#sources'>Data sources</a> · <a href='https://knightchrism.github.io/'>Part of GeoKnight GIS</a></footer></body></html>"""
+<main>{body}</main><footer>{FOOT}<br>{DISCLAIMER}<br>Questions, corrections or removal requests: open an issue at <a href='{ISSUES_URL}'>{ISSUES_URL}</a> · <a href='{up}terms.html'>Terms of use</a> · <a href='{up}terms.html#sources'>Data sources</a> · <a href='https://knightchrism.github.io/'>Part of GeoKnight GIS</a></footer>{HOME_BTN if 'maplibregl.Map' in body else ''}</body></html>"""
 
 
 # ---------- geometry helpers ----------
