@@ -1,6 +1,6 @@
 """Plain-language 'start here' section for the GeoRescue dashboard (redesign-plain).
 Facts only from this repo: README, glossary (COLORS), footer data sources, Pages workflow."""
-CONTACT = "geoknight0015@gmail.com"
+CONTACT = "info@geoknightgis.com"
 
 _LEG = [("#ff4d6d", "Contained parcel", "one lot drawn on top of a bigger one instead of cut out of it"),
         ("#ff9f1c", "Overlap", "two parcels claim the same piece of ground"),
@@ -41,7 +41,7 @@ Basemap © CARTO © OpenStreetMap contributors; map library MapLibre GL JS. GeoR
 <details><summary>How often is it updated?</summary><p>The public demo is set to re-run automatically once a week. The date of the latest run is shown under "Latest run".</p></details>
 <details><summary>I found an error or want my parcel removed.</summary><p>Open an issue at <a href="https://github.com/knightchrism/georescue/issues">github.com/knightchrism/georescue/issues</a> or email <a href="mailto:{CONTACT}">{CONTACT}</a>.</p></details></div>
 
-<div class=p-band><div><b>Want this kind of check on your own parcel data?</b><span>Ask GeoKnight GIS what's possible for your map.</span></div><a class="btn gold" href="mailto:{CONTACT}?subject=GeoRescue%20inquiry">Email geoknight0015@gmail.com</a></div>
+<div class=p-band><div><b>Want this kind of check on your own parcel data?</b><span>Ask GeoKnight GIS what's possible for your map.</span></div><a class="btn gold" href="mailto:{CONTACT}?subject=GeoRescue%20inquiry">Email info@geoknightgis.com</a></div>
 <h2 class=p-detail>The details: featured test case and latest run</h2></section>"""
 
 CSS = """
