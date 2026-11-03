@@ -67,7 +67,7 @@ BANNER = "Test demo — not authoritative. Not a survey, title opinion, or legal
 DISCLAIMER = ("Disclaimer: results are automated, experimental data quality test results computed from public data. Verdicts are proposals, not findings. "
               "Boundary placements are best-fit, not measured in the field. Consult a licensed surveyor or attorney and the official records. "
               "GeoRescue is not affiliated with the City of Jacksonville, the Duval County Clerk of Courts or the Duval County Property Appraiser, and does not own their data.")
-ISSUES_URL = "https://github.com/knightchrism/georescue/issues"
+CONTACT_URL = "https://geoknightgis.com/contact.html"
 
 
 # Round house-icon button (bottom-left) back to the GeoKnight GIS home page; added to every page with a web map.
@@ -82,7 +82,7 @@ def page(title, body, depth=0, head="", desc="Evidence-based parcel overlap reso
 <meta property=og:type content=website><meta name=twitter:card content=summary_large_image><link rel=icon href="{up}assets/favicon.svg" type="image/svg+xml"><link rel=icon href="{up}assets/favicon.ico" sizes=any><link rel=apple-touch-icon href="{up}assets/apple-touch-icon.png"><meta property=og:image:width content=1200><meta property=og:image:height content=630>
 <link rel=stylesheet href="{up}assets/style.css">{THEME_JS}{head}</head><body>
 <header><a class=gkbrand href="https://knightchrism.github.io/">GeoKnight GIS</a><a class=brand href="{up}index.html">{LOGO.format(up=up)}<span class=wm>GeoRescue</span></a><nav><a href="{up}index.html#start">Start here</a><a href="{up}index.html">Dashboard</a><a href="{up}index.html#map-sec">Map</a><a href="{up}cases.html">Case files</a><a href="{up}history.html">Run history</a><a href="{up}glossary.html">Glossary</a><a href="{up}agent.html">Ask GeoRescue</a><a class=gkback href="https://knightchrism.github.io/">← Back to GeoKnight GIS</a></nav><button id=tt>☀ light</button></header><div class=banner role=note>{BANNER}</div>
-<main>{body}</main><footer>{FOOT}<br>{DISCLAIMER}<br>Questions, corrections or removal requests: open an issue at <a href='{ISSUES_URL}'>{ISSUES_URL}</a> · <a href='{up}terms.html'>Terms of use</a> · <a href='{up}terms.html#sources'>Data sources</a> · <a href='https://knightchrism.github.io/'>Part of GeoKnight GIS</a></footer>{HOME_BTN if 'maplibregl.Map' in body else ''}</body></html>"""
+<main>{body}</main><footer>{FOOT}<br>{DISCLAIMER}<br>Questions or issues? <a href='{CONTACT_URL}'>Contact GeoKnight GIS</a> · <a href='{up}terms.html'>Terms of use</a> · <a href='{up}terms.html#sources'>Data sources</a> · <a href='https://knightchrism.github.io/'>Part of GeoKnight GIS</a></footer>{HOME_BTN if 'maplibregl.Map' in body else ''}</body></html>"""
 
 
 # ---------- geometry helpers ----------
@@ -420,7 +420,7 @@ decision or action taken using them. Everything here is for testing and demonstr
 In Florida, surveying and mapping is a licensed profession (Chapter 472, Florida Statutes). Consult a licensed surveyor and mapper or an attorney,
 and the official records, before relying on any boundary, acreage or ownership information.</p>
 <p>Data belongs to its sources (below). GeoRescue does not own their data and is not affiliated with, endorsed by or acting for them.</p>
-<p>Questions, corrections or removal requests: open an issue at <a href="https://github.com/knightchrism/georescue/issues">https://github.com/knightchrism/georescue/issues</a>.</p></div>
+<p>Questions or issues? <a href="https://geoknightgis.com/contact.html">Contact GeoKnight GIS</a></p></div>
 <h2 id=sources>Data sources</h2><div class=card><ul>
 <li><b>City of Jacksonville GIS — parcels</b> (<a href="https://maps.coj.net/coj/rest/services/CityBiz/Parcels/MapServer/0">CityBiz/Parcels service</a>; <a href="https://maps.coj.net/">source disclaimer / home</a>).</li>
 <li><b>Duval County Property Appraiser</b> (<a href="https://paopropertysearch.coj.net">property search</a>; <a href="https://paopropertysearch.coj.net/Basic/Search.aspx">source disclaimer / home</a>). As the Property Appraiser notes for its own data, appraiser and GIS records are maintained for assessment purposes and are <b>not intended for legal use</b>, such as conveyances or boundary determinations.</li>

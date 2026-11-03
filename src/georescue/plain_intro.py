@@ -39,7 +39,7 @@ Basemap © CARTO © OpenStreetMap contributors; map library MapLibre GL JS. GeoR
 <details><summary>Is a flag proof something is wrong with my property?</summary><p>No. A flag means the public map looks inconsistent. Many flags are harmless drawing quirks. Only a licensed surveyor, an attorney and the official records can settle a boundary.</p></details>
 <details><summary>What is the "featured test case" below?</summary><p>One example where a smaller lot appears to be drawn inside a larger parcel. GeoRescue read the larger parcel's deed and compared its described shape to the map. Owner names are replaced with "Parcel A" and "Parcel B".</p></details>
 <details><summary>How often is it updated?</summary><p>The public demo is set to re-run automatically once a week. The date of the latest run is shown under "Latest run".</p></details>
-<details><summary>I found an error or want my parcel removed.</summary><p>Open an issue at <a href="https://github.com/knightchrism/georescue/issues">github.com/knightchrism/georescue/issues</a> or email <a href="mailto:{CONTACT}">{CONTACT}</a>.</p></details></div>
+<details><summary>I found an error or want my parcel removed.</summary><p><a href="https://geoknightgis.com/contact.html">Contact GeoKnight GIS</a> or email <a href="mailto:{CONTACT}">{CONTACT}</a>.</p></details></div>
 
 <div class=p-band><div><b>Want this kind of check on your own parcel data?</b><span>Ask GeoKnight GIS what's possible for your map.</span></div><a class="btn gold" href="mailto:{CONTACT}?subject=GeoRescue%20inquiry">Email info@geoknightgis.com</a></div>
 <h2 class=p-detail>The details: featured test case and latest run</h2></section>"""
